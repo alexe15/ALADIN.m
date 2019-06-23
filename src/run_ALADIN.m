@@ -9,8 +9,6 @@
 % out: xopt:   Optimal x vector
 %      logg:   Struct, logging several values during the iteration process
 %%------------------------------------------------------------------------
-
-
 function [ xopt, logg ] = run_ALADIN( ffi,ggi,hhi,AA,zz0,...
                                     lam0,llbx,uubx,Sig,opts )
 import casadi.*
@@ -45,7 +43,6 @@ disp(['Problem setup: ' num2str(toc(setupT)) ' sec'])
 %% ALADIN iterations
 initializeVariables
 
-
 iterTime = tic;
 i   = 1;
 rho = opts.rho0;
@@ -54,7 +51,6 @@ while i <= opts.maxiter
     obj             = 0;
     for j=1:NsubSys
         % solve local problems
-        
         % set up parameter vector for local NLP's
         pNum = [ rho;
                  lam;
@@ -173,7 +169,7 @@ while i <= opts.maxiter
     % solve global QP
     tic
     if strcmp(opts.innerAlg, 'full')
-        [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact,i);    
+        [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact);    
         delx             = delxs2(1:(end-Ncons)); 
     else
         [delx, lamges, maxComS, lamRes] = solveQPdistr2(HHiEval,AAQPll, ...
@@ -216,8 +212,7 @@ while i <= opts.maxiter
     end
    
     % plot iterates?
-    p = true; 
-    if p == true  
+    if opts.plot == true
        plotIterates;
     end
 end
