@@ -172,14 +172,12 @@ while i <= opts.maxiter
     
     % solve global QP
     tic
-    redQP = false;
-    if redQP==true
-        % reduced QP via Schur complement?
-        [delx, lamges] = solveQPdistr2(HHiEval,AAQPll,ggiEval,AA,xx,lam,mu);
+    if strcmp(opts.innerAlg, 'full')
+        [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact,i);    
+        delx             = delxs2(1:(end-Ncons)); 
     else
-        % standard ALADIN QP
-        [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact,i);  
-         delx             = delxs2(1:(end-Ncons)); 
+        [delx, lamges, maxComS, lamRes] = solveQPdistr2(HHiEval,AAQPll, ...
+                    ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
     end
     disp(['Solve QP: ' num2str(toc) ' sec'])
     QPtotTime        = QPtotTime + toc;   
