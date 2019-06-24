@@ -19,6 +19,7 @@ for i=1:NsubSys
     % local Lagrange multipliers
     kkappCas = opts.sym('kapp',nngi{i}+nnhi{i},1);
  
+ 
     nx        = length(xxCas{i});
     zzCas{i}  = opts.sym('z',nx,1);
 
@@ -60,17 +61,27 @@ for i=1:NsubSys
     
     % Gradient and Hessian  of local objective
     gradiCas    = gradient(locFunsCas.f{i},xxCas{i}); 
-    gradLiCas   = gradient(locFunsCas.f{i} + kkappCas'*[locFunsCas.g{i}; locFunsCas.h{i}],xxCas{i}); 
+ %   gradLiCas   = gradient(locFunsCas.f{i} + kkappCas'*[locFunsCas.g{i}; locFunsCas.h{i}],xxCas{i}); 
 
-    if strcmp(opts.hessian,'aug') % Hessian of aug. L.
-        HHiCas    = hessian(locFunsCas.f{i} + kkappCas'*[locFunsCas.g{i}; locFunsCas.h{i}]+rhoCas/2*(xxCas{i})'*Sig{i}*(xxCas{i}),xxCas{i}); 
-    elseif strcmp(opts.hessian,'gaussNewton')
-        HHiCas    = hessian(locFunsCas.f{i} + 100*locFunsCas.g{i}'*locFunsCas.g{i},xxCas{i});
+    if nngi{i}+nnhi{i} == 0
+        if strcmp(opts.hessian,'aug') % Hessian of aug. L.
+            HHiCas    = hessian(locFunsCas.f{i} + rhoCas/2*(xxCas{i})'*Sig{i}*(xxCas{i}),xxCas{i}); 
+        elseif strcmp(opts.hessian,'gaussNewton')
+            HHiCas    = hessian(locFunsCas.f{i} + 100*locFunsCas.g{i}'*locFunsCas.g{i},xxCas{i});
+        else
+            % standard Hessian
+            HHiCas    = hessian(locFunsCas.f{i}, xxCas{i});       
+        end
     else
-        % standard Hessian
-        HHiCas    = hessian(locFunsCas.f{i}+kkappCas'*[locFunsCas.g{i}; locFunsCas.h{i}],xxCas{i});       
+        if strcmp(opts.hessian,'aug') % Hessian of aug. L.
+            HHiCas    = hessian(locFunsCas.f{i} + kkappCas'*[locFunsCas.g{i}; locFunsCas.h{i}]+rhoCas/2*(xxCas{i})'*Sig{i}*(xxCas{i}),xxCas{i}); 
+        elseif strcmp(opts.hessian,'gaussNewton')
+            HHiCas    = hessian(locFunsCas.f{i} + 100*locFunsCas.g{i}'*locFunsCas.g{i},xxCas{i});
+        else
+            % standard Hessian
+            HHiCas    = hessian(locFunsCas.f{i}+kkappCas'*[locFunsCas.g{i}; locFunsCas.h{i}],xxCas{i});       
+        end
     end
-
     % set up CasADi function
     sens.g{i}   = Function(['g' num2str(i)],{xxCas{i}},{gradiCas});
     sens.H{i}   = Function(['H' num2str(i)],{xxCas{i},kkappCas,rhoCas},{HHiCas}); 
