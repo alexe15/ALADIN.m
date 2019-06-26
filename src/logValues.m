@@ -1,4 +1,9 @@
-        % logging
+for j=1:NsubSys
+        KioptEq{j}      = KKapp{j}(1:nngi{j});
+        KioptIneq{j}    = KKapp{j}(nngi{j}+1:end); 
+end
+
+% logging
         logg.X          = [logg.X x];
 %         logg.delY       = [logg.delY delx];
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];

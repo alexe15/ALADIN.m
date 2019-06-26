@@ -58,7 +58,7 @@ while i <= opts.maxiter
         % solve local NLP's
         tic
         sol = nnlp{j}('x0' ,    xx{j},...
-                      'lam_g0', Kiopt{j},...
+                      'lam_g0', KKapp{j},...
                       'lam_x0', LLam_x{j},...
                       'p',      pNum,...
                       'lbx',    llbx{j},...
@@ -66,7 +66,7 @@ while i <= opts.maxiter
                       'lbg',    gBounds.lb{j}, ...
                       'ubg',    gBounds.ub{j});          
                   
-        xiopt           = full(sol.x);        
+        xx{j}           = full(sol.x);        
         KKapp{j}        = full(sol.lam_g);
         LLam_x{j}       = full(sol.lam_x);
         
@@ -74,13 +74,13 @@ while i <= opts.maxiter
         disp(['Solve NLP ' num2str(j) ': ' num2str(toc) ' sec'])                    
    
         % primal active set detection
-        inact           = [false(nngi{j},1); locFuns.h{j}(xiopt) < opts.actMargin];
+        inact           = [false(nngi{j},1); locFuns.h{j}(xx{j}) < opts.actMargin];
         KKapp{j}(inact) = 0;
         
         % evaluate gradients and Hessians of the local problems
         tic
-        HHiEval{j}      = sens.H{j}(xiopt,KKapp{j},rho);
-        ggiEval{j}      = sens.g{j}(xiopt);
+        HHiEval{j}      = sens.H{j}(xx{j},KKapp{j},rho);
+        ggiEval{j}      = sens.g{j}(xx{j});
         disp(['Evaluate sensitivities in subproblem ' num2str(j) ': ' num2str(toc) ' sec'])
 
         % regularization of the local hessians
@@ -92,21 +92,14 @@ while i <= opts.maxiter
         RegTotTime      = RegTotTime + toc;
         
         % compute the Jacobian of nonlinear constraints/bounds
-        JacCon          = full(sens.Jac{j}(xiopt));    
-        JacBounds       = eye(size(xiopt,1));
+        JacCon          = full(sens.Jac{j}(xx{j}));    
+        JacBounds       = eye(size(xx{j},1));
         
         % eliminate inactive entries  
-        JJacCon{j}       = sparse(JacCon(~inact,:));      
-        JacBounds         = JacBounds((llbx{j}-xiopt)> opts.actMargin | (xiopt-uubx{j})>opts.actMargin,:);
+        JJacCon{j}      = sparse(JacCon(~inact,:));      
+        JacBounds       = JacBounds((llbx{j}-xx{j})> opts.actMargin | (xx{j}-uubx{j})>opts.actMargin,:);
+        JJacCon{j}      = [JJacCon{j}; JacBounds];         
         
-        JJacCon{j}         = [JJacCon{j}; JacBounds];         
-        
-        
-        xx{j}           = xiopt;
-        Kiopt{j}        = KKapp{j};
-        KioptEq{j}      = KKapp{j}(1:nngi{j});
-        KioptIneq{j}    = KKapp{j}(nngi{j}+1:end);
-             
         % logg consensus violation, objective value and gradient 
         consViol        = full(sol.g);
         consViolEq      = [consViolEq; consViol(1:nngi{j})];
@@ -114,55 +107,47 @@ while i <= opts.maxiter
         
         % maximal multiplier for inequalities
         kappaMax        = max(abs(KKapp{j}));
-    end
-    x = vertcat(xx{:});
+    end 
     
-    rhsQP1  = -A*x;      
+    % set up coordination QP including slacks 
+    x        =  vertcat(xx{:});
+    rhsQP    = -A*x;     
     
-    % built the QP
-    AQPll   = blkdiag(JJacCon{:});
-    gQPs    = sparse(vertcat(ggiEval{:},lam));
-
-    
-    % use BFGS updates insread?
-    BFGS = false;
-    if BFGS==true
+ 
+    % set up the Hessian of the coordination QP
+    if strcmp(opts.Hess,'BFGS')
         run(BFGS_AL);
-    else
-        HQP             = blkdiag(HHiEval{:});
-    end
-
-    % use fixed Hessian to improve convergence?
-    fixHess = false;
-    if fixHess == true
-        % fix Hessian in the beginning to improve convergence?
+    elseif strcmp(opts.Hess,'fix')
+         % fix Hessian in the beginning to improve convergence?
         if i < 100
             HQP = 1000000000*eye(size(HQP,1));
         end
+    else
+        HQP = blkdiag(HHiEval{:});
     end
-    
-    HQPs            = blkdiag(HQP,mu*eye(Ncons)); 
-    xOld            = vertcat(xx{:});
-    xxOld           = xx;
+    HQPs     = blkdiag(HQP,mu*eye(Ncons)); 
 
-    % number of active inequalities
-    Nhact   = size(AQPll,1);
-    AQP     = [A -eye(Ncons);AQPll zeros(Nhact,Ncons)];
-    bQP     = sparse([rhsQP1;zeros(Nhact,1)]); 
+    
+    JacCon   = blkdiag(JJacCon{:});
+    Nhact    = size(JacCon,1);
+    AQP      = [A -eye(Ncons);JacCon zeros(Nhact,Ncons)];
+    bQP      = sparse([rhsQP;zeros(Nhact,1)]); 
+    
+    gQPs     = sparse(vertcat(ggiEval{:},lam));  
     
     % check whether QP is feasible?
     checkFeas = false;
     if checkFeas==true
-       run(checkQPfeasibility );
+       run( checkQPfeasibility );
     end
     
-    % solve global QP
+    % solve coordination QP
     tic
     if strcmp(opts.innerAlg, 'full')
         [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact);    
         delx             = delxs2(1:(end-Ncons)); 
     else
-        [delx, lamges, maxComS, lamRes] = solveQPdistr2(HHiEval,JacCon, ...
+        [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval,JacCon, ...
                     ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
     end
     disp(['Solve QP: ' num2str(toc) ' sec'])

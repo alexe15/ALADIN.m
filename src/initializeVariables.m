@@ -26,7 +26,7 @@ for j=1:NsubSys
    nngi{j} = size(locFunsCas.g{j},1);
    nnhi{j} = size(locFunsCas.h{j},1);  
     
-   Kiopt{j} = zeros(nngi{j}+nnhi{j},1);
+   KKapp{j} = zeros(nngi{j}+nnhi{j},1);
    LLam_x{j}= zeros(length(xx{j}),1);
 end
 
