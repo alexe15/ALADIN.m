@@ -1,6 +1,9 @@
-addpath('./solver');
+restoredefaultpath;
 clear all;
 clc;
+
+addpath('../src');
+addpath(genpath('../tools/'))
 import casadi.*
 
 %% define Alex's non-convex problem
