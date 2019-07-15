@@ -43,11 +43,11 @@ h1f     =   matlabFunction(h1,'Vars',{y1});
 h2f     =   matlabFunction(h2,'Vars',{y2});
 
 % initalize
-maxit   =   15;
+maxit   =   30;
 y0      =   3*rand(N*n,1);
 lam0    =   10*(rand(1)-0.5);
-rho     =   10;
-mu      =   10;
+rho     =   100;
+mu      =   1000000;
 eps     =   1e-4;
 Sig     =   {eye(n),eye(n)};
 
@@ -90,7 +90,7 @@ AA          = {A1,A2};
 opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
     'muMax',1e5,'eps',eps,'maxiter',maxit,'actMargin',-1e-6,'hessian','full',...
      'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
-     'full','plot',false,'Hess','standard');
+     'full','plot',true,'Hess','standard');
 
 [xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
                                       lam0,llbx,uubx,Sig,opts);

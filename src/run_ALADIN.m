@@ -74,7 +74,7 @@ while i <= opts.maxiter
         disp(['Solve NLP ' num2str(j) ': ' num2str(toc) ' sec'])                    
    
         % primal active set detection
-        inact           = [false(nngi{j},1); locFuns.h{j}(xx{j}) < opts.actMargin];
+        inact           = logical([false(nngi{j},1); full(locFuns.h{j}(xx{j}) < opts.actMargin)]);
         KKapp{j}(inact) = 0;
         
         % evaluate gradients and Hessians of the local problems
@@ -146,8 +146,23 @@ while i <= opts.maxiter
     if strcmp(opts.innerAlg, 'full')
         [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact);    
         delx             = delxs2(1:(end-Ncons)); 
+        
+    elseif  strcmp(opts.innerAlg, 'nonlSlack')
+        KKT = [ HQP       mu*JacCon'          A' ;
+                JacCon   -eye(Nhact)          zeros(Nhact, Ncons);
+                A         zeros(Ncons,Nhact)  zeros(Ncons)];
+            
+        rhs = [ -vertcat(ggiEval{:}) - A'*lam; 
+                 zeros(Nhact,1);
+                 0 - A*x];
+        
+        solTot = KKT\rhs;
+        
+        delx   = full(solTot(1:size(HQP,1)));
+        lamges = full(solTot(end-Ncons+1:end));
+        
     else
-        [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval,JacCon, ...
+        [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval,JJacCon, ...
                     ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
     end
     disp(['Solve QP: ' num2str(toc) ' sec'])

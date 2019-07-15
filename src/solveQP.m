@@ -1,4 +1,6 @@
 function [ xopt, lam, eigH, rankLEQS_ex ] = solveQP( H, g, A, b, solver,Nhact)
+
+
 if strcmp(solver, 'ipopt')
     % regularization
 %     if rank(H) ~=1
