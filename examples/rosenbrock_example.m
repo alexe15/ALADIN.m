@@ -63,26 +63,26 @@ opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
                                       lam0,llbx,uubx,Sig,opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
-y1  =   sym('y1',[n,1],'real');
-y2  =   sym('y2',[n,1],'real');
+y1  =   sym('y1',[1,1],'real');
+y2  =   sym('y2',[2,1],'real');
 f1fun   =   matlabFunction(f1,'Vars',{y1});
 f2fun   =   matlabFunction(f2,'Vars',{y2});
-%h1fun   =   matlabFunction(h1,'Vars',{y1});
+h1fun   =   emptyfun;
 h2fun   =   matlabFunction(h2,'Vars',{y2});
 
 
 % y0  =   ones(N*n,1);
-y   =   SX.sym('y',[N*n,1]);
-F   =   f1fun(y(1:2))+f2fun(y(3:4));
-g   =   [h1fun(y(1:2));
-         h2fun(y(3:4));
+y   =   SX.sym('y',[3,1]);
+F   =   f1fun(y(1))+f2fun(y(2:3));
+g   =   [h1fun(y(1));
+         h2fun(y(2:3));
          [A1, A2]*y];
 nlp =   struct('x',y,'f',F,'g',g);
 cas =   nlpsol('solver','ipopt',nlp);
 sol =   cas('lbx', [lb1; lb2],...
             'ubx', [ub1; ub2],...
-            'lbg', [-inf;-inf;b], ...
-            'ubg', [0;0;b]);  
+            'lbg', [-inf;b], ...
+            'ubg', [0;b]);
         
         
 % plotting
