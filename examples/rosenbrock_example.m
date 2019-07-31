@@ -33,33 +33,30 @@ h1f     =   emptyfun;
 h2f     =   matlabFunction(h2,'Vars',{y2});
 
 %% initalize
-maxit   =   15;
-%y0      =   3*rand(N*n,1);
-lam0    =   10*(rand(1)-0.5);
-rho     =   10;
-mu      =   100;
-eps     =   1e-4;
-Sig     =   {eye(1),eye(2)};
+maxit =   15;
+rho   =   10;
+mu    =   100;
+eps   =   1e-4;
+
+opts  =   struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
+                 mu,'muUpdate',1,'muMax',1e5,'eps',eps,...
+                 'maxiter',maxit,'actMargin',-1e-6,'hessian',...
+                 'full','solveQP','MA57','reg','true',...
+                 'locSol','ipopt','innerIter',2400,'innerAlg',...
+                 'full','plot',false,'Hess','standard');
 
 %% solve with ALADIN
-AQP           = [A1,A2];
-ffifun        = {f1f,f2f};
-hhifun        = {h1f,h2f};
-[ggifun{1:N}] = deal(emptyfun);
+ffifun           =   {f1f,f2f};
+[ggifun{1:N}]    =   deal(emptyfun);
+hhifun           =   {h1f,h2f};
+AA               =   {A1,A2};
+yy0              =   {[-2],[-2;1]};
+lam0             =   10*(rand(1)-0.5);
+llbx             =   {lb1,lb2};
+uubx             =   {ub1,ub2};
+Sig              =   {eye(1),eye(2)};
 
-yy0         = {[-2],[-2;1]};
-%xx0        = {[1 1]',[1 1]'};
-
-llbx        = {lb1,lb2};
-uubx        = {ub1,ub2};
-AA          = {A1,A2};
-
-opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
-    'muMax',1e5,'eps',eps,'maxiter',maxit,'actMargin',-1e-6,'hessian','full',...
-     'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
-     'full','plot',false,'Hess','standard');
-
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
+[xoptAL, loggAL] =   run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
                                       lam0,llbx,uubx,Sig,opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
