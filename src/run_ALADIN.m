@@ -28,7 +28,7 @@ setupT  = tic;
 [ locFunsCas, xxCas ]   = mFun2casFun(locFuns, zz0, opts);
 
 % create local solvers and sensitivities
-[ nnlp, sens, gBounds ] = createLocalSolvers( locFunsCas, AA, xxCas, Sig, opts );
+[ nnlp, sens, gBounds ] = createLocalSolvers( locFunsCas, AA, xxCas, opts );
 
 % set up a merit function for line search
 [ Mfun ]                = createMfun(locFunsCas, xxCas, AA, opts );
@@ -40,14 +40,15 @@ if lamInit == true
 end
 
 disp(['Problem setup: ' num2str(toc(setupT)) ' sec'])
+
 %% ALADIN iterations
 initializeVariables
 
 iterTime = tic;
-i   = 1;
-rho = opts.rho0;
-mu  = opts.mu0;
-while i <= opts.maxiter
+i       = 1;
+rho     = opts.rho0;
+mu      = opts.mu0;
+while i <= opts.maxiter    
     % solve local problems
     for j=1:NsubSys
         % set up parameter vector for local NLP's
@@ -57,18 +58,37 @@ while i <= opts.maxiter
                                  
         % solve local NLP's
         tic
+        if strcmp(opts.Sig,'const')
         sol = nnlp{j}('x0' ,    xx{j},...
                       'lam_g0', KKapp{j},...
                       'lam_x0', LLam_x{j},...
-                      'p',      pNum,...
+                      'p',      [pNum; Sig{j}(:)],...
                       'lbx',    llbx{j},...
                       'ubx',    uubx{j},...
                       'lbg',    gBounds.lb{j}, ...
                       'ubg',    gBounds.ub{j});          
-                  
-        xx{j}           = full(sol.x);        
-        KKapp{j}        = full(sol.lam_g);
-        LLam_x{j}       = full(sol.lam_x);
+        else
+            % compute Hessian at y for scaling
+            if i > 1
+                tmp         = ones(nngi{j} + nnhi{j},1);
+                tmp(~inact) = kapp;
+                HHiEval{j}  = sens.H{j}(yy{j},tmp,rho);
+                HHiEval{j}  = regularizeH(HHiEval{j});
+            else
+                HHiEval = Sig;
+            end
+            
+            sol = nnlp{j}('x0', xx{j},...
+                      'lam_g0', KKapp{j},...
+                      'lam_x0', LLam_x{j},...
+                      'p',      [pNum; HHiEval{j}(:)],...
+                      'lbx',    llbx{j},...
+                      'ubx',    uubx{j},...
+                      'lbg',    gBounds.lb{j}, ...
+                      'ubg',    gBounds.ub{j});          
+        end
+        % collect variables 
+        [ xx{j}, KKapp{j}, LLam_x{j} ] = deal(full(sol.x), full(sol.lam_g), full(sol.lam_x));
         
         NLPtotTime      = NLPtotTime + toc;            
         disp(['Solve NLP ' num2str(j) ': ' num2str(toc) ' sec'])                    
@@ -86,7 +106,7 @@ while i <= opts.maxiter
         % regularization of the local hessians
         tic
         if strcmp(opts.reg,'true')
-            HHiEval{j} = regularizeH(HHiEval{j});
+            [HHiEval{j}, didReg ] = regularizeH(HHiEval{j});
         end
         disp(['Regularization in ' num2str(j) ': ' num2str(toc) ' sec'])
         RegTotTime      = RegTotTime + toc;
@@ -109,8 +129,18 @@ while i <= opts.maxiter
         kappaMax        = max(abs(KKapp{j}));
     end 
     
+     % line search on the local step
+    linSloc = false;
+    if linSloc == true
+        alphaLoc = lineSearch(Mfun, vertcat(yy{:}), vertcat(xx{:}) - vertcat(yy{:}) );
+    else
+        alphaLoc = 1;
+    end
+    alphaLoc
+    
+    
     % set up coordination QP including slacks 
-    x        =  vertcat(xx{:});
+    x        =  vertcat(yy{:}) + alphaLoc*(vertcat(xx{:}) - vertcat(yy{:}));
     rhsQP    = -A*x;     
     
  
@@ -129,6 +159,12 @@ while i <= opts.maxiter
 
     
     JacCon   = blkdiag(JJacCon{:});
+    
+    % check condition number of constraints
+    if cond(full(JacCon)) > 1e8
+       keyboard 
+    end
+    
     Nhact    = size(JacCon,1);
     AQP      = [A -eye(Ncons);JacCon zeros(Nhact,Ncons)];
     bQP      = sparse([rhsQP;zeros(Nhact,1)]); 
@@ -139,14 +175,14 @@ while i <= opts.maxiter
     checkFeas = false;
     if checkFeas==true
        run( checkQPfeasibility );
-    end
+    end    
     
     % solve coordination QP
     tic
     if strcmp(opts.innerAlg, 'full')
         [delxs2, lamges] = solveQP(HQPs,gQPs,AQP,bQP,opts.solveQP,Nhact);    
         delx             = delxs2(1:(end-Ncons)); 
-        
+        kapp             = full(delxs2(size(HQP,1)+1:end-Ncons ));
     elseif  strcmp(opts.innerAlg, 'nonlSlack')
         KKT = [ HQP       mu*JacCon'          A' ;
                 JacCon   -eye(Nhact)          zeros(Nhact, Ncons);
@@ -160,7 +196,7 @@ while i <= opts.maxiter
         
         delx   = full(solTot(1:size(HQP,1)));
         lamges = full(solTot(end-Ncons+1:end));
-        
+        kapp   = full(solTot(size(HQP,1)+1:end-Ncons ));
     else
         [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval,JJacCon, ...
                     ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
@@ -171,20 +207,24 @@ while i <= opts.maxiter
     % do a line search?
     linS = false;
     if linS == true
-        stepSize = lineSearch(Mfun, x, y);
+        alpha = lineSearch(Mfun, x ,delx);
+    else
+        alpha = 1;
     end
+  
     
-    % no line search
+    % compute the QP step
     ctr   = 1;
     yOld = vertcat(yy{:});
     for j=1:NsubSys
         ni    = length(yy{j});
-        yy{j} = yy{j} + 1*(xx{j} - yy{j}) + 1*delx(ctr:(ctr+ni-1)); 
+        yy{j} = yy{j} + 1*(xx{j} - yy{j}) + alpha*delx(ctr:(ctr+ni-1)); 
         ctr   = ctr + ni;
     end
-    lam     = lam + 1*(lamges(1:Ncons) - lam);
+    lam     = lam + alpha*(lamges(1:Ncons) - lam);
     y = vertcat(yy{:});
     i = i+1;
+
    
     % rho update
     if rho < opts.rhoMax && rho > 90

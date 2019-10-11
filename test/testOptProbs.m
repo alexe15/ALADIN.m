@@ -135,7 +135,7 @@ maxit   =   15;
 %y0      =   3*rand(N*n,1);
 lam0    =   10*(rand(1)-0.5);
 rho     =   10;
-mu      =   100;
+mu      =   10;
 eps     =   1e-4;
 Sig     =   {eye(1),eye(2)};
 
@@ -152,7 +152,7 @@ llbx        = {lb1,lb2};
 uubx        = {ub1,ub2};
 AA          = {A1,A2};
 
-opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
+opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1.2,...
     'muMax',1e5,'eps',eps,'maxiter',maxit,'actMargin',-1e-6,'hessian','full',...
      'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
      'full','plot',false,'Hess','standard');

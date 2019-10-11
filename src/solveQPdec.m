@@ -294,20 +294,20 @@ u = zDistr;
 end
 
 
-% % % compare with D-ADMM
-%  nPlot = 97; 
+% % compare with D-ADMM
+%  nPlot = 100; 
 % % set(0,'defaultTextInterpreter','latex');
 %  figure 
 %  resCG = max(abs(S*ZcgD-repmat(rhsS,[1 size(ZcgD,2)])));
 %  semilogy(1:nPlot,resCG(:,1:nPlot))
 % hold on
-% resADM = max(abs(S*Z-rhsS));
+% resADM = max(abs(S*Z-repmat(rhsS,[1,size(Z,2)])));
 % semilogy(1:nPlot,resADM(:,1:nPlot))
 % legend('D-CG','D-ADMM')
-% ylabel('$\|S\lambda^k-s\|_\infty$')
+% ylabel('$\|\tilde S\lambda^k-\tilde s\|_\infty$')
 % xlabel('k')
-% ylim([1e-11 1e2])
-
+% ylim([1e-15 1e3])
+% xlim([1 100])
 
 
 %% expand again locally

@@ -9,7 +9,7 @@ for i=1:NsubSys
            
     % local equality and inequality constraints
     locFunsCas.g{i}  = locFuns.g{i}(xxCas{i});
-    locFunsCas.h{i}  = locFuns.h{i}(xxCas{i});
+    locFunsCas.h{i}  = 1*locFuns.h{i}(xxCas{i});
     locFunsCas.f{i}  = locFuns.f{i}(xxCas{i});
 
 end

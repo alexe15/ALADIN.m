@@ -1,5 +1,6 @@
 % variable initialization
 logg.X          = [];
+logg.Y          = [];
 logg.delY       = [];   
 logg.Kappa      = [];
 logg.KappaEq    = [];

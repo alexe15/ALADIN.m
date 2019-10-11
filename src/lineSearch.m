@@ -1,11 +1,11 @@
-function [ output_args ] = lineSearch( input_args )
+function [ alphaSQP ] = lineSearch( Mfun, x, delx)
 
  alphaSQP = 1;
 
 % From central solution multipliers
 muMeritMin  = 1e4;
 % SQP like line search, not really working...
-lineSSQP = false;
+lineSSQP = true;
 % ALADIN line search
 ALADINLs = false;
 
@@ -14,7 +14,7 @@ ALADINLs = false;
 %   Detailed explanation goes here
 
     % line search
-    if lineSSQP == true
+if lineSSQP == true
 %         % evaluate constraint violations for local problems
 %         ctr = 1;
 %         for j=1:NsubSys
@@ -47,8 +47,8 @@ ALADINLs = false;
     %     figure
     %     plot(a,f);
         % line search
-        y = vertcat(yy{:});
-        while full(Mfun(y,muMeritMin*1.1)) < full(Mfun(x + alphaSQP*delx,muMeritMin*1.1))
+      %  y = vertcat(yy{:});
+        while full(Mfun(x,muMeritMin*1.1)) < full(Mfun(x + alphaSQP*delx,muMeritMin*1.1))
             % try 2nd order correction if no suff. decrease (Nocedal p.443)
 %             if alphaSQP == 1
 %                 constrLin     = [blkdiag(AAQPll{:}); A];
@@ -66,7 +66,7 @@ ALADINLs = false;
         end
         
             % lambda only for cons. constr,
-        lam     = lam + alphaSQP*(lamges(1:Ncons) - lam);
+  %      lam     = lam + alphaSQP*(lamges(1:Ncons) - lam);
     
         % lambda update for SQP like this?
     %       lam     = alphaM*lamges(1:Ncons);
@@ -80,108 +80,108 @@ ALADINLs = false;
     %     end
     
         % update the local states
-        yyOld = yy;
-        ctr   = 1;
-        for j=1:NsubSys
-            ni    = length(yy{j});
-            yy{j} = xx{j} + alphaSQP*delx(ctr:(ctr+ni-1)); 
-            ctr   = ctr + ni;
-        end
-    elseif ALADINLs == true
-        gamma       = 1e-8;
-        % line search
-        x = vertcat(xx{:}); % local solutions
-        
-        % sufficient decrease by full step?
-        if full(Mfun(y,muMeritMin*1.1)) - full(Mfun(x + delx,muMeritMin*1.1)) > ...
-                gamma*(rho/2*(x-y)'*blkdiag(Sig{:})*(x-y) + muMeritMin*1.1*norm(A*x,1))
-            
-            alpha1 = 1;
-            alpha2 = 1;
-            alpha3 = 1;
-            
-            % reset non-monotone counter
-            nonMonSteps = 0;
-            
-        % sufficient decrease only local step?
-        elseif full(Mfun(y,muMeritMin*1.1)) - full(Mfun(x,muMeritMin*1.1)) > ...
-                gamma*(rho/2*(x-y)'*blkdiag(Sig{:})*(x-y) + muMeritMin*1.1*norm(A*x,1))
-            
-            % non-monotone strategy
-            if nonMonSteps == 0
-                % save current iterate
-                yySave   = yy;
-                xxSave   = xx;
-                delxSave = delx;
-                lamSave  = lam;
-                rhoSave  = rho;
-                muSave   = mu;
-            end
-            
-            if nonMonSteps < 2
-                alpha1 = 1;
-                alpha2 = 1;
-                alpha3 = 1;
-            else
-                alpha1 = 1;
-                alpha2 = 0;
-                alpha3 = 0;
-                
-                nonMonSteps = -1;
-                yy       = yySave;
-                xx       = xxSave;
-                delx     = delxSave;
-                lam      = lamSave;
-                rho      = rhoSave;
-                mu       = muSave;
-            end
-
-            nonMonSteps = nonMonSteps + 1;  
-        else
-             if nonMonSteps == 0
-            % save current iterate
-                yySave   = yy;
-                lamSave  = lam;
-                rhoSave  = rho;
-                muSave   = mu;
-             end
-            
-            if nonMonSteps < 2
-                alpha1 = 1;
-                alpha2 = 1;
-                alpha3 = 1;
-            else
-                alpha1 = 0;
-                alpha2 = 0;
-                alpha3 = 0;
-                
-                 nonMonSteps = -1;
+%         yyOld = yy;
+%         ctr   = 1;
+%         for j=1:NsubSys
+%             ni    = length(yy{j});
+%             yy{j} = xx{j} + alphaSQP*delx(ctr:(ctr+ni-1)); 
+%             ctr   = ctr + ni;
+%         end
+%     elseif ALADINLs == true
+%         gamma       = 1e-8;
+%         % line search
+%         x = vertcat(xx{:}); % local solutions
+%         
+%         % sufficient decrease by full step?
+%         if full(Mfun(y,muMeritMin*1.1)) - full(Mfun(x + delx,muMeritMin*1.1)) > ...
+%                 gamma*(rho/2*(x-y)'*blkdiag(Sig{:})*(x-y) + muMeritMin*1.1*norm(A*x,1))
+%             
+%             alpha1 = 1;
+%             alpha2 = 1;
+%             alpha3 = 1;
+%             
+%             % reset non-monotone counter
+%             nonMonSteps = 0;
+%             
+%         % sufficient decrease only local step?
+%         elseif full(Mfun(y,muMeritMin*1.1)) - full(Mfun(x,muMeritMin*1.1)) > ...
+%                 gamma*(rho/2*(x-y)'*blkdiag(Sig{:})*(x-y) + muMeritMin*1.1*norm(A*x,1))
+%             
+%             % non-monotone strategy
+%             if nonMonSteps == 0
+%                 % save current iterate
+%                 yySave   = yy;
+%                 xxSave   = xx;
+%                 delxSave = delx;
+%                 lamSave  = lam;
+%                 rhoSave  = rho;
+%                 muSave   = mu;
+%             end
+%             
+%             if nonMonSteps < 2
+%                 alpha1 = 1;
+%                 alpha2 = 1;
+%                 alpha3 = 1;
+%             else
+%                 alpha1 = 1;
+%                 alpha2 = 0;
+%                 alpha3 = 0;
+%                 
+%                 nonMonSteps = -1;
 %                 yy       = yySave;
 %                 xx       = xxSave;
 %                 delx     = delxSave;
 %                 lam      = lamSave;
 %                 rho      = rhoSave;
 %                 mu       = muSave;
-            end
-            nonMonSteps = nonMonSteps + 1;      
-
-            %keyboard;
-            % increase rho?
-%             rho = rho*2;
+%             end
+% 
+%             nonMonSteps = nonMonSteps + 1;  
+%         else
+%              if nonMonSteps == 0
+%             % save current iterate
+%                 yySave   = yy;
+%                 lamSave  = lam;
+%                 rhoSave  = rho;
+%                 muSave   = mu;
+%              end
 %             
-        end
+%             if nonMonSteps < 2
+%                 alpha1 = 1;
+%                 alpha2 = 1;
+%                 alpha3 = 1;
+%             else
+%                 alpha1 = 0;
+%                 alpha2 = 0;
+%                 alpha3 = 0;
+%                 
+%                  nonMonSteps = -1;
+% %                 yy       = yySave;
+% %                 xx       = xxSave;
+% %                 delx     = delxSave;
+% %                 lam      = lamSave;
+% %                 rho      = rhoSave;
+% %                 mu       = muSave;
+%             end
+%             nonMonSteps = nonMonSteps + 1;      
+% 
+%             %keyboard;
+%             % increase rho?
+% %             rho = rho*2;
+%             
+end
   
         % update
-        ctr   = 1;
-        for j=1:NsubSys
-            ni    = length(yy{j});
-            yy{j} = yy{j} + alpha1*(xx{j} - yy{j}) + alpha2*delx(ctr:(ctr+ni-1)); 
-            ctr   = ctr + ni;
-        end
-              
-        % lambda only for cons. constr,
-        lam     = lam + alpha3*(lamges(1:Ncons) - lam);
-    end
+%         ctr   = 1;
+%         for j=1:NsubSys
+%             ni    = length(yy{j});
+%             yy{j} = yy{j} + alpha1*(xx{j} - yy{j}) + alpha2*delx(ctr:(ctr+ni-1)); 
+%             ctr   = ctr + ni;
+%         end
+%               
+%         % lambda only for cons. constr,
+%         lam     = lam + alpha3*(lamges(1:Ncons) - lam);
+%     
 
 end
 

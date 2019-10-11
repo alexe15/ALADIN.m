@@ -1,4 +1,4 @@
-function [ nnlp, sens, gBounds ] = createLocalSolvers( locFunsCas, AA, xxCas, Sig, opts )
+function [ nnlp, sens, gBounds ] = createLocalSolvers( locFunsCas, AA, xxCas, opts )
 %CREATELOCALSOLVERS Summary of this function goes here
 %   Detailed explanation goes here
 import casadi.*
@@ -9,6 +9,7 @@ lamCas      = opts.sym('lam',size(AA{1},1),1);
 
 
 for i=1:NsubSys     
+    nnxi{i} = size(AA{i},2);
     nngi{i} = size(locFunsCas.g{i},1);
     nnhi{i} = size(locFunsCas.h{i},1);    
     
@@ -18,7 +19,7 @@ for i=1:NsubSys
     
     % local Lagrange multipliers
     kkappCas = opts.sym('kapp',nngi{i}+nnhi{i},1);
- 
+    SSig     = opts.sym('SSig',[nnxi{i} nnxi{i}]);
  
     nx        = length(xxCas{i});
     zzCas{i}  = opts.sym('z',nx,1);
@@ -26,7 +27,7 @@ for i=1:NsubSys
                 
     % objective function for local NLP's
     ffiLocCas = locFunsCas.f{i} + lamCas'*AA{i}*xxCas{i} ...
-                + rhoCas/2*(xxCas{i} - zzCas{i})'*Sig{i}*(xxCas{i} - zzCas{i});
+                + rhoCas/2*(xxCas{i} - zzCas{i})'*SSig*(xxCas{i} - zzCas{i});
      
             
     
@@ -51,7 +52,7 @@ for i=1:NsubSys
                      lamCas;
                      zzCas{i}];
     
-    nlp     = struct('x',xxCas{i},'f',ffiLocCas,'g',[locFunsCas.g{i}; locFunsCas.h{i}],'p',ppCas{i});
+    nlp     = struct('x',xxCas{i},'f',ffiLocCas,'g',[locFunsCas.g{i}; locFunsCas.h{i}],'p',[ppCas{i}; SSig(:)]);
     nnlp{i} = nlpsol('solver','ipopt',nlp,nlp_opts);
     % alternatively use an SQP algorithm
 %    nnlp{i} = nlpsol('solver','sqpmethod',nlp);
