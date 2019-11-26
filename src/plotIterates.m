@@ -19,7 +19,7 @@
 % 
 %             % merit function
 %             subplot(7,1,3);
-            subplot(3,2,subPltCtr)
+            subplot(2,2,subPltCtr)
             subPltCtr = subPltCtr + 1;
             hold on;
             semilogy(logg.Mfun);
@@ -29,13 +29,13 @@
 %             % consensus violation
 %             subplot(7,1,4);
 %             figure(2)
-            subplot(3,2,subPltCtr)
+            subplot(2,2,subPltCtr)
             subPltCtr = subPltCtr + 1;
             hold on;
             %semilogy(logg.consViol);
             plot(1:1:size(logg.consViol,2),log10(logg.consViol));
             xlabel('k')
-            ylabel('||Ax-b||_\infty')
+            ylabel('log$ _{10}(||Ax-b||_\infty)$', 'Interpreter', 'latex')
             
 % 
 %             % working set
@@ -47,7 +47,7 @@
 %             ylabel('Active constraints')
 %             
 %             figure(3);
-            subplot(3,2,subPltCtr)
+            subplot(2,2,subPltCtr)
             subPltCtr = subPltCtr + 1;
             hold on;
             plot(logg.wrkSetChang');
@@ -66,7 +66,7 @@
 lineSSQP = false;
             if lineSSQP == true
 %                 figure(4);
-                subplot(3,2,subPltCtr)
+                subplot(2,2,subPltCtr)
                 subPltCtr = subPltCtr + 1;
                 hold on;
                 plot(logg.alpha);
@@ -80,7 +80,7 @@ lineSSQP = false;
 %             ylabel('step size')
 
 %             figure(5);
-            subplot(3,2,subPltCtr)
+            subplot(2,2,subPltCtr)
             subPltCtr = subPltCtr + 1;
             hold on;
             plot(1:i-1,log10(logg.localStepS'),'k');

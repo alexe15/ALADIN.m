@@ -55,7 +55,7 @@ iterTime = tic;
 i       = 1;
 rho     = opts.rho0;
 mu      = opts.mu0;
-while i <= opts.maxiter    
+while ( (i <= opts.maxiter) & ((~logical(opts.term_eps)) | (logg.consViol >= opts.term_eps))  )
     % solve local problems
     parfor j=1:NsubSys % parfor???
         % set up parameter vector for local NLP's
