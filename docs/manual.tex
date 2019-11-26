@@ -12,6 +12,7 @@
 
 \begin{document}
 
+
 \maketitle
 
 \begin{abstract}
@@ -24,7 +25,7 @@
 The algorithm is based on the paper \cite{Houska}.
 Few algorithmic extensions for numerical stability, e.g. a specific implementation for choosing the Hessian approximation.
 Furthermore, slightly different problem formulation for numerical reasons.
-We only consider the local version of ALADIN here, a globally convergent version is topic 
+We only consider the local version of ALADIN here, a globally convergent version is topic. \textcolor{red}{\textbf{TODO:} More introduction... i.e. This manual is written for ... This seems to me a bit bullett pointish..} 
 
 \section{Problem Formulation}
 The ALADIN solver solves problems of the form
@@ -46,8 +47,10 @@ In constrast to \cite{Houska}, we distinguish here between \eqref{sepFormEq}, \e
 
 
 \section{Solver Interface}
-The input data for the solver are $f_i$, $g_i$, $h_i$, $A_i$, $b$, $\underline{x}_i$, $\bar x_i$, $\Sigma_i \succ 0$ and struct called opts.
-
+The input data for the solver are $f_i$, $g_i$, $h_i$, $A_i$, $b$, $\underline{x}_i$, $\bar x_i$, $\Sigma_i \succ 0$ and struct called opts. The objective functions $f_i$, and the constraint functions $g_i$, $h_i$ are handed over in a cell, i.e. if we have decoupled objective functions $f_1, \cdots , f_n$, they are handed over via $$
+\texttt{cell\{f$_1$, f$_2$, $\cdots$, f$_n$\}}.$$
+ The coupling matrices are similarly handed over via a cell, i.e. if we have $n$ coupling matrices $A_1, \cdots , A_n$ they are handed over as 
+ $$\texttt{cell\{A$_1$, A$_2$ $\cdots$, A$_n$\}}.$$ Usually, every design variable has its own search domain. To transfer the feasble set to ALADIN, for each (multi dimensional) variable $x_i = (x_{i1}, \cdots , x_{in})$ a lower bound vector $\underline{x}_i = (\underline{x}_{i1}, \cdots , \underline{x}_{in})^T$ and an upper bound vector $\overline{x}_i = (\overline{x}_{i1}, \cdots , \overline{x}_{in})^T$ is transfered. All lower and upper bound vectors are again stored in two cells. $Sigma_i$ stores scaling matrices. They are handed over in the manner as the coupling matrices. The \texttt{opts} - struct contains several entries. They can be extracted from table \ref{tab: ALADIN options struct.}. \textcolor{red}{\textbf{TODO} opts struct vervollstaendigen!!!!!} 
 \begin{table}
 	\centering
 	\begin{tabular}{rcc}
@@ -72,10 +75,16 @@ $r_\mu$	& numeric  & $1 \dots 2$  \\
 	\hline 
 \end{tabular} 
 \caption{ALADIN options struct.}
+\label{tab: ALADIN options struct.}
 \end{table}
 
 \section{Software Structure}
-\begin{figure}
+Applying the ALADIN solver means to execute a series of different and also a series of different types of optimization problems. For the sake of readability and understanding of the software, a short recapitulation and overview of necessary general knowledge on optimization is given.
+
+\textcolor{red}{TODO}
+
+ An overview of the ALADIN solver in tabular form is given in figure \ref{fig:flowchart}. To be able to use the already implemented optimization tools from CasADi, first of all, the matlab functions need to be converted to CasADi functions. This is done in the function \texttt{mFun2casFun}. 
+\begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.3\linewidth]{figures/flowChart}
 	\caption{ALADIN solver flowchart.}
@@ -85,7 +94,7 @@ $r_\mu$	& numeric  & $1 \dots 2$  \\
 
 \begin{algorithm}
 	
-	\caption{Augmented Lagrangian Alternating Direction Inexact Newton (ALADIN)}
+	\caption{Augmented Lagrangian Alternating Direction Inexact Newto{}n (ALADIN)}
 	\textbf{Initialization:} Initial guess $(z^0,\lambda^0)$, choose $\Sigma_i,\rho^0,\mu^0,\epsilon$. \\
 	\textbf{Repeat:}
 	\begin{enumerate}
@@ -293,13 +302,92 @@ Further research is strongly needed here.
 \section{Numerical Examples}
 \subsection{Problem Setup with Different Tools}
 \subsubsection{MATLAB Symbolic}
+\paragraph{First Example} \\
+As a first example, the following non-convex problem is taken into consideration
 
+\begin{align*}
+\min_{x = (x_1, x_2)} 2\cdot (x_1 - 1)^2 + (x_2 - 2)^2 &\\
+\text{s.t.} \quad-1 \leq x_1 \cdot x_2 \leq 1.5.&
+\end{align*}
+For the application of the ALADIN solver, firstly, a reformulation is needed. Therefore, let $y_1 := (y_{11}, y_{12})$, $y_2 := (y_{21}, y_{22})$ and define
+\begin{align*}
+f_1(y_1) & := 2 \cdot (y_1(1) - 1 )^2 \\
+f_2(y_2) & := (y_2(2) - 2)^2.
+\end{align*}
+Further, set
+\begin{align*}
+h_1(y_1) & : = 1 - y_1(1) \cdot y_1(2) \\
+h_2(y_2) & : = -1.5 + y_1(1) \cdot y_1(2).
+\end{align*}
+If now the follwing equations holds true, i.e.
+\begin{align}\label{coupling}
+y_1(2)  = y_2(1),
+\end{align}
+a system of separable, coupled objective functions is given. Notice, that (\ref{coupling}) can be expressed as
+\begin{align*}
+&\sum_{i = 1}^2 A_i y_i = 0 \\
+\text{with} \quad & A_1 := [+0 \quad +1] \\
+\text{and} \quad  & A_2 := [-1 \quad +0]
+\end{align*}
+such that overall the form of (\ref{eq:sepForm}) is given, i.e.
 
-\lstinputlisting[firstline=1,lastline=30]{../examples/example_main.m}
+\begin{subequations} \label{eq:sepForm_example}
+    \begin{align} 
+    \min_{y} \sum_{i=1}^2  f_i(y_i)& \\
+    \text{subject to }\quad  h_i(y_i)&\leq 0&\forall i \in \mathcal{R} = \{1, 2\}, \label{sepFormInEq_example} \\
+    \underline y_i \leq y_i& \leq \bar y_i &\forall i \in \mathcal{R} = \{1, 2\}, \label{sepFormBound_example}\\
+    \sum_{i\in \mathcal{R}} A_i y_i&=b \label{eq:consConstr_example}
+    \end{align}
+\end{subequations}
+For implementation in \textsc{Matlab}, the objetive functions, the constraint functions, the coupling matrices and the upper and lower boundaries are handed over via a cells. The objective functions and the constraint functions are of the type \texttt{matlab function} to be able to use the matlab intern optimization toolbox. The lower boundary is stored as a vector. In the same manner, the upper boundary is stored. The coupling matrices are stored in matrix form. Further, the \texttt{opts} struct needs to be defined. Details on \texttt{opts} can be found in section TODO.
+\\So firstly, for using the MATLAB symbolic toolbox, we can define the split-up problem.
+\lstinputlisting[firstline=10,lastline=31]{../examples/example_main.m}
+To solve the problem using ALADIN, we first have to convert the symbolic variables to MATLAB functions
+\lstinputlisting[firstline=33,lastline=37]{../examples/example_main.m}
+Next, we set the solver options
+\lstinputlisting[firstline=40,lastline=46]{../examples/example_main.m}
+Finally, we solve the problem with ALADIN
+\lstinputlisting[firstline=49,lastline=70]{../examples/example_main.m}
+
+\paragraph{Rosenbrock Function} \\
+For the Rosenbrock Function we consider
+\begin{align*}
+\min_{x_1, x_2} f(x_1, x_2) &= (1 - x_1)^2 + 100 \cdot (x_2 - x_1^2)^2 \\
+\text{s.t.} \quad x_1 & \geq -1.5.
+\end{align*}
+In order to solve it with ALADIN, we have to reformulate the problem. First, we substitute $x_1$ and $x_2$ which gives us
+\begin{align*}
+\min_{y_1, y_2, y_3}f(y_1, y_2, y_3) & = f(y_1) + f(y_2, y_3)\\
+ & = (1 - y_1)^2 + 100 \cdot (y_2 - y_3^2)^2 \\
+\text{s.t.} \quad y_2 & \geq - 1.5\\
+y_1 & = y_3. 
+\end{align*}
+Second, we slit up the problem as follows
+\begin{align*}
+\min_{\tilde{y}_1, \tilde{y}_2} &= f_1(\tilde{y}_1) + f_2(\tilde{y}_2) \\
+& = (1 - \tilde{y}_1(1))^2 + 100 \cdot (\tilde{y}_2(1) - \tilde{y}_2(2)^2)^2 \\ 
+\\
+\text{s.t.} \quad & [1] \cdot \tilde{y}_1 + [0, -1] \cdot \tilde{y}_2 = 0 \\
+\quad \quad & \quad \quad \text{ } -1.5 - \tilde{y}_2(1) \leq 0
+\end{align*}
+with $\tilde{y}_1 = (y_1)$ and $\tilde{y}_2 = (y_2, y_3)$.
+Using the MATLAB symbolic toolbox, we can now define the split-up problem 
+%(see \texttt{rosenbrock\_example.m}) 
+as 
+\lstinputlisting[firstline=10,lastline=26]{../examples/rosenbrock_example.m}
+To solve the problem using ALADIN, we first have to convert the symbolic variables to MATLAB functions:
+\lstinputlisting[firstline=29,lastline=33]{../examples/rosenbrock_example.m}
+Next, we set the solver options.
+\lstinputlisting[firstline=36,lastline=47]{../examples/rosenbrock_example.m}
+Finally, we solve the problem with ALADIN
+\lstinputlisting[firstline=50,lastline=62]{../examples/rosenbrock_example.m}
 
 \subsubsection{MATLAB Functions}
+\textcolor{red}{\textbf{TODO}} 
 \subsubsection{CasADi Symbolic}
-
+\textcolor{red}{TODO: Beispiel aufstellen für casadi symbolic statt matlab symbolic \\
+$\rightarrow$ eine dependency weniger\\
+$\rightarrow$ siehe \texttt{run$\_$aladin} für Beispiel.}
 \subsection{Using ALADIN for MPC}
 \subsection{Using ALADIN for OPF}
 \subsubsection{Particular Numerical Issues in OPF}
