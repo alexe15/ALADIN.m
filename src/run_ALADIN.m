@@ -42,6 +42,13 @@ end
 disp(['Problem setup: ' num2str(toc(setupT)) ' sec'])
 
 %% ALADIN iterations
+
+% pre_initialization
+nngi = {};
+nnhi = {};
+HHiEval_ = cell(NsubSys, 1);
+
+
 initializeVariables
 
 iterTime = tic;
@@ -50,7 +57,7 @@ rho     = opts.rho0;
 mu      = opts.mu0;
 while i <= opts.maxiter    
     % solve local problems
-    for j=1:NsubSys
+    parfor j=1:NsubSys % parfor???
         % set up parameter vector for local NLP's
         pNum = [ rho;
                  lam;
@@ -67,25 +74,25 @@ while i <= opts.maxiter
                       'ubx',    uubx{j},...
                       'lbg',    gBounds.lb{j}, ...
                       'ubg',    gBounds.ub{j});          
-        else
-            % compute Hessian at y for scaling
-            if i > 1
-                tmp         = ones(nngi{j} + nnhi{j},1);
-                tmp(~inact) = kapp;
-                HHiEval{j}  = sens.H{j}(yy{j},tmp,rho);
-                HHiEval{j}  = regularizeH(HHiEval{j});
-            else
-                HHiEval = Sig;
-            end
-            
-            sol = nnlp{j}('x0', xx{j},...
-                      'lam_g0', KKapp{j},...
-                      'lam_x0', LLam_x{j},...
-                      'p',      [pNum; HHiEval{j}(:)],...
-                      'lbx',    llbx{j},...
-                      'ubx',    uubx{j},...
-                      'lbg',    gBounds.lb{j}, ...
-                      'ubg',    gBounds.ub{j});          
+%         else
+%             % compute Hessian at y for scaling
+%             if i > 1
+%                 tmp         = ones(nngi{j} + nnhi{j},1);
+%                 tmp(~inact) = kapp;
+%                 HHiEval{j}  = sens.H{j}(yy{j},tmp,rho);
+%                 HHiEval{j}  = regularizeH(HHiEval{j});
+%             else
+%                 HHiEval = Sig;
+%             end
+%             
+%             sol = nnlp{j}('x0', xx{j},...
+%                       'lam_g0', KKapp{j},...
+%                       'lam_x0', LLam_x{j},...
+%                       'p',      [pNum; HHiEval{j}(:)],...
+%                       'lbx',    llbx{j},...
+%                       'ubx',    uubx{j},...
+%                       'lbg',    gBounds.lb{j}, ...
+%                       'ubg',    gBounds.ub{j});          
         end
         % collect variables 
         [ xx{j}, KKapp{j}, LLam_x{j} ] = deal(full(sol.x), full(sol.lam_g), full(sol.lam_x));
@@ -127,7 +134,9 @@ while i <= opts.maxiter
         
         % maximal multiplier for inequalities
         kappaMax        = max(abs(KKapp{j}));
-    end 
+        
+        HHiEval_{j} = HHiEval{j};
+    end %end of parfor
     
      % line search on the local step
     linSloc = false;
@@ -153,7 +162,7 @@ while i <= opts.maxiter
             HQP = 1000000000*eye(size(HQP,1));
         end
     else
-        HQP = blkdiag(HHiEval{:});
+        HQP = blkdiag(HHiEval_{:});
     end
     HQPs     = blkdiag(HQP,mu*eye(Ncons)); 
 
@@ -198,7 +207,7 @@ while i <= opts.maxiter
         lamges = full(solTot(end-Ncons+1:end));
         kapp   = full(solTot(size(HQP,1)+1:end-Ncons ));
     else
-        [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval,JJacCon, ...
+        [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval_,JJacCon, ...
                     ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
     end
     disp(['Solve QP: ' num2str(toc) ' sec'])
@@ -255,4 +264,3 @@ disp(['QP total time:       ' num2str(QPtotTime) ' sec'])
 disp(['Regularization time: ' num2str(RegTotTime) ' sec'])
 
 end
-
