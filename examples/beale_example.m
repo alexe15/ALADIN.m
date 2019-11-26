@@ -56,13 +56,14 @@ h2f     =   matlabFunction(h2,'Vars',{y2});
 h3f     =   matlabFunction(h3,'Vars',{y3});
 
 %% initalize
-maxit   =   100;
-%y0      =   3*rand(N*n,1);
-lam0    =   10*(rand(1)-0.5)*ones(size(A1,1),1);
-rho     =   10;
-mu      =   1000;
-eps     =   1e-4;
-Sig     =   {eye(n),eye(n),eye(n)};
+maxit      =   100;
+%y0        =   3*rand(N*n,1);
+lam0       =   10*(rand(1)-0.5)*ones(size(A1,1),1);
+rho        =   10;
+mu         =   1000;
+eps        =   1e-4;
+term_eps   =   0;
+Sig        =   {eye(n),eye(n),eye(n)};
 
 %% solve with ALADIN
 emptyfun      = @(x) [];
@@ -78,11 +79,8 @@ llbx        = {lb1,lb2,lb3};
 uubx        = {ub1,ub2,ub3};
 AA          = {A1,A2,A3};
 
-opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
-    'muMax',1e5,'eps',eps,'maxiter',maxit,'actMargin',-1e-6,'hessian','full',...
-     'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
-     'full','plot',false,'Hess','standard','slpGlob', true,'trGamma', 1e6, ...
-      'Sig','const', 'term_eps', 0);
+opts = initializeOpts(rho, mu, maxit, term_eps);
+
 
 [xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
                                       lam0,llbx,uubx,Sig,opts);

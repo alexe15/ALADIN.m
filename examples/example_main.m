@@ -48,6 +48,9 @@ mu      =   100;
 eps     =   1e-4;
 Sig     =   {eye(n),eye(n)};
 
+% no termination criterion, stop after maxit
+term_eps = 0;
+
 %% solve with ALADIN
 emptyfun      = @(x) [];
 AQP           = [A1,A2];
@@ -61,12 +64,8 @@ yy0         = {y0(1:2),y0(3:4)};
 llbx        = {lb1,lb2};
 uubx        = {ub1,ub2};
 AA          = {A1,A2};
-opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',1e3,'mu0',mu,'muUpdate',1,...
-    'muMax',1e5,'eps',eps,'maxiter',maxit,'actMargin',-1e-6,'hessian','full',...
-     'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
-     'full','plot',false,'Hess','standard','slpGlob', true,'trGamma', 1e6, ...
-      'Sig','const', 'term_eps', 0);
 
+opts = initializeOpts(rho, mu, maxit, term_eps);
 
 [xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
                                       lam0,llbx,uubx,Sig,opts);

@@ -125,11 +125,12 @@ b = 0;
 
 %% initialize
 
-maxit_ = 15;
-lam0_  = (rand(1) - 0.5)*ones(size(A1_, 1), 1);
-rho_   = 10;
-mu_    = 100;
-eps_   = 1e-4;
+maxit_      = 15;
+lam0_       = (rand(1) - 0.5)*ones(size(A1_, 1), 1);
+rho_        = 10;
+mu_         = 100;
+eps_        = 1e-4;
+term_eps_    = 0;
 
 Sig_ = cell(1, N_);
 
@@ -137,13 +138,15 @@ for i = 1 : N_
     Sig_(i) = mat2cell(eye(n_), n_, n_);
 end
 
-opts  =   struct('rho0',rho_,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
-                 mu_,'muUpdate',1,'muMax',1e5,'eps',eps_,...
-                 'maxiter',maxit_,'actMargin',-1e-6,'hessian',...
-                 'full','solveQP','MA57','reg','true',...
-                 'locSol','ipopt','innerIter',2400,'innerAlg',...
-                 'full','plot',true,'Hess','standard','slpGlob',...
-                 true,'trGamma', 1e6,'Sig','const', 'term_eps', 0);
+opts = initializeOpts(rho_, mu_, maxit_, term_eps_);
+
+% opts  =   struct('rho0',rho_,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
+%                  mu_,'muUpdate',1,'muMax',1e5,'eps',eps_,...
+%                  'maxiter',maxit_,'actMargin',-1e-6,'hessian',...
+%                  'full','solveQP','MA57','reg','true',...
+%                  'locSol','ipopt','innerIter',2400,'innerAlg',...
+%                  'full','plot',true,'Hess','standard','slpGlob',...
+%                  true,'trGamma', 1e6,'Sig','const', 'term_eps', 0);
 
 %% solve with aladin
 ffifun_          = cell(1, N_);

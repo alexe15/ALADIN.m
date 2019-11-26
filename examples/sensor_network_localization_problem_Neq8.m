@@ -232,21 +232,16 @@ h7f = matlabFunction(h7, 'Vars', {y7});
 h8f = matlabFunction(h8, 'Vars', {y8});
 
 %% initialize
-maxit =   15;
-lam0  =   10 * (rand(1) - 0.5)*ones(size(A1, 1), 1);
-rho   =   10;
-mu    =   100;
-eps   =   1e-4;
-Sig   =   {eye(n), eye(n), eye(n), eye(n), eye(n), eye(n), eye(n), eye(n)};
+maxit       =   15;
+lam0        =   10 * (rand(1) - 0.5)*ones(size(A1, 1), 1);
+rho         =   10;
+mu          =   100;
+eps         =   1e-4;
+Sig         =   {eye(n), eye(n), eye(n), eye(n), eye(n), eye(n), eye(n), eye(n)};
+term_eps    = 0;
 
+opts = initializeOpts(rho, mu, maxit, term_eps);
 
-opts  =   struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
-                 mu,'muUpdate',1,'muMax',1e5,'eps',eps,...
-                 'maxiter',maxit,'actMargin',-1e-6,'hessian',...
-                 'full','solveQP','MA57','reg','true',...
-                 'locSol','ipopt','innerIter',2400,'innerAlg',...
-                 'full','plot',true,'Hess','standard','slpGlob',...
-                 true,'trGamma', 1e6,'Sig','const', 'term_eps', 0);
 
 %% solve with aladin
 AQP             = [A1, A2, A3, A4, A5, A6, A7, A8];
