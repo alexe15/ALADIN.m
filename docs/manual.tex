@@ -61,18 +61,44 @@ $\rho^0$	& numeric  & $10^0 \dots 10^4$ \\
 	\hline 
 $r_\rho$	& numeric  & $1 \dots 2$ \\ 
 	\hline 
+$\rho_{\text{max}}$ & numeric & $ 5 \cdot 10^3$ \\
+    \hline
 $\mu^0$	& numeric  & $10^3 \dots 10^6$ \\ 
 	\hline 
 $r_\mu$	& numeric  & $1 \dots 2$  \\ 
 	\hline 
+$\mu_\text{max}$ & numeric & $10^5$ \\
+    \hline
+$\varepsilon$ & numeric & $10^{-4}$ \\
+    \hline
+\texttt{maxiter} & numeric & $15 \cdots 30$ \\
+    \hline
+\texttt{actMargin} & string & $-10^{-6}$ \\
+    \hline
+\texttt{hessian} & string & $\{\texttt{full}, \cdots \}$\\
+    \hline
+\texttt{solveQP}    & string  & \{\texttt{MA57, linsolve, ...} \}  \\ 
+    \hline 
+\texttt{reg} & string & \texttt{true}\\
+    \hline
 \texttt{locSol}	& string  &\{ \texttt{ipopt}, ... \} \\ 
 	\hline 
-\texttt{solveQP}	& string  & \{\texttt{MA57, linsolve, ...} \}  \\ 
-	\hline 
+\texttt{innerIter} & numeric & 2400\\
+    \hline
+\texttt{innerAlg} & string & \{ \texttt{full}, $\cdots$ \}\\
+    \hline
 \texttt{plot}	& logical  & -  \\ 
 	\hline 
+\texttt{Hess} & numeric & \{\texttt{standard}\} \\
+    \hline
+\texttt{slpGlob} & logical & - \\
+    \hline
+\texttt{trGamma} & numeric & $10^6$ \\    
+    \hline
 \texttt{Sig}	& string  & \{\texttt{Hess, const} \} \\ 
 	\hline 
+\texttt{term\_eps} & numeric & $10^-6$\\
+    \hline
 \end{tabular} 
 \caption{ALADIN options struct.}
 \label{tab: ALADIN options struct.}
