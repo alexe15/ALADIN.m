@@ -56,3 +56,11 @@ function testRastriginProblem(TestRastriginProblem)
     close all;
 end
 
+%% Test Convex example and ADMM solver
+function testConvexExample(testConvexExample)
+
+    run ../examples/convex_example.m
+    assert(full(norm(sol.x -xoptAL,inf)) < 1e-3, 'Out of tolerance for local minimizer!')
+    assert(full(norm(sol.x - xoptADM,inf)) < 1e-3, 'ADMM out of tolerance!')
+
+end
