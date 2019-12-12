@@ -41,6 +41,8 @@ end
 
 disp(['Problem setup: ' num2str(toc(setupT)) ' sec'])
 
+% plausibilityCheck
+
 %% ALADIN iterations
 
 % pre_initialization
