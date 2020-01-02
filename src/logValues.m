@@ -10,7 +10,7 @@ end
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];
 %         logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
 %         logg.KappaIneq  = [logg.KappaIneq vertcat(KioptIneq{:})];
-        logg.lambda     = [logg.lambda lam];     
+        logg.lambda     = [logg.lambda lam];
         logg.localStepS = [logg.localStepS norm(x - yOld,1)];
         logg.QPstepS    = [logg.QPstepS norm(y-x,1)];
         logg.Mfun       = [logg.Mfun full(Mfun(y,muMeritMin*1.1))];
