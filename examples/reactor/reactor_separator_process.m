@@ -201,11 +201,13 @@ end
 
 lam0 = 1*ones(size(AA{1},1),1);
 
-opts = struct('rho0',1e3,'rhoUpdate',1,'rhoMax',1e3,'mu0',1e4,'muUpdate',1.5,...
-    'muMax',2e8,'eps',1e-6,'maxiter',20,'actMargin',-1e-6,'hessian','standard',...
-     'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
-     'full','plot',false,'Hess','standard','slpGlob', true,'trGamma', 1e6, ...
-      'Sig','const');
+% initialize the options for ALADIN
+rho = 1e3;
+mu = 1e4;
+maxit = 20;
+term_eps = 0; % no termination criterion, stop after maxit
+
+opts = initializeOpts(rho, mu, maxit, term_eps);
 
 % solve with ALADIN
 [xoptAL, loggAL] = run_ALADIN(JJFun,ggFun,hhFun,AA,xx0,...
