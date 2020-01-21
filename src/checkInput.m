@@ -1,8 +1,10 @@
+function [  ] = checkInput( sProb )
 % script to check plausibility of input variables
+[ ffifun ggifun hhifun ] =  ...
+               deal(sProb.locFuns.ffi, sProb.locFuns.ggi, sProb.locFuns.hhi);
 
 
 %% dimension check of number of subsystems
-
 size_ffi = size(ffifun);
 size_ggi = size(ggifun);
 size_hhi = size(hhifun);
@@ -14,16 +16,14 @@ assert(all(size_ffi == size_ggi) & all(size_hhi == size_ffi), ...
     'and the inequality constraints g_i must be equal']);
 
 %% dimension check of matrix A
-
-assert(all(size_ffi == size(AA)), ...
+assert(all(size_ffi == size(sProb.AA)), ...
     ['ERROR: Mismatching number of coupling matrices.' ...
     'The number of coupling matrices is supposed to be equal to the' ...
     'number of subsystems']);
 
 %% dimension check of initial value
-
- x_test = vertcat(zz0{:});
- A_test = [AA{:}];
+ x_test = vertcat(sProb.zz0{:});
+ A_test = [sProb.AA{:}];
  
  size_x_test = size(x_test);
  size_A_test = size(A_test);
@@ -34,8 +34,7 @@ assert(all(size_ffi == size(AA)), ...
     'coupling matrices']);
 
 %% check rank of AA
-
-AA_concat = horzcat(AA{:});
+AA_concat = horzcat(sProb.AA{:});
 size_AA = size(AA_concat);
 
 assert(rank(AA_concat) == size_AA(1), ... 
@@ -43,10 +42,11 @@ assert(rank(AA_concat) == size_AA(1), ...
        'otherwise no full coupling is possible']);
 
 %% dimension check of lambda
-size_AA = size(AA);
+size_AA = size(sProb.AA{1},1);
 
-assert(size_AA(1) == length(lam0), ...
+assert(size_AA(1) == length(sProb.lam0), ...
     ['Mismatch of dimension of lam0.' ...
     'Dimension should be equal to number of rows of he coupling matrices']);
 
 
+end

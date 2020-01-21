@@ -1,25 +1,37 @@
+% logg consensus violation, objective value and gradient 
+%consViol        = full(sol.g);
+%consViolEq      = [consViolEq; consViol(1:nngi{j})];
+%iinact{j}       = inact;
+
+% maximal multiplier for inequalities
+kappaMax        = max(abs(vertcat(iter.loc.KKapp{:})));
+
+
 for j=1:NsubSys
-        KioptEq{j}      = KKapp{j}(1:nngi{j});
-        KioptIneq{j}    = KKapp{j}(nngi{j}+1:end); 
+        KioptEq{j}      = iter.loc.KKapp{j}(1:nngi{j});
+        KioptIneq{j}    = iter.loc.KKapp{j}(nngi{j}+1:end); 
 end
 
 % logging
-        logg.X          = [logg.X x];
-        logg.Y          = [logg.Y y];
+x               = vertcat(iter.loc.xx{:});
+y               = vertcat(iter.yy{:});
+yOld            = vertcat(iter.yyOld{:});
+
+logg.X          = [iter.logg.X x];
+logg.Y          = [iter.logg.Y y];
 %         logg.delY       = [logg.delY delx];
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];
 %         logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
 %         logg.KappaIneq  = [logg.KappaIneq vertcat(KioptIneq{:})];
-        logg.lambda     = [logg.lambda lam];
-        logg.localStepS = [logg.localStepS norm(x - yOld,1)];
-        logg.QPstepS    = [logg.QPstepS norm(y-x,1)];
-        logg.Mfun       = [logg.Mfun full(Mfun(y,muMeritMin*1.1))];
-        logg.consViol   = [logg.consViol norm(A*x,inf)];
-        Act             = vertcat(iinact{:});
-        logg.wrkSet     = [logg.wrkSet ~Act];
-        if i>2 % number of changing active constraints
-            logg.wrkSetChang = [logg.wrkSetChang sum(abs(logg.wrkSet(:,end-1) - ~Act))];
-        end
+iter.logg.lam        = [iter.logg.lam iter.lam];
+iter.logg.localStepS = [iter.logg.localStepS norm(x - yOld,inf)];
+iter.logg.QPstepS    = [iter.logg.QPstepS norm(y-x,inf)];
+iter.logg.Mfun       = [iter.logg.Mfun full(sProb.Mfun(y,iter.ls.muMeritMin*1.1))];
+iter.logg.consViol   = [iter.logg.consViol norm([sProb.AA{:}]*x,inf)];
+iter.logg.wrkSet     = [iter.logg.wrkSet ~vertcat(iter.loc.inact{:})];
+if i>2 % number of changing active constraints
+    iter.logg.wrkSetChang = [iter.logg.wrkSetChang sum(abs(iter.logg.wrkSet(:,end-1) - ~vertcat(iter.loc.inact{:})))];
+end
 %         logg.obj        = [logg.obj obj];
-    %    logg.desc       = [logg.desc full(grad'*delx)<0];
+%    logg.desc       = [logg.desc full(grad'*delx)<0];
 %         logg.alpha      = [logg.alpha alphaSQP];

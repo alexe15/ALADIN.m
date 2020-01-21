@@ -1,4 +1,4 @@
-function [ xopt, lam, eigH, rankLEQS_ex ] = solveQP( H, g, A, b, solver,Nhact)
+function [ xopt, lam, eigH, rankLEQS_ex ] = solveQP( H, g, A, b, solver)
 
 
 if strcmp(solver, 'ipopt')
@@ -158,12 +158,12 @@ if strcmp(solver, 'MA57')
     LEQS_Bs = [-g; b];
     
     % constraint regularization (Parameter from IPOPT paper)
-    reg = false;
-    if reg == true
-        LEQS_As(end-Nhact+1:end,end-Nhact+1:end) = -1e-8*eye(Nhact);
-    end
+%     reg = false;
+%     if reg == true
+%         LEQS_As(end-Nhact+1:end,end-Nhact+1:end) = -1e-8*eye(Nhact);
+%     end
    
-    [L, D, P] = ldl(LEQS_As);
+    [L, D, P] = ldl(sparse(LEQS_As));
     LEQS_xs = P*(L'\(D\(L\(P'*LEQS_Bs))));    
 
     xopt    = LEQS_xs(1:nx);
