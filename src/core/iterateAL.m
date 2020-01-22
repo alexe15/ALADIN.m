@@ -1,16 +1,16 @@
-function [ sol ] = iterateAL( sProb, opts )
+function [ sol, timers ] = iterateAL( sProb, opts )
 %ITERATEAL Summary of this function goes here
 NsubSys = length(sProb.AA);
 Ncons   = size(sProb.AA{1},1);
 initializeVariables;
 
-iter.timers.iterTime = tic;
+iterTimer = tic;
 i                   = 1;
 while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
                                       (logg.consViol(i) >= opts.term_eps)))
                                   
     % solve local NLPs and evaluate sensitivities                              
-    [ iter.loc ] = parallelStep( sProb, iter, opts );
+    [ iter.loc, timers ] = parallelStep( sProb, iter, timers, opts );
 
     % set up the Hessian of the coordination QP
     if strcmp( opts.Hess, 'BFGS' )
@@ -38,12 +38,12 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
          [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval, ...
                 JJacCon,ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
     end         
-    QPtotTime        = QPtotTime + toc;   
+    timers.QPtotTime      = timers.QPtotTime + toc;   
    
     % do a line search on the QP step?
     linS = false;
     if linS == true
-        stepSizes.alpha = lineSearch(Mfun, x ,delx);
+        stepSizes.alpha   = lineSearch(Mfun, x ,delx);
     end
   
     % compute the ALADIN step
@@ -67,11 +67,19 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
    
     % plot iterates?
     if opts.plot == true
+       tic
        plotIterates;
+       timers.plotTimer = timers.plotTimer + toc;
     end
     
     i = i+1;
 end
+timers.iterTime = toc(iterTimer);
+
+
+sol.xxOpt  = iter.yy;
+sol.lamOpt = iter.lam;
+sol.iter   = iter;
 
 
 end

@@ -1,7 +1,7 @@
 function [ locFunsCas, xxCas ] = mFun2casFun( sProb, opts )
 %MFUN2CASFUN Summary of this function goes here
 %   Detailed explanation goes here
-
+import casadi.*
 
 NsubSys    = length(sProb.locFuns.ffi);
 for i=1:NsubSys

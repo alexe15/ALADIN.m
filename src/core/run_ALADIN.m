@@ -9,8 +9,8 @@
 % out: xopt:   Optimal x vector
 %      logg:   Struct, logging several values during the iteration process
 %%------------------------------------------------------------------------
-function [ xopt, logg ] = run_ALADIN( ffi,ggi,hhi,AA,zz0,...
-                                    lam0,llbx,uubx,SSig,opts )
+function [ xopt, lamOpt, iter ] = run_ALADIN( ffi,ggi,hhi,AA,zz0,...
+                                                 lam0,llbx,uubx,SSig,opts )
                                 
 % just a wrapper for new interface!
 
@@ -27,6 +27,7 @@ opts.SSig  = SSig;
                                 
 sol = run_ALADINnew( sProb, opts );                             
                           
-xopt = sol.xopt;
-logg = sol.logg;
+xopt   = sol.xxOpt;
+lamOpt = sol.lamOpt;
+iter   = sol.iter;
 end

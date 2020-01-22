@@ -11,24 +11,28 @@
 %%------------------------------------------------------------------------
 function [ sol ] = run_ALADINnew( sProb, opts )
 import casadi.*
-opts.sym           = @SX.sym;
+opts.sym   = @SX.sym;
 
 % check inputs
 checkInput(sProb);
 
 % set default options
-opts               = setDefaultOpts(opts);
+opts       = setDefaultOpts(opts);
+
+% timers
+totTimer   = tic;
+setupTimer = tic;
 
 % set up local NLPs and sensitivities
-sProb              = createLocSolAndSens(sProb, opts);
-
-% problem setup 
-sol.timers.totTime = tic;
-sol.timers.setupT  = tic;
+sProb                = createLocSolAndSens(sProb, opts);
+timers.setupT        = toc(setupTimer);
 
 % run ALADIN iterations
-sol                = iterateAL( sProb, opts );
+[ sol, timers.iter ] = iterateAL( sProb, opts );
+
+% total time
+timers.totTime   = toc(totTimer);
 
 % display timing
-displayTimers(sol.timers);
+displayTimers(timers);
 end

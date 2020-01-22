@@ -64,5 +64,9 @@ iter.stepSizes.mu      = opts.mu0;
 
 iter.stepSizes.alpha   = 1;
 
-iter.timers.NLPtotTime = 0;
-iter.timers.RegTotTime = 0;
+timers.NLPtotTime = 0;
+timers.RegTotTime = 0;
+timers.sensEvalT  = 0;
+timers.plotTimer  = 0;
+
+timers.QPtotTime       = 0;
