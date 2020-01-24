@@ -31,7 +31,7 @@ timers.setupT        = toc(setupTimer);
 [ sol, timers.iter ] = iterateAL( sProb, opts );
 
 % total time
-timers.totTime   = toc(totTimer);
+timers.totTime  = toc(totTimer);
 
 % display timing
 displayTimers(timers);

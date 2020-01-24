@@ -58,7 +58,7 @@ for j=1:NsubSys % parfor???
     % regularization of the local hessians
     tic
     if strcmp(opts.reg,'true')
-        [HHiEval{j}, didReg ] = regularizeH(loc.sensEval.HHiEval{j});
+        [loc.sensEval.HHiEval{j}, didReg ] = regularizeH(loc.sensEval.HHiEval{j});
     end
     timers.RegTotTime    = timers.RegTotTime + toc;
 end 
