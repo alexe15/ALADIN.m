@@ -17,8 +17,8 @@ x               = vertcat(iter.loc.xx{:});
 y               = vertcat(iter.yy{:});
 yOld            = vertcat(iter.yyOld{:});
 
-logg.X          = [iter.logg.X x];
-logg.Y          = [iter.logg.Y y];
+iter.logg.X     = [iter.logg.X x];
+iter.logg.Y     = [iter.logg.Y y];
 %         logg.delY       = [logg.delY delx];
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];
 %         logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
