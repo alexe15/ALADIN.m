@@ -1,31 +1,25 @@
-restoredefaultpath;
+% restoredefaultpath;
 clear all;
 clc;
 
 addpath(genpath('../src'));
-% make sure, that matlab can find casadi package
+
+% make sure that current version of casadi is loaded and added to matlab
+% path
+
 % addpath(genpath('../tools/'))
-import casadi.*
+ import casadi.*
 
 %% define Alex's non-convex problem
 N   =   2;
 n   =   2;
 m   =   1;
 
-y_1 = SX.sym('y_1', n);
-y_2 = SX.sym('y_2', n);
+f1 = @(x) 2 * ( x(1) - 1)^2;
+f2 = @(y) (y(2) - 2)^2;
 
-f1f = 2 * (y_1(1) - 1)^2;
-f2f = (y_2(2) - 2)^2;
-
-f1 = Function('f_1', {y_1}, {f1f});
-f2 = Function('f_2', {y_2}, {f2f});
-
-h1f = 1 - y_1(1)*y_1(2);
-h2f = -1.5 + y_2(1)*y_2(2);
-
-h1 = Function('h_1', {y_1}, {h1f});
-h2 = Function('h_2', {y_2}, {h2f});
+h1 = @(x) (1 - x(1) * x(2));
+h2 = @(y) (-1.5 + y(1) * y(2));
 
 A1  =   [0, 1];
 A2  =   [-1,0];
@@ -50,8 +44,8 @@ Sig     =   {eye(n),eye(n)};
 term_eps = 0;
 
 %% solve with ALADIN
-
 emptyfun      = @(x) [];
+
 [ggifun{1:N}] = deal(emptyfun);
 
 % define the optimization set up
@@ -79,14 +73,21 @@ sol_ALADIN = run_ALADINnew( sProb, opts );
                                 
 %% solve centralized problem with CasADi & IPOPT
 
-y   =   SX.sym('y',[N*n,1]);
-F = f1(y_1) + f2(y_2);
-g = [h1(y_1); h2(y_2); [A1, A2]*[y_1;y_2]];
 
-% F   =   f1fun(y(1:2))+f2fun(y(3:4));
-% g   =   [h1fun(y(1:2));
-%          h2fun(y(3:4));
-%          [A1, A2]*y];
+y_1 = SX.sym('y_1', n);
+y_2 = SX.sym('y_2', n);
+
+f_1 = Function('f_1', {y_1}, {2 * (y_1(1) - 1)^2});
+f_2 = Function('f_2', {y_2}, {(y_2(2) - 2)^2});
+
+h_1 = Function('h_1', {y_1}, {1 - y_1(1)*y_1(2)});
+h_2 = Function('h_2', {y_2}, {-1.5 + y_2(1)*y_2(2)});
+
+y   =   SX.sym('y',[N*n,1]);
+F = f_1(y_1) + f_2(y_2);
+g = [h_1(y_1); h_2(y_2); [A1, A2]*[y_1;y_2]];
+
+
 nlp =   struct('x',[y_1; y_2],'f',F,'g',g);
 cas =   nlpsol('solver','ipopt',nlp);
 sol =   cas('lbx', [lb1; lb2],...
@@ -104,5 +105,3 @@ sol =   cas('lbx', [lb1; lb2],...
 % plot(maxit,full(sol.x),'ob')
 % xlabel('$k$');
 % ylabel('$x^k$');
-
- 

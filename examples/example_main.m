@@ -3,7 +3,7 @@ clear all;
 clc;
 
 addpath(genpath('../src'));
-%addpath(genpath('../tools/'))
+% addpath(genpath('../tools/'))
 import casadi.*
 
 %% define Alex's non-convex problem
@@ -18,8 +18,6 @@ f2  =   (y2(2)-2)^2;
 
 
 h1  =   1-y1(1)*y1(2);
-% h1  =   [1-y1(1)*y1(2);
-%          -1+y1(1)*y1(2)];
 h2  =   -1.5+y2(1)*y2(2);
 
 A1  =   [0, 1];
@@ -52,24 +50,32 @@ Sig     =   {eye(n),eye(n)};
 term_eps = 0;
 
 %% solve with ALADIN
+
 emptyfun      = @(x) [];
-AQP           = [A1,A2];
-ffifun        = {f1f,f2f};
-hhifun        = {h1f,h2f};
 [ggifun{1:N}] = deal(emptyfun);
 
-yy0         = {y0(1:2),y0(3:4)};
-%xx0        = {[1 1]',[1 1]'};
+% define the optimization set up
+% define objective and constraint functions
+sProb.locFuns.ffi  = {f1f, f2f};
+sProb.locFuns.ggi  = ggifun;
+sProb.locFuns.hhi  = {h1f, h2f};
 
-llbx        = {lb1,lb2};
-uubx        = {ub1,ub2};
-AA          = {A1,A2};
+% define boundaries
+sProb.llbx = {lb1,lb2};
+sProb.uubx = {ub1,ub2};
 
-opts = initializeOpts(rho, mu, maxit, term_eps);
+% define counpling matrix
+sProb.AA   = {A1,A2};
 
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
-           
+% define initial values for solutions and lagrange multipliers
+sProb.zz0  = {y0(1:2),y0(3:4)};
+sProb.lam0 = 10*(rand(1)-0.5);
+
+
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
+
+sol_ALADIN = run_ALADINnew( sProb, opts ); 
+
                                  
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');
@@ -94,15 +100,15 @@ sol =   cas('lbx', [lb1; lb2],...
             'ubg', [0;0;b]);  
         
         
-% plotting
-set(0,'defaulttextInterpreter','latex')
-figure(2)
-hold on
-plot(loggAL.X')
-hold on
-plot(maxit,full(sol.x),'ob')
-xlabel('$k$');
-ylabel('$x^k$');
+%% plotting
+% set(0,'defaulttextInterpreter','latex')
+% figure(2)
+% hold on
+% plot(loggAL.X')
+% hold on
+% plot(maxit,full(sol.x),'ob')
+% xlabel('$k$');
+% ylabel('$x^k$');
 
 %% solve with ADMM
 % rhoADMM = 1000;
