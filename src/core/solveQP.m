@@ -1,5 +1,4 @@
-function [ xopt, lam, eigH, rankLEQS_ex ] = solveQP( H, g, A, b, solver)
-
+function [ delx, lam  ] = solveQP( H, g, A, b, solver)
 
 if strcmp(solver, 'ipopt')
     % regularization
@@ -43,7 +42,7 @@ if strcmp(solver, 'ipopt')
             'ubx',  inf*ones(nx,1),...
             'lbg', zeros(neq,1), ...
             'ubg', zeros(neq,1));
-    xopt =   full(sol.x);
+    delx =   full(sol.x);
     lam  =   full(sol.lam_g);            
 end
 
@@ -73,10 +72,10 @@ if strcmp(solver, 'pinv')
     end
 
 
-    xopt    = LEQS_x(1:nx);
+    delx    = LEQS_x(1:nx);
     lam     = LEQS_x((nx+1):end); 
-    eigH    = eig(H);
-    rankLEQS_ex = rank([LEQS_A LEQS_B]);
+ %   eigH    = eig(H);
+ %   rankLEQS_ex = rank([LEQS_A LEQS_B]);
 end
 
 
@@ -109,10 +108,10 @@ if strcmp(solver, 'linsolve')
     end
 
 
-    xopt    = LEQS_x(1:nx);
+    delx    = LEQS_x(1:nx);
     lam     = LEQS_x((nx+1):end); 
-    eigH    = []; %eig(H); % takes a lot of time...
-    rankLEQS_ex = []; %rank([LEQS_A LEQS_B]);
+ %   eigH    = []; %eig(H); % takes a lot of time...
+ %   rankLEQS_ex = []; %rank([LEQS_A LEQS_B]);
 end
 
 
@@ -137,10 +136,10 @@ if strcmp(solver, 'sparseBs')
     end
 
 
-    xopt    = LEQS_xs(1:nx);
+    delx    = LEQS_xs(1:nx);
     lam     = LEQS_xs((nx+1):end); 
-    eigH    = []; %eig(H); % takes a lot of time...
-    rankLEQS_ex = []; %rank([LEQS_A LEQS_B]);
+ %   eigH    = []; %eig(H); % takes a lot of time...
+  %  rankLEQS_ex = []; %rank([LEQS_A LEQS_B]);
 end
 
 
@@ -166,10 +165,10 @@ if strcmp(solver, 'MA57')
     [L, D, P] = ldl(sparse(LEQS_As));
     LEQS_xs = P*(L'\(D\(L\(P'*LEQS_Bs))));    
 
-    xopt    = LEQS_xs(1:nx);
+    delx    = LEQS_xs(1:nx);
     lam     = LEQS_xs((nx+1):end); 
-    eigH    = []; %eig(H); % takes a lot of time...
-    rankLEQS_ex = []; %rank([LEQS_A LEQS_B]);
+ %   eigH    = []; %eig(H); % takes a lot of time...
+ %   rankLEQS_ex = []; %rank([LEQS_A LEQS_B]);
     
 end
 
@@ -177,7 +176,7 @@ end
 
 if strcmp(solver, 'MOSEK')
     [res]   = mskqpopt(H,g,A,b,b,[],[]);
-    xopt    = res.sol.itr.xx;
+    delx    = res.sol.itr.xx;
     lam     = - res.sol.itr.y;
 end
 
@@ -193,10 +192,15 @@ if strcmp(solver, 'quadprog')
     nx   =  size(H,1);
 %     opt = optimoptions('quadprog','Algorithm','interior-point-convex');
     opt = optimoptions('quadprog','Algorithm','active-set');
-    [xopt,~,~,~,lam_str]=...
+    [delx,~,~,~,lam_str]=...
         quadprog(H,g,[],[],A,b,-10*ones(nx,1),10*ones(nx,1),[],opt);
     lam  = lam_str.eqlin;
 end
+
+
+
+
+
 
 
     % solve QP via CasADi --> copy code to runAL as CasADi variables are
