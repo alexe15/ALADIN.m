@@ -22,22 +22,29 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
     % set up and solve the coordination QP
     tic
     iter.lamOld      = iter.lam;
-    if strcmp(opts.slack,'nonl') && ~strcmp(opts.innerAlg, 'dec')
+    if strcmp(opts.slack,'nonl') && strcmp(opts.innerAlg, 'none')
         [ HQP, gQP, AQP, bQP] = createCoordQPnLsl( sProb, iter );
         [delxs2, lamges]      = solveQP(HQP,gQP,AQP,bQP,opts.solveQP);    
         iter.delx             = delxs2(1:(end-Ncons)); 
-    else
+    elseif strcmp(opts.innerAlg, 'none')
         [ HQP, gQP, AQP, bQP] = createCoordQP( sProb, iter );
         [delxs2, lamges]      = solveQP(HQP,gQP,AQP,bQP,opts.solveQP);  
-        iter.delx             = delxs2(1:(end-Ncons)); 
+        iter.ddelx            = decomposeX(delxs2,iter);
+     %   iter.delx             = delxs2(1:(end-Ncons)); 
         iter.lam              = lamges(1:Ncons);
     end
     
-    % solve coordination QP
-    if strcmp(opts.innerAlg, 'dec')
-         [delx, lamges, maxComS, lamRes] = solveQPdec(HHiEval, ...
-                JJacCon,ggiEval,AA,xx,lam,mu,opts.innerIter,opts.innerAlg);
-    end         
+    % solve coordination QP decentrally
+    if ~strcmp(opts.innerAlg, 'none')
+        % condense sensistivities locally 
+        iter.loc.cond          = condenseLocally(sProb, iter);
+        % solve condensed QP by decentralized CG/ADMM
+        [ iter.llam, iter.lam, iter.comm ] = ...
+                              solveQPdecNew(iter.loc.cond, iter.lam, opts);
+     %  [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, opts, iter, sProb );
+        % expand again locally based on computed \lamda
+        iter.ddelx             = expandLocally(iter.llam, iter.loc.cond);
+    end        
     timers.QPtotTime      = timers.QPtotTime + toc;   
    
     % do a line search on the QP step?

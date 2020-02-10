@@ -35,4 +35,10 @@ timers.totTime  = toc(totTimer);
 
 % display timing
 displayTimers(timers);
+
+% display comunication
+if ~strcmp(opts.innerAlg, 'none')
+    displayComm(sol.iter.comm, opts.innerAlg);
+end
+
 end
