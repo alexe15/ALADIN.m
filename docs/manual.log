@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.5.5)  20 FEB 2020 15:02
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.5.5)  21 FEB 2020 18:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -434,10 +434,6 @@ LaTeX Info: Redefining \nameref on input line 13.
 \@outlinefile=\write3
 \openout3 = `manual.out'.
 
-
-
-Package hyperref Warning: Rerun to get /PageLabels entry.
-
 Class scrartcl Info: loading recommended package `bookmark'.
 (scrartcl)           Using `bookmark' together with `hyperref' is recommended,
 (scrartcl)           because of handling of possible bookmark level gaps.
@@ -445,6 +441,7 @@ Class scrartcl Info: loading recommended package `bookmark'.
 (scrartcl)           `bookmarkpackage=false' before \begin{document} and
 (scrartcl)           you can avoid this message with `\usepackage{bookmark}'
 (scrartcl)           before \begin{document} on input line 13.
+
 (c:/Software/texlive/2019/texmf-dist/tex/latex/oberdiek/bookmark.sty
 Package: bookmark 2016/05/17 v1.26 PDF bookmarks (HO)
 
@@ -481,4 +478,155 @@ LaTeX Warning: Citation `Houska' on page 2 undefined on input line 25.
 
 LaTeX Warning: Citation `Houska' on page 2 undefined on input line 43.
 
-[2
+[2] [3]
+File: figures/flowChart.pdf Graphic file (type pdf)
+<use figures/flowChart.pdf>
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 123.
+
+
+LaTeX Warning: Citation `Houska2016' on page 4 undefined on input line 163.
+
+
+LaTeX Warning: Citation `Nocedal' on page 4 undefined on input line 185.
+
+
+LaTeX Warning: Citation `somePappers' on page 4 undefined on input line 194.
+
+
+Overfull \hbox (9.46329pt too wide) detected at line 202
+\OML/cmm/m/it/10.95 L \OT1/cmr/m/n/10.95 = [] []  +  [][] \OML/cmm/m/it/10.95 s
+ \OT1/cmr/m/n/10.95 +  []\OMS/cmsy/m/n/10.95 k\OML/cmm/m/it/10.95 s\OMS/cmsy/m/
+n/10.95 k[] \OT1/cmr/m/n/10.95 + \OML/cmm/m/it/10.95 ^^U[]\OT1/cmr/m/n/10.95 (\
+OML/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[] \OT1/cmr/m/n/10
+.95 + ^^A\OML/cmm/m/it/10.95 x\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 ^^@ \OML
+/cmm/m/it/10.95 s \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 b\OT1/cmr/m/n/10.
+95 ) + \OML/cmm/m/it/10.95 ^^T[]C[]\OT1/cmr/m/n/10.95 ^^A\OML/cmm/m/it/10.95 x:
+
+ []
+
+[4] [5]
+
+LaTeX Warning: Citation `Nocedal' on page 6 undefined on input line 248.
+
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 252.
+[6]
+
+LaTeX Warning: Citation `Engelmann19' on page 7 undefined on input line 288.
+
+
+LaTeX Warning: Citation `Houska' on page 7 undefined on input line 293.
+
+[7]
+
+LaTeX Warning: Citation `Engelmann' on page 8 undefined on input line 308.
+
+
+LaTeX Warning: Citation `Nocedal' on page 8 undefined on input line 310.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 323.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\Sigma' on input line 323.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 323.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 323.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 323.
+
+[8]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 373.
+LaTeX Font Info:    Try loading font information for TU+pcr on input line 373.
+LaTeX Font Info:    No file TUpcr.fd. on input line 373.
+
+
+LaTeX Font Warning: Font shape `TU/pcr/m/n' undefined
+(Font)              using `TU/lmr/m/n' instead on input line 373.
+
+(../examples/example_main.m [9]) (../examples/example_main.m)
+(../examples/example_main.m) (../examples/example_main.m [10])
+File: figures/example_main.eps Graphic file (type eps)
+<figures/example_main.eps>
+ [11] [12]
+(../examples/rosenbrock_example.m
+Overfull \hbox (14.62032pt too wide) in paragraph at lines 7--8
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+) (../examples/rosenbrock_example.m) (../examples/rosenbrock_example.m [13])
+(../examples/rosenbrock_example.m)
+File: figures/rosenbrock.eps Graphic file (type eps)
+<figures/rosenbrock.eps>
+ [14] [15]
+
+LaTeX Warning: Citation `Houska' on page 16 undefined on input line 456.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\hbox' on input line 464.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\mathsurround' on input line 464.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\z@' on input line 464.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\unskip' on input line 464.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@@italiccorr' on input line 464.
+
+
+Overfull \hbox (0.38977pt too wide) in paragraph at lines 481--485
+\TU/pcr/m/n/10.95 where the constraint functions $\OML/cmm/m/it/10.95 g[]$ \TU/
+pcr/m/n/10.95 are an arbitrary partitioning of $\OML/cmm/m/it/10.95 g\OT1/cmr/m
+/n/10.95 (\OML/cmm/m/it/10.95 x\OT1/cmr/m/n/10.95 ) = (\OML/cmm/m/it/10.95 g[]\
+OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95
+ ; [] ; g[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x\OT1/cmr/m/n/10.95 )$
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 488.
+[16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 488.
+ (./manual.aux)
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 488.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 488.
+Package rerunfilecheck Info: File `manual.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 488.
+ ) 
+Here is how much of TeX's memory you used:
+ 13224 strings out of 492916
+ 198289 string characters out of 6132928
+ 432573 words of memory out of 5000000
+ 17119 multiletter control sequences out of 15000+600000
+ 13589 words of font info for 72 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 41i,19n,51p,9113b,1762s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on manual.pdf (16 pages).

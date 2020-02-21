@@ -39,7 +39,7 @@ f2f     =  matlabFunction(f2,'Vars',{y2});
 h1f     =   matlabFunction(h1,'Vars',{y1});
 h2f     =   matlabFunction(h2,'Vars',{y2});
 
-%% initalize
+%% set solver options
 maxit   =   30;
 y0      =   3*rand(N*n,1);
 lam0    =   10*(rand(1)-0.5)*ones(size(A1,1),1);
@@ -58,8 +58,8 @@ emptyfun      = @(x) [];
 % define the optimization set up
 % define objective and constraint functions
 sProb.locFuns.ffi  = {f1f, f2f};
-sProb.locFuns.ggi  = ggifun;
 sProb.locFuns.hhi  = {h1f, h2f};
+sProb.locFuns.ggi  = ggifun;
 
 % define boundaries
 sProb.llbx = {lb1,lb2};

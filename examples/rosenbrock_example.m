@@ -11,12 +11,12 @@ y1  =   sym('y1',[1,1],'real');
 y2  =   sym('y2',[n,1],'real');
 
 f1  =   (1-y1(1))^2;
-f2  =   100*(y2(1)-y2(2)^2)^2;
+f2  =   100*(y2(2)-y2(1)^2)^2;
 
-h2  =   -1.5-y2(2);
+h2  =   -1.5-y2(1);
 
 A1  =   [1];
-A2  =   [0, -1];
+A2  =   [-1, 0];
 b   =   0;
 
 lb1 =   [-inf];
@@ -32,8 +32,8 @@ f2f     =   matlabFunction(f2,'Vars',{y2});
 h1f     =   emptyfun;
 h2f     =   matlabFunction(h2,'Vars',{y2});
 
-%% initalize
-maxit       =   15;
+%% set solver options
+maxit       =   30;
 rho         =   10;
 mu          =   100;
 eps         =   1e-4;

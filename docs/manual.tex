@@ -342,18 +342,21 @@ f_2(y_2) & := (y_2(2) - 2)^2.
 \end{align*}
 Further, set
 \begin{align*}
-h_1(y_1) & : = 1 - y_1(1) \cdot y_1(2) \\
-h_2(y_2) & : = -1.5 + y_1(1) \cdot y_1(2).
+h_1(y_1) & : = 1 - y_{11} \cdot y_{12} \\
+h_2(y_2) & : = -1.5 + y_{21} \cdot y_{22}.
 \end{align*}
 If now the follwing equations holds true, i.e.
 \begin{align}\label{coupling}
-y_1(2)  = y_2(1),
+\begin{aligned}
+y_{11}  &= y_{21},\\
+y_{12}  &= y_{22}
+\end{aligned}
 \end{align}
 a system of separable, coupled objective functions is given. Notice, that (\ref{coupling}) can be expressed as
 \begin{align*}
 &\sum_{i = 1}^2 A_i y_i = 0 \\
-\text{with} \quad & A_1 := [+0 \quad +1] \\
-\text{and} \quad  & A_2 := [-1 \quad +0]
+\text{with} \quad & A_1 := \begin{bmatrix} +1 & 0 \\ 0 & +1 \end{bmatrix} \\
+\text{and} \quad  & A_2 := \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix}
 \end{align*}
 such that overall the form of (\ref{eq:sepForm}) is given, i.e.
 
@@ -367,13 +370,21 @@ such that overall the form of (\ref{eq:sepForm}) is given, i.e.
 \end{subequations}
 For implementation in \textsc{Matlab}, the objetive functions, the constraint functions, the coupling matrices and the upper and lower boundaries are handed over via a cells. The objective functions and the constraint functions are of the type \texttt{matlab function} to be able to use the matlab intern optimization toolbox. The lower boundary is stored as a vector. In the same manner, the upper boundary is stored. The coupling matrices are stored in matrix form. Further, the \texttt{opts} struct needs to be defined. Details on \texttt{opts} can be found in section TODO.
 \\So firstly, for using the MATLAB symbolic toolbox, we can define the split-up problem.
-\lstinputlisting[firstline=10,lastline=31]{../examples/example_main.m}
+\lstinputlisting[firstline=11,lastline=33]{../examples/example_main.m}
 To solve the problem using ALADIN, we first have to convert the symbolic variables to MATLAB functions
-\lstinputlisting[firstline=33,lastline=37]{../examples/example_main.m}
+\lstinputlisting[firstline=35,lastline=40]{../examples/example_main.m}
 Next, we set the solver options
-\lstinputlisting[firstline=40,lastline=46]{../examples/example_main.m}
+\lstinputlisting[firstline=42,lastline=52]{../examples/example_main.m}
 Finally, we solve the problem with ALADIN
-\lstinputlisting[firstline=49,lastline=70]{../examples/example_main.m}
+\lstinputlisting[firstline=54,lastline=78]{../examples/example_main.m}
+Fig. \ref{fig:example_main} shows the convergence property of ALADIN on the first example. It can be seen that it converges after about only 10 iterations, which is very fast.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\linewidth]{figures/example_main.eps}
+	\caption{Convergence property of ALADIN on first example}
+	\label{fig:example_main}
+\end{figure}
 
 \paragraph{Rosenbrock Function} 
 For the Rosenbrock Function we consider
@@ -384,29 +395,38 @@ For the Rosenbrock Function we consider
 In order to solve it with ALADIN, we have to reformulate the problem. First, we substitute $x_1$ and $x_2$ which gives us
 \begin{align*}
 \min_{y_1, y_2, y_3}f(y_1, y_2, y_3) & = f(y_1) + f(y_2, y_3)\\
- & = (1 - y_1)^2 + 100 \cdot (y_2 - y_3^2)^2 \\
+ & = (1 - y_1)^2 + 100 \cdot (y_3 - y_2^2)^2 \\
 \text{s.t.} \quad y_2 & \geq - 1.5\\
-y_1 & = y_3. 
+y_1 & = y_2. 
 \end{align*}
 Second, we slit up the problem as follows
 \begin{align*}
 \min_{\tilde{y}_1, \tilde{y}_2} &= f_1(\tilde{y}_1) + f_2(\tilde{y}_2) \\
-& = (1 - \tilde{y}_1(1))^2 + 100 \cdot (\tilde{y}_2(1) - \tilde{y}_2(2)^2)^2 \\ 
+& = (1 - \tilde{y}_1)^2 + 100 \cdot (\tilde{y}_{22} - \tilde{y}_{21}^2)^2 \\ 
 \\
-\text{s.t.} \quad & [1] \cdot \tilde{y}_1 + [0, -1] \cdot \tilde{y}_2 = 0 \\
-\quad \quad & \quad \quad \text{ } -1.5 - \tilde{y}_2(1) \leq 0
+\text{s.t.} \quad & [1] \cdot \tilde{y}_1 + [-1, 0] \cdot \tilde{y}_2 = 0 \\
+\quad \quad & \quad \quad \text{ } -1.5 - \tilde{y}_{21} \leq 0
 \end{align*}
 with $\tilde{y}_1 = (y_1)$ and $\tilde{y}_2 = (y_2, y_3)$.
 Using the MATLAB symbolic toolbox, we can now define the split-up problem 
 %(see \texttt{rosenbrock\_example.m}) 
 as 
-\lstinputlisting[firstline=10,lastline=26]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=7,lastline=26]{../examples/rosenbrock_example.m}
 To solve the problem using ALADIN, we first have to convert the symbolic variables to MATLAB functions:
-\lstinputlisting[firstline=29,lastline=33]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=28,lastline=33]{../examples/rosenbrock_example.m}
 Next, we set the solver options.
-\lstinputlisting[firstline=36,lastline=47]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=35,lastline=40]{../examples/rosenbrock_example.m}
 Finally, we solve the problem with ALADIN
-\lstinputlisting[firstline=50,lastline=62]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=42,lastline=56]{../examples/rosenbrock_example.m}
+Fig. \ref{fig:rosenbrock} shows the convergence property of ALADIN on Rosenbrock function.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1\linewidth]{figures/rosenbrock.eps}
+	\caption{Convergence property of ALADIN on Rosenbrock function}
+	\label{fig:rosenbrock}
+\end{figure}
 
 \subsubsection{MATLAB Functions}
 \textcolor{red}{\textbf{TODO}} 
