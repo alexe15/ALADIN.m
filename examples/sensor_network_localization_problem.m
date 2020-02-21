@@ -50,7 +50,7 @@ emptyfun      = @(x) [];
 % They are Gaussian distributed with variances sigma_i = sigma_i_bar = 10
 
 %Initialization:
-N_       = 100; % number of agents
+N_       = 10; % number of agents
 sigma_   = 10;  % variance of measurement error
 n_       = 4;   % dimension of design variables          
 d_       = 2;         % dimension of coordinate system (!!! hard coded for d = 2 !!!)
@@ -125,7 +125,7 @@ b = 0;
 
 %% initialize
 
-maxit_      = 15;
+maxit_      = 50;
 lam0_       = (rand(1) - 0.5)*ones(size(A1_, 1), 1);
 rho_        = 10;
 mu_         = 100;
@@ -138,7 +138,7 @@ for i = 1 : N_
     Sig_(i) = mat2cell(eye(n_), n_, n_);
 end
 
-opts = initializeOpts(rho_, mu_, maxit_, term_eps_);
+opts = initializeOpts(rho_, mu_, maxit_, Sig_, term_eps_);
 
 % opts  =   struct('rho0',rho_,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
 %                  mu_,'muUpdate',1,'muMax',1e5,'eps',eps_,...

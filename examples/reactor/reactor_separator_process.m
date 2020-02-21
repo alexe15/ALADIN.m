@@ -11,9 +11,10 @@ par = parameters();
 Nunit = par.Nunit;
 
 % sampling time and time horizon
-dT = 0.01;
-N  = 10;
+dT = par.dT;
+N  = par.N;
 H  = dT*N;
+Nx = Nunit*N*4;
 
 % input constraints
 sc_in = par.sc_in; % scaling parameter for input
@@ -43,7 +44,7 @@ end
 
 % set the weight matrix of cost function
 Qc = diag([20*sc_tem^2, 1000, 1000, 1000]);
-Rc = 1e-6;
+Rc = 1e-10*sc_in^2;
 
 %% centralized formulation
 % for each reactor
@@ -97,7 +98,7 @@ sol = solver('x0', XX0, 'lbx', LLbx, 'ubx', UUbx,...
              'lbg', LLcon, 'ubg', UUcon, 'p', PP);
 
 XXopt1 = reshape(full(sol.x)',[],N);
-plotresults(N, XXopt1); % plot the results
+plotresults(XXopt1); % plot the results
 
 %% distributed formulation
 for i = 1:Nunit
@@ -181,25 +182,27 @@ Usol = full([sol.x(N*Nunit*4+1:N*Nunit*4+N);...
             sol.x(N*Nunit*4*3+2*N+1:end)]);
 Uopt = reshape(Usol,N,[])';
 XXopt = vertcat(Xopt, Uopt);
-plotresults(N, XXopt);
+plotresults(XXopt);
 
 %% solve with ALADIN
 
 for i = 1:Nunit
-    JJFun{i} = Function(['f' num2str(i)], {XXU{i}}, {JJ{i}});
-    ggFun{i} = Function(['g' num2str(i)], {XXU{i}}, {gg{i}});
+    chem.locFuns.ffi{i} = Function(['f' num2str(i)], {XXU{i}}, {JJ{i}});
+    chem.locFuns.ggi{i} = Function(['g' num2str(i)], {XXU{i}}, {gg{i}});
     
     emptyfun = @(x) [];
-    hhFun{i} = emptyfun;
+    chem.locFuns.hhi{i} = emptyfun;
     
-    % set up aladin parameters
+    % set up aladin parameters    
+    chem.llbx{i} = [zeros(Nunit*N*4,1); Ql(i)*ones(N,1)];
+    chem.uubx{i} = [inf*ones(Nunit*N*4,1); Qu(i)*ones(N,1)];
+    chem.AA{i}   = AA{i};
+    chem.zz0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
+    
     SSig{i} = eye(length(XXU{i}));
-    llbx{i} = [zeros(Nunit*N*4,1); Ql(i)*ones(N,1)];
-    uubx{i} = [inf*ones(Nunit*N*4,1); Qu(i)*ones(N,1)];
-    xx0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
 end
 
-lam0 = 1*ones(size(AA{1},1),1);
+chem.lam0 = ones(size(AA{1},1),1);
 
 % initialize the options for ALADIN
 rho = 1e3;
@@ -207,21 +210,20 @@ mu = 1e4;
 maxit = 20;
 term_eps = 0; % no termination criterion, stop after maxit
 
-opts = initializeOpts(rho, mu, maxit, term_eps);
+opts = initializeOpts(rho, mu, maxit, SSig, term_eps);
 
 % solve with ALADIN
-[xoptAL, loggAL] = run_ALADIN(JJFun,ggFun,hhFun,AA,xx0,...
-                                      lam0,llbx,uubx,SSig,opts);
+sol_ALADIN = run_ALADINnew(chem,opts);
 
 % plot the results
-Xsol = full(xoptAL(1:N*Nunit*4));
+Xsol = full(sol_ALADIN.xxOpt{1}(1:Nx));
 Xopt = reshape(Xsol,[],N);
-Usol = full([xoptAL(N*Nunit*4+1:N*Nunit*4+N);...
-            xoptAL(N*Nunit*4*2+N+1:(N*Nunit*4+N)*2);...
-            xoptAL(N*Nunit*4*3+2*N+1:end)]);
+Usol = full([sol_ALADIN.xxOpt{1}(Nx+1:Nx+N);...
+             sol_ALADIN.xxOpt{2}(Nx+1:Nx+N);...
+             sol_ALADIN.xxOpt{3}(Nx+1:Nx+N)]);
 Uopt = reshape(Usol,N,[])';
 XXopt = vertcat(Xopt, Uopt);
-plotresults(N, XXopt);
+plotresults(XXopt);
 
 %% define the fuctions 
 % function: Runge-Kutte 4 Integrator
@@ -334,26 +336,31 @@ function dx = ode_reactor(t, x, u, number, state)
 end
 
 % function: plot the results
-function plotresults(N, X)
+function plotresults(X)
 
     set(groot, 'defaultAxesTickLabelInterpreter','latex');
     set(groot, 'defaultLegendInterpreter','latex');
+    par    = parameters();
+    N      = par.N;
+    dT     = par.dT;
+    sc_tem = par.sc_tem;
+    sc_in  = par.sc_in;
 
-    T1  = X(1,:);
+    T1  = sc_tem*X(1,:);
     ca1 = X(2,:);
     cb1 = X(3,:);
     cc1 = X(4,:);
-    T2  = X(5,:); 
+    T2  = sc_tem*X(5,:); 
     ca2 = X(6,:);
     cb2 = X(7,:);
     cc2 = X(8,:);
-    T3  = X(9,:);
+    T3  = sc_tem*X(9,:);
     ca3 = X(10,:);
     cb3 = X(11,:);
     cc3 = X(12,:);
-    Q1  = X(13,:);
-    Q2  = X(14,:);
-    Q3  = X(15,:);
+    Q1  = sc_in*X(13,:);
+    Q2  = sc_in*X(14,:);
+    Q3  = sc_in*X(15,:);
     t = [0:N-1]*0.01;
 
     % plot the state variables
@@ -427,62 +434,64 @@ end
 
 % function: definition of system parameters
 function par = parameters
-par.Nunit      = 3;
+    par.Nunit      = 3;
+    par.N          = 40;
+    par.dT         = 0.04;
 
-par.T10        = 300;
-par.T20        = 300;
+    par.T10        = 300;
+    par.T20        = 300;
 
-par.F10        = 5;
-par.F20        = 5;
-par.Fr         = 1.9;
-par.F1         = 6.883;
-par.F2         = 12.44;
+    par.F10        = 5;
+    par.F20        = 5;
+    par.Fr         = 1.9;
+    par.F1         = 6.883;
+    par.F2         = 12.44;
 
-par.CA10       = 4;
-par.CA20       = 3;
+    par.CA10       = 4;
+    par.CA20       = 3;
 
-par.V1         = 1;
-par.V2         = 0.5;
-par.V3         = 1; 
+    par.V1         = 1;
+    par.V2         = 0.5;
+    par.V3         = 1; 
 
-par.E1         = 5e4;
-par.E2         = 5.5e4;
+    par.E1         = 5e4;
+    par.E2         = 5.5e4;
 
-par.k1         = 3e6;
-par.k2         = 3e6;
+    par.k1         = 3e6;
+    par.k2         = 3e6;
 
-par.H1         = -5e4;
-par.H2         = -5.3e4;
-par.Hvap       = 5;
+    par.H1         = -5e4;
+    par.H2         = -5.3e4;
+    par.Hvap       = 5;
 
-par.alpha_a    = 2;
-par.alpha_b    = 1;
-par.alpha_c    = 1.5;
-par.alpha_d    = 3;
+    par.alpha_a    = 2;
+    par.alpha_b    = 1;
+    par.alpha_c    = 1.5;
+    par.alpha_d    = 3;
 
-par.MWA        = 50;
-par.MWB        = 50;
-par.MWC        = 50;
+    par.MWA        = 50;
+    par.MWB        = 50;
+    par.MWC        = 50;
 
-par.Cp         = 0.231;
-par.R          = 8.314;
-par.rho        = 1000;
+    par.Cp         = 0.231;
+    par.R          = 8.314;
+    par.rho        = 1000;
 
-par.xd         = 8.39e-4;
+    par.xd         = 8.39e-4;
 
-% define equilibrium point
-par.x1s = [369.53; 3.31; 0.17; 0.04];
-par.x2s = [435.25; 2.75; 0.45; 0.11];
-par.x3s = [435.25; 2.88; 0.50; 0.12];
+    % define equilibrium point
+    par.x1s = [369.53; 3.31; 0.17; 0.04];
+    par.x2s = [435.25; 2.75; 0.45; 0.11];
+    par.x3s = [435.25; 2.88; 0.50; 0.12];
 
-par.Qs  = [0; 0; 0];
+    par.Qs  = [0; 0; 0];
 
-% define the start point
-par.x10 = [360.69; 3.19; 0.15; 0.03];
-par.x20 = [430.91; 2.76; 0.34; 0.08];
-par.x30 = [430.42; 2.79; 0.38; 0.08];
+    % define the start point
+    par.x10 = [360.69; 3.19; 0.15; 0.03];
+    par.x20 = [430.91; 2.76; 0.34; 0.08];
+    par.x30 = [430.42; 2.79; 0.38; 0.08];
 
-% define the scaling parameters
-par.sc_in  = 1e4; % input scaling
-par.sc_tem = 400; % temperature scaling
+    % define the scaling parameters
+    par.sc_in  = 1e4; % input scaling
+    par.sc_tem = 400; % temperature scaling
 end

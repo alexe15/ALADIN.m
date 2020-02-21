@@ -29,7 +29,7 @@ A3  =   [ 0,  0;...
          -1,  0;...
           0,  0;...
           0, -1];
-b   =   0;
+b   =   [0;0;0;0];
 
 lb1 =   [-10;-6.5];
 lb2 =   [-10;-6.5];
@@ -60,27 +60,24 @@ Sig         =   {eye(n),eye(n),eye(n)};
 
 %% solve with ALADIN
 AQP           = [A1,A2,A3];
-ffifun        = {f1f,f2f,f3f};
-hhifun        = {h1f,h2f,h3f};
 [ggifun{1:N}] = deal(emptyfun);
 
-yy0         = {[-1;-1],[-1;-1],[-1;-1]};
+sProb.locFuns.ffi = {f1f,f2f,f3f};
+sProb.locFuns.hhi = {h1f,h2f,h3f};
+sProb.locFuns.ggi = ggifun;
+
+
+sProb.zz0   = {[-1;-1],[-1;-1],[-1;-1]};
+sProb.lam0  = lam0;
 %xx0        = {[1 1]',[1 1]'};
 
-llbx        = {lb1,lb2,lb3};
-uubx        = {ub1,ub2,ub3};
-AA          = {A1,A2,A3};
+sProb.llbx  = {lb1,lb2,lb3};
+sProb.uubx  = {ub1,ub2,ub3};
+sProb.AA    = {A1,A2,A3};
 
-opts = initializeOpts(rho, mu, maxit, term_eps);
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
 
-% opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
-%    'muMax',1e5,'eps',eps,'maxiter',maxit,'actMargin',-1e-6,'hessian','full',...
-%     'solveQP','MA57','reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
-%     'full','plot',false,'Hess','standard','slpGlob', true,'trGamma', 1e6, ...
-%      'Sig','const', 'term_eps', 0);
-
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+sol_ALADIN  = run_ALADINnew(sProb,opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');
@@ -97,23 +94,21 @@ h3fun   =   matlabFunction(h3,'Vars',{y3});
 % y0  =   ones(N*n,1);
 y   =   SX.sym('y',[N*n,1]);
 F   =   f1fun(y(1:2))+f2fun(y(3:4))+f3fun(y(5:6));
-g   =   [h1fun(y(1:2));
-         h2fun(y(3:4));
-         h2fun(y(5:6));
+g   =   [h3fun(y(5:6));
          [A1, A2, A3]*y];
 nlp =   struct('x',y,'f',F,'g',g);
 cas =   nlpsol('solver','ipopt',nlp);
 sol =   cas('lbx', [lb1; lb2; lb3],...
             'ubx', [ub1; ub2; ub3],...
-            'lbg', [-inf;-inf;-inf;b], ...
-            'ubg', [0;0;0;b]);  
+            'lbg', [-inf;b], ...
+            'ubg', [0;b]);  
         
         
 % plotting
 set(0,'defaulttextInterpreter','latex')
 figure(2)
 hold on
-plot(loggAL.X')
+plot(sol_ALADIN.iter.logg.X')
 hold on
 plot(maxit,full(sol.x),'ob')
 xlabel('$k$');

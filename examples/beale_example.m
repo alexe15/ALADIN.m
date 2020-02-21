@@ -56,7 +56,7 @@ h2f     =   matlabFunction(h2,'Vars',{y2});
 h3f     =   matlabFunction(h3,'Vars',{y3});
 
 %% initalize
-maxit      =   100;
+maxit      =   50;
 %y0        =   3*rand(N*n,1);
 lam0       =   10*(rand(1)-0.5)*ones(size(A1,1),1);
 rho        =   10;
@@ -66,24 +66,26 @@ term_eps   =   0;
 Sig        =   {eye(n),eye(n),eye(n)};
 
 %% solve with ALADIN
-emptyfun      = @(x) [];
-AQP           = [A1,A2,A3];
-ffifun        = {f1f,f2f,f3f};
-hhifun        = {h1f,h2f,h3f};
-[ggifun{1:N}] = deal(emptyfun);
+emptyfun           = @(x) [];
+[ggifun{1:N}]      = deal(emptyfun);
+AQP                = [A1,A2,A3];
+sProb.locFuns.ffi  = {f1f,f2f,f3f};
+sProb.locFuns.hhi  = {h1f,h2f,h3f};
+sProb.locFuns.ggi  = ggifun;
 
-yy0         = {[0.5; 0.5; 0.5],[0.5; 0.5; 0.5],[0.5; 0.5; 0.5]};
+sProb.llbx        = {lb1,lb2,lb3};
+sProb.uubx        = {ub1,ub2,ub3};
+sProb.AA          = {A1,A2,A3};
+
+sProb.zz0         = {[0.5; 0.5; 0.5],[0.5; 0.5; 0.5],[0.5; 0.5; 0.5]};
+sProb.lam0        = lam0;
 %xx0        = {[1 1]',[1 1]'};
 
-llbx        = {lb1,lb2,lb3};
-uubx        = {ub1,ub2,ub3};
-AA          = {A1,A2,A3};
 
-opts = initializeOpts(rho, mu, maxit, term_eps);
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
 
 
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+sol_ALADIN   = run_ALADINnew(sProb, opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');
@@ -116,7 +118,7 @@ sol =   cas('lbx', [lb1; lb2; lb3],...
 set(0,'defaulttextInterpreter','latex')
 figure(2)
 hold on
-plot(loggAL.X')
+plot(sol_ALADIN.iter.logg.X')
 hold on
 plot(maxit,full(sol.x),'ob')
 xlabel('$k$');

@@ -13,7 +13,7 @@ y2  =   sym('y2',[n,1],'real');
 f1  =   (1-y1(1))^2;
 f2  =   100*(y2(1)-y2(2)^2)^2;
 
-h2  =   -1.5-y2(1);
+h2  =   -1.5-y2(2);
 
 A1  =   [1];
 A2  =   [0, -1];
@@ -39,29 +39,21 @@ mu          =   100;
 eps         =   1e-4;
 term_eps    =   0;
 
-opts = initializeOpts(rho, mu, maxit, term_eps);
-
-% opts  =   struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
-%                  mu,'muUpdate',1,'muMax',1e5,'eps',eps,...
-%                  'maxiter',maxit,'actMargin',-1e-6,'hessian',...
-%                  'full','solveQP','MA57','reg','true',...
-%                  'locSol','ipopt','innerIter',2400,'innerAlg',...
-%                  'full','plot',false,'Hess','standard','slpGlob',...
-%                  true,'trGamma', 1e6,'Sig','const', 'term_eps', 0);
-
 %% solve with ALADIN
-ffifun           =   {f1f,f2f};
 [ggifun{1:N}]    =   deal(emptyfun);
-hhifun           =   {h1f,h2f};
-AA               =   {A1,A2};
-yy0              =   {[-2],[-2;1]};
-lam0             =   10*(rand(1)-0.5);
-llbx             =   {lb1,lb2};
-uubx             =   {ub1,ub2};
-Sig              =   {eye(1),eye(2)};
+sProb.locFuns.ffi   =   {f1f,f2f};
+sProb.locFuns.hhi   =   {h1f,h2f};
+sProb.locFuns.ggi   =   ggifun;
+sProb.AA            =   {A1,A2};
+sProb.zz0           =   {[-2],[-2;1]};
+sProb.lam0          =   10*(rand(1)-0.5);
+sProb.llbx          =   {lb1,lb2};
+sProb.uubx          =   {ub1,ub2};
+Sig                 =   {eye(1),eye(2)};
 
-[xoptAL, loggAL] =   run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
+
+sol_ALADIN =   run_ALADINnew(sProb,opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[1,1],'real');
@@ -90,7 +82,7 @@ sol =   cas('lbx', [lb1; lb2],...
 set(0,'defaulttextInterpreter','latex')
 figure(2)
 hold on
-plot(loggAL.X')
+plot(sol_ALADIN.iter.logg.X')
 hold on
 plot(maxit,full(sol.x),'ob')
 xlabel('$k$');
