@@ -156,8 +156,8 @@ end
 comm.loc  = locComm*opts.innerIter;
 comm.glob = 0;
 
-%figure
-%semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
+figure
+semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
 
 end
 
