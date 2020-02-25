@@ -41,7 +41,7 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
         % solve condensed QP by decentralized CG/ADMM
         [ iter.llam, iter.lam, iter.comm ] = ...
                               solveQPdecNew(iter.loc.cond, iter.lam, opts);
-     %  [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, opts, iter, sProb );
+       [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, opts, iter, sProb );
         % expand again locally based on computed \lamda
         iter.ddelx             = expandLocally(iter.llam, iter.loc.cond);
     end        

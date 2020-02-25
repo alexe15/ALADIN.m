@@ -157,8 +157,8 @@ for i=1:NsubSys
 end
 
 % 
-%  figure
-%  semilogy(max(abs(S*Z-repmat(rhsS,[1,size(Z,2)]))))
+  figure
+  semilogy(max(abs(S*Z-repmat(rhsS,[1,size(Z,2)]))))
 %loglog(max(abs(S*Z-rhsS)))
 
 end
