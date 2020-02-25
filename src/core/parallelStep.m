@@ -40,8 +40,8 @@ for j=1:NsubSys % parfor???
 
     % evaluate gradients and Hessians of the local problems
     tic
-    loc.sensEval.HHiEval{j}       = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
-    loc.sensEval.ggiEval{j}       = sProb.sens.gg{j}(loc.xx{j});
+    loc.sensEval.HHiEval{j} = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
+    loc.sensEval.ggiEval{j} = sProb.sens.gg{j}(loc.xx{j});
 
     % compute the Jacobian of nonlinear constraints/bounds
     JacCon           = full(sProb.sens.JJac{j}(loc.xx{j}));    
@@ -49,18 +49,35 @@ for j=1:NsubSys % parfor???
 
     % eliminate inactive entries  
     JJacCon{j}       = sparse(JacCon(~loc.inact{j},:));      
-    JacBounds        = JacBounds((sProb.llbx{j} - loc.xx{j}) > opts.actMargin | ...
-                             (loc.xx{j}-sProb.uubx{j}) > opts.actMargin,:);
+    JacBounds        = JacBounds((sProb.llbx{j} - loc.xx{j})  ...
+           > opts.actMargin |(loc.xx{j}-sProb.uubx{j}) > opts.actMargin,:);
     loc.sensEval.JJacCon{j}      = [JJacCon{j}; JacBounds];     
-    
     timers.sensEvalT = timers.sensEvalT + toc;
     
-    % regularization of the local hessians
-    tic
-    if strcmp(opts.reg,'true')
-        [loc.sensEval.HHiEval{j}, didReg ] = regularizeH(loc.sensEval.HHiEval{j});
+        
+    if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
+        % compute reduced systems locally 
+        loc.sensEval.ZZ{j}    = null(full(JJacCon{j}));
+        loc.sensEval.HHred{j} = loc.sensEval.ZZ{j}'* ...
+                          full(loc.sensEval.HHiEval{j})*loc.sensEval.ZZ{j};
+        loc.sensEval.AAred{j} = sProb.AA{j}*loc.sensEval.ZZ{j};
+        loc.sensEval.ggred{j} = loc.sensEval.ZZ{j}'*full(loc.sensEval.ggiEval{j});
+
+        % regularize reduced Hessian
+        tic
+        if strcmp(opts.reg,'true')
+            loc.HHred{j}  = regularizeH(loc.HHred{j}, opts);
+        end
+        timers.RegTotTime = timers.RegTotTime + toc;        
+    else
+        % regularization full Hessian
+        tic
+        if strcmp(opts.reg,'true')
+            loc.sensEval.HHiEval{j} = ...
+                                 regularizeH(loc.sensEval.HHiEval{j},opts);
+        end
+        timers.RegTotTime = timers.RegTotTime + toc;
     end
-    timers.RegTotTime    = timers.RegTotTime + toc;
 end 
     
 end

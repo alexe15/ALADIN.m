@@ -22,6 +22,7 @@ sProb.uubx = uubx;
 sProb.AA   = AA;
 sProb.zz0  = zz0;
 sProb.lam0 = lam0;
+sProb.b    = zeros(length(lam0),1);
 opts.SSig  = SSig;
 
                                 
