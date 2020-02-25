@@ -54,9 +54,9 @@ for j=1:NsubSys % parfor???
     loc.sensEval.JJacCon{j}      = [JJacCon{j}; JacBounds];     
     timers.sensEvalT = timers.sensEvalT + toc;
     
-        
+    % for reduced-space method, compute reduced QP
     if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
-        % compute reduced systems locally 
+
         loc.sensEval.ZZ{j}    = null(full(JJacCon{j}));
         loc.sensEval.HHred{j} = loc.sensEval.ZZ{j}'* ...
                           full(loc.sensEval.HHiEval{j})*loc.sensEval.ZZ{j};
