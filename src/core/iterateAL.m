@@ -71,7 +71,7 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
        plotIterates;
        timers.plotTimer = timers.plotTimer + toc;
     end
-    
+    iterationResponse(i, opts, iter);
     i = i+1;
 end
 timers.iterTime = toc(iterTimer);

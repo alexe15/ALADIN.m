@@ -1,4 +1,4 @@
-visualizationFigure = figure(1);
+visualizationFigure = figure;
 
 plotMeritFunction = subplot(2, 2, 1);
 hold on;
