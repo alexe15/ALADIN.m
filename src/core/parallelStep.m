@@ -1,4 +1,4 @@
-function [ loc, timers ] = parallelStep( sProb, iter, timers, opts )
+function [ loc, timers, opts ] = parallelStep( sProb, iter, timers, opts )
 %PARALLELSTEP Summary of this function goes here
 NsubSys = length(sProb.AA);
 
@@ -12,14 +12,10 @@ for j=1:NsubSys % parfor???
              iter.lam;
              iter.yy{j}];
 
-    % dynamicaaly changing \Sigma?
-    if strcmp(opts.Sig,'dyn')
-        SSig = computeDynSig(sProb);
-    end
     
     % solve local NLP's
     tic
-    sol = sProb.nnlp{j}('x0' ,    iter.loc.xx{j},...
+    sol = sProb.nnlp{j}('x0' ,    iter.yy{j},...
                         'lam_g0', iter.KKapp{j},...
                         'lam_x0', iter.LLam_x{j},...
                         'p',      [pNum; opts.SSig{j}(:)],...
@@ -38,12 +34,25 @@ for j=1:NsubSys % parfor???
                       full(sProb.locFuns.hhi{j}(loc.xx{j}) < opts.actMargin)]);
     KKapp{j}(loc.inact{j}) = 0;
 
-    % evaluate gradients and Hessians of the local problems
+    
+    % dynamically changing \Sigma?
+    if strcmp(opts.Sig,'dyn')
+        % after second iteration 
+        if size(iter.logg.X,2) > 2 
+            [opts.SSig{j}, loc.locStep{j}] = computeDynSig(opts.SSig{j},...
+                                iter.yy{j}, loc.xx{j},iter.loc.locStep{j});
+        else
+            loc.locStep{j} = iter.yy{j} - loc.xx{j};
+        end
+    end
+
+    % evaluate sensitivities locally
+    % Hessians
     tic
     loc.sensEval.HHiEval{j} = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
     loc.sensEval.ggiEval{j} = sProb.sens.gg{j}(loc.xx{j});
 
-    % compute the Jacobian of nonlinear constraints/bounds
+    % Jacobians of active nonlinear constraints/bounds
     JacCon           = full(sProb.sens.JJac{j}(loc.xx{j}));    
     JacBounds        = eye(size(loc.xx{j},1));
 

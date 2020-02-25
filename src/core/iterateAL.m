@@ -10,7 +10,7 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
                                       (logg.consViol(i) >= opts.term_eps)))
                                   
     % solve local NLPs and evaluate sensitivities                              
-    [ iter.loc, timers ] = parallelStep( sProb, iter, timers, opts );
+    [ iter.loc, timers, opts ] = parallelStep( sProb, iter, timers, opts );
 
     % set up the Hessian of the coordination QP
     if strcmp( opts.Hess, 'BFGS' )
@@ -80,7 +80,6 @@ timers.iterTime = toc(iterTimer);
 sol.xxOpt  = iter.yy;
 sol.lamOpt = iter.lam;
 sol.iter   = iter;
-
 
 end
 
