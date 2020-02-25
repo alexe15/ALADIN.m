@@ -66,7 +66,7 @@ for j=1:NsubSys % parfor???
         % regularize reduced Hessian
         tic
         if strcmp(opts.reg,'true')
-            loc.HHred{j}  = regularizeH(loc.HHred{j}, opts);
+            loc.sensEval.HHred{j}  = regularizeH(loc.sensEval.HHred{j}, opts);
         end
         timers.RegTotTime = timers.RegTotTime + toc;        
     else
