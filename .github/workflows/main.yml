@@ -8,20 +8,10 @@ jobs:
   build:
     name: Deploy docs
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
-
     steps:
       - name: Checkout master
         uses: actions/checkout@v1
-        
-      - name: Install dependencies
-        run: |
-            pip install --upgrade pip
-            pip install mkdocs
-            pip install pymdown-extensions
-    
+
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
         env:
