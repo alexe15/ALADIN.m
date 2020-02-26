@@ -1,7 +1,7 @@
 ---
-layout: post
-title: Blogging Like a Hacker
+layout: page
+title: ALADIN-M
 ---
 
-# Test
+# ALADIN-M
 This is a test.
