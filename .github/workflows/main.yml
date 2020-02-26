@@ -1,10 +1,8 @@
 name: Publish docs via GitHub Pages
 on:
   push:
-    branches:
-        - master
-        tags:
-            - makedoku
+    tags:
+    - makedocs
 
 jobs:
   build:
