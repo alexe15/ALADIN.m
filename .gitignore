@@ -26,3 +26,8 @@ codegen/
 
 # Octave session info
 octave-workspace
+
+
+
+# ignore mkdocs site
+/site
