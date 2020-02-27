@@ -1,10 +1,17 @@
 site_name: ALADIN-M
+site_url: https://alexe15.github.io/ALADIN.m/
+site_description: Project documentation ALADIN-M
+site_author: Alexander Engelmann
+
+repo_url: https://github.com/alexe15/ALADIN.m
+edit_uri: ""
 
 theme: readthedocs
 
 nav:
   - Start: index.md
   - The algorithm: ALADIN.md
+  - Code structure: codeStruct.md
 
 markdown_extensions:
   - codehilite
