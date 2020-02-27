@@ -49,8 +49,22 @@ for j=1:NsubSys % parfor???
     % evaluate sensitivities locally
     % Hessians
     tic
-    loc.sensEval.HHiEval{j} = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
     loc.sensEval.ggiEval{j} = sProb.sens.gg{j}(loc.xx{j});
+    if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
+        loc.sensEval.gLiEval{j}   = sProb.sens.gL{j}(loc.xx{j},loc.KKapp{j});
+        if ~isfield(iter.loc, 'sensEval')
+            loc.sensEval.HHiEval{j}   = eye(length(sProb.zz0{j}));
+        else
+            loc.sensEval.HHiEval{j}   = BFGS(iter.loc.sensEval.HHiEval{j},...
+                                             loc.sensEval.gLiEval{j},...
+                                             iter.loc.sensEval.gLiEvalOld{j},...
+                                             loc.xx{j},...
+                                             iter.loc.xxOld{j},...
+                                             opts.Hess);
+        end
+    else
+        loc.sensEval.HHiEval{j}   = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
+    end 
 
     % Jacobians of active nonlinear constraints/bounds
     JacCon           = full(sProb.sens.JJac{j}(loc.xx{j}));    
@@ -88,6 +102,12 @@ for j=1:NsubSys % parfor???
         timers.RegTotTime = timers.RegTotTime + toc;
     end
 end 
-    
+
+% save information for next BFGS iteration
+if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
+    loc.sensEval.gLiEvalOld = loc.sensEval.gLiEval;
+    loc.xxOld               = loc.xx;
+end
+ 
 end
 

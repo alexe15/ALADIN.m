@@ -11,13 +11,6 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
                                   
     % solve local NLPs and evaluate sensitivities                              
     [ iter.loc, timers, opts ] = parallelStep( sProb, iter, timers, opts );
-
-    % set up the Hessian of the coordination QP
-    if strcmp( opts.Hess, 'BFGS' )
-        sens.HHi = BFGS( sProb, iterates );
-    end
-    
-    sensEval.HHi = blkdiag( HHiEval{:} );
     
     % set up and solve the coordination QP
     tic

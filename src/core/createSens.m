@@ -21,31 +21,39 @@ for i=1:NsubSys
     sens.gg{i}   = Function(['g' num2str(i)],{sProb.xxCas{i}},{gradiCas});
     sens.JJac{i} = Function(['Jac' num2str(i)],{sProb.xxCas{i}},{JJhiCas});
 
-    % gradient of Lagrangian for BFGS version
-    sens.ggL{i}  = Function(['g' num2str(i)],{sProb.xxCas{i},kkappCas},{gradiCas});
-    
-    % compute the Hessian approximation
-    if nngi{i}+nnhi{i} == 0
-        if strcmp(opts.hessian,'gaussNewton')
-            HHiCas    = hessian(sProb.locFunsCas.ffi{i}, xxCas{i});
+    if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
+        % gradient of Lagrangian for BFGS version
+        if size(kkappCas,1) == 0
+            gradiLag     = gradiCas;
         else
-            % standard Hessian
-            HHiCas    = hessian(sProb.locFunsCas.ffi{i}, sProb.xxCas{i});       
+            gradiLag     = gradient(sProb.locFunsCas.ffi{i} + kkappCas'* ...
+                        [sProb.locFunsCas.ggi{i};sProb.locFunsCas.hhi{i}],...
+                        sProb.xxCas{i});
         end
+        sens.gL{i}  = Function(['g' num2str(i)],{sProb.xxCas{i},kkappCas},{gradiLag});
     else
-        if  strcmp(opts.hessian,'gaussNewton')
-            HHiCas    = hessian(sProb.locFunsCas.ffi{i} + ...
-                sProb.locFunsCas.ggi{i}'*locFunsCas.ggi{i},sProb.xxCas{i});
+        % compute the Hessian approximation
+        if nngi{i}+nnhi{i} == 0
+            if strcmp(opts.hessian,'gaussNewton')
+                HHiCas    = hessian(sProb.locFunsCas.ffi{i}, xxCas{i});
+            else
+                % standard Hessian
+                HHiCas    = hessian(sProb.locFunsCas.ffi{i}, sProb.xxCas{i});       
+            end
         else
-            % standard Hessian
-            HHiCas    = hessian(sProb.locFunsCas.ffi{i} + kkappCas'* ...
-                    [sProb.locFunsCas.ggi{i}; sProb.locFunsCas.hhi{i}], ...
-                                                           sProb.xxCas{i});       
+            if  strcmp(opts.hessian,'gaussNewton')
+                HHiCas    = hessian(sProb.locFunsCas.ffi{i} + ...
+                    sProb.locFunsCas.ggi{i}'*locFunsCas.ggi{i},sProb.xxCas{i});
+            else
+                % standard Hessian
+                HHiCas    = hessian(sProb.locFunsCas.ffi{i} + kkappCas'* ...
+                        [sProb.locFunsCas.ggi{i}; sProb.locFunsCas.hhi{i}], ...
+                                                               sProb.xxCas{i});       
+            end
         end
+        sens.HH{i}   = Function(['H' num2str(i)],{sProb.xxCas{i}, ... 
+                                              kkappCas,sProb.rhoCas},{HHiCas}); 
     end
-    sens.HH{i}   = Function(['H' num2str(i)],{sProb.xxCas{i}, ... 
-                                          kkappCas,sProb.rhoCas},{HHiCas}); 
-    
 end
 
 end
