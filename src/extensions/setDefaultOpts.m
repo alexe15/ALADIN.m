@@ -1,6 +1,9 @@
-function [ opts ] = setDefaultOpts( opts )
+function [ opts ] = setDefaultOpts( sProb, opts )
 % set the required option fields to default values if not defined by the
 % user
+
+% compute default scaling matrices \Digma and \Delta
+[SSig , Del] = createDefaultSigDel( sProb );
 
 % define default options
 defaultOpts = struct( 'rho0',1e2,'rhoUpdate',1.1,'rhoMax',1e8, ...
@@ -9,7 +12,8 @@ defaultOpts = struct( 'rho0',1e2,'rhoUpdate',1.1,'rhoMax',1e8, ...
         'reg','true','locSol','ipopt','innerIter',2400,'innerAlg', ...
         'none','Hess','standard','plot',true,'slpGlob', true, ...
         'trGamma', 1e6,'Sig','const','lamInit',false,'term_eps',false, ...
-        'slack','standard','warmStart',true,'regParam',1e-4);
+        'slack','standard','warmStart',true,'regParam',1e-4,'SSig',SSig,...
+        'Del',Del);
 
 
 optFields    = fieldnames(opts);

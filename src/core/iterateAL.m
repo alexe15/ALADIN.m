@@ -17,8 +17,6 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
         sens.HHi = BFGS( sProb, iterates );
     end
     
-    sensEval.HHi = blkdiag( HHiEval{:} );
-    
     % set up and solve the coordination QP
     tic
     iter.lamOld      = iter.lam;

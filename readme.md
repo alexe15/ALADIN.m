@@ -1,6 +1,18 @@
-# ALADIN-M - An open-source MATLAB toolbox for distributed optimization
+# ALADIN-M
 
 ALADIN-M is a toolbox for distributed non-convex optimization in MALTAB with  [ALADIN](https://epubs.siam.org/doi/abs/10.1137/140975991) and ADMM.
+A detailed documentation can be found [here](https://alexe15.github.io/ALADIN.m/).
+
+
+## Getting started
+1. Download ALADIN-M and add the `\src` folder to you MATLAB path.
+2. Run `\exampels\main_example.m`.
+
+
+## Example
+```
+Micro example goes here. 
+````
 
 ## Highlights
 ALADIN-M 
@@ -17,11 +29,6 @@ ALADIN requires
 - the MATLAB [parallel computing toolbox](https://de.mathworks.com/products/parallel-computing.html) for parallel computin (if needed);
 - the MATLAB [symbolic math toolbox](https://de.mathworks.com/products/symbolic.html) (only for some examples).
 
-A detailed documentation can be found [here](https://alexe15.github.io/ALADIN.m/).
-
-## Getting started
-1. Download ALADIN-M and add the `\src` folder to you MATLAB path.
-2. Run `\exampels\main_example.m`.
 
 ## License
 ALADIN-M comes under the [MIT license](https://en.wikipedia.org/wiki/MIT_License), see the [license file](https://github.com/alexe15/ALADIN.m/blob/master/LICENSE.txt).

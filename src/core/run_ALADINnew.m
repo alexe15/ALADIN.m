@@ -17,7 +17,7 @@ opts.sym   = @SX.sym;
 checkInput(sProb);
 
 % set default options
-opts       = setDefaultOpts(opts);
+opts       = setDefaultOpts(sProb, opts);
 
 % timers
 totTimer   = tic;
