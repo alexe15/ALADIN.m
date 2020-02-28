@@ -19,6 +19,11 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
     tic
     iter.lamOld      = iter.lam;
     if strcmp(opts.innerAlg, 'none')
+        % update scaling matrix
+        if strcmp(opts.DelUp,'dyn')
+            
+        end
+        
         % set up and solve coordination QP
         [ HQP, gQP, AQP, bQP]   = createCoordQP( sProb, iter, opts );
         [ xs, lamTot]           = solveQP(HQP,gQP,AQP,bQP,opts.solveQP);    

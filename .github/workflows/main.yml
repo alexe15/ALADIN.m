@@ -1,14 +1,16 @@
 name: Publish docs via GitHub Pages
 on:
   push:
-    tags:
-      - makedocs
+    branches:
+      - master
 
 jobs:
   build:
     name: Deploy docs
     runs-on: ubuntu-latest
     steps:
+      - name: Install dependencies
+        run:  pip install mkdocs-mermaid-plugin
       - name: Checkout master
         uses: actions/checkout@v1
 
