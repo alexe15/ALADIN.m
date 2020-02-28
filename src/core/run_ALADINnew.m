@@ -13,11 +13,14 @@ function [ sol ] = run_ALADINnew( sProb, opts )
 import casadi.*
 opts.sym   = @SX.sym;
 
-% check inputs
-checkInput(sProb);
+% set constraints to empty functions/default initial guess
+sProb      = setDefaultVals(sProb);
 
 % set default options
 opts       = setDefaultOpts(sProb, opts);
+
+% check inputs
+checkInput(sProb);
 
 % timers
 totTimer   = tic;
