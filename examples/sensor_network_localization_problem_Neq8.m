@@ -2,11 +2,11 @@ restoredefaultpath;
 clear all;
 clc;
 
-addpath('../src');
-addpath(genpath('../tools/'));
-addpath('./solver');
+ addpath(genpath('../src/'));
+ addpath(genpath('../tools/'));
+ addpath('./solver');
 
-import casadi.*
+% import casadi.*
 emptyfun        = @(x) [];
 
 %% define sensor network localization problem for N = 8
@@ -52,7 +52,7 @@ N = 8;
 n = 4;
 
 % variance
-sigma =2;
+sigma =2 ;
 sigma1 = 2; % for debugging!
 
 % matrix to store initial positions
@@ -232,15 +232,16 @@ h7f = matlabFunction(h7, 'Vars', {y7});
 h8f = matlabFunction(h8, 'Vars', {y8});
 
 %% initialize
-maxit       =   15;
+maxit       =   30;
 lam0        =   10 * (rand(1) - 0.5)*ones(size(A1, 1), 1);
 rho         =   10;
 mu          =   100;
 eps         =   1e-4;
 Sig         =   {eye(n), eye(n), eye(n), eye(n), eye(n), eye(n), eye(n), eye(n)};
 term_eps    = 0;
+parallel = 'true';
 
-opts = initializeOpts(rho, mu, maxit, term_eps);
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps, parallel);
 
 
 %% solve with aladin

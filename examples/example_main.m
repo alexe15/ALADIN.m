@@ -4,7 +4,7 @@ clc;
 
 % addpath(genpath('../src'));
 % addpath(genpath('../tools/'))
-import casadi.*
+% import casadi.*
 
 %% define Alex's non-convex problem
 % give general settings
@@ -72,10 +72,14 @@ sProb.AA   = {A1,A2};
 sProb.zz0  = {y0(1:2),y0(3:4)};
 sProb.lam0 = lam0;
 
-% define the options for ALADIN algorthm
-opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
+% define the options for ALADIN algorthm in parallel form
+ opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'true');
+ sol_ALADIN_parallel = run_ALADINnew( sProb, opts ); 
 
-sol_ALADIN = run_ALADINnew( sProb, opts ); 
+% define the options for ALADIN algorthm in centralized form
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'false');
+sol_ALADIN_centralized = run_ALADINnew( sProb, opts ); 
+
 
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');

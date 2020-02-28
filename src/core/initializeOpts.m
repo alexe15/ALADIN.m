@@ -1,4 +1,4 @@
-function [default_opts] = initializeOpts(rho, mu, maxit, MatSig, term_eps)
+function [default_opts] = initializeOpts(rho, mu, maxit, MatSig, term_eps, parallelization)
 %Initializes the opts struct with standard values
 %   
 
@@ -30,7 +30,8 @@ eps = 1e-4;
                            'lamInit','false',...
                            'term_eps', term_eps,...
                            'slack','standard',...
-                           'warmstart',true);
+                           'warmstart',true, ...
+                           'parfor', parallelization);
                    
               % default_opts.SSig = MatSig;
                    

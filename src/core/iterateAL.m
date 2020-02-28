@@ -9,9 +9,12 @@ i                   = 1;
 while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
                                       (logg.consViol(i) >= opts.term_eps)))
                                   
-    % solve local NLPs and evaluate sensitivities                              
-    [ iter.loc, timers, opts ] = parallelStep( sProb, iter, timers, opts );
-    
+    % solve local NLPs and evaluate sensitivities
+   if (strcmp( opts.parfor, 'true' ))
+        [ iter.loc, timers ] = parallelStepDecentral( sProb, iter, timers, opts );
+   else
+        [ iter.loc, timers ] = parallelStepCentral( sProb, iter, timers, opts );
+   end
     % set up and solve the coordination QP
     tic
     iter.lamOld      = iter.lam;

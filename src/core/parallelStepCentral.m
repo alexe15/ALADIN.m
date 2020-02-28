@@ -1,4 +1,4 @@
-function [ loc, timers, opts ] = parallelStep( sProb, iter, timers, opts )
+function [ loc, timers, opts ] = parallelStepCentral( sProb, iter, timers, opts )
 %PARALLELSTEP Summary of this function goes here
 NsubSys = length(sProb.AA);
 
