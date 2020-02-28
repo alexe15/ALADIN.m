@@ -27,15 +27,13 @@ ALADIN requires
 ## Example
 Suppose we would like to solve the problem 
 
-$$
-\begin{aligned}  
-&	\min_{y_1,y_2 \in \mathbb{R}^2}   2 \,(y_{11} - 1)^2 +   (y_{22} - 2)^2\\
-\;\;\text{subject to} \;\;    &  1 - y_{11}\,y_{12} \leq 0, \quad 
-    -1.5 + y_{21} y_{22} \leq 0, \\
-    &(\,0 \;\; 1\, )\,y_1 \;\;+\; \;(\,-1 \;\; 0 \,)\,y_2 = 0,
-\end{aligned}
-$$
-which is in form of....
+![](https://render.githubusercontent.com/render/math?math=%5Cmin_%7By_1,y_2%20%5Cin%20%5Cmathbb%7BR%7D%5E2%7D%20%20%202%20(y_%7B11%7D%20-%201)%5E2%20+%20%20%20(y_%7B22%7D%20-%202)%5E2%5Cquad%5Ctext%7Bs.t.%7D%5Cquad1-%20y_%7B11%7Dy_%7B12%7D%20%5Cleq%200\quad%20\text{and}\quad%20-1.5%20+%20y_{21}%20y_{22}%20\leq%200)
+
+and
+
+![(0\;\;1)y_1\;\;+\;\;(-1\;\;0)y_2=0](https://render.githubusercontent.com/render/math?math=(0%5C%3B%5C%3B1)y_1%5C%3B%5C%3B%2B%5C%3B%5C%3B(-1%5C%3B%5C%3B0)y_2%3D0,)
+
+which is in partially-separable form.
 This non-convex problem can be solved by ALADIN-M with the following code snippet.
 
 ```
@@ -113,13 +111,9 @@ By default ALADIN-M shows progress in the iterations e.g. by the consensus gap $
 
 Note that the above is a reformulation of the problem
 
-$$
-\begin{aligned} 
-\min_{x_1,x_2\in \mathbb{R}} & \;f(x)=2 \, (x_1 - 1)^2 + (x_2 - 2)^2 \\
-\text{subject to}&\quad -1 \leq x_1 \, x_2 \leq 1.5 
-\end{aligned}
-$$
-by introducing auxiliary variables and additional consensus constraints.
+![\min_{x_1,x_2\in \mathbb{R}}  2 \, (x_1 - 1)^2 + (x_2 - 2)^2 \quad \text{subject to}\quad -1 \leq x_1 \, x_2 \leq 1.5 ](https://render.githubusercontent.com/render/math?math=%5Cmin_%7Bx_1%2Cx_2%5Cin%20%5Cmathbb%7BR%7D%7D%20%202%20%5C%2C%20(x_1%20-%201)%5E2%20%2B%20(x_2%20-%202)%5E2%20%5Cquad%20%5Ctext%7Bsubject%20to%7D%5Cquad%20-1%20%5Cleq%20x_1%20%5C%2C%20x_2%20%5Cleq%201.5%20)
+
+which can be reformulated by introducing auxiliary variables and additional consensus constraints.
 
 
 
