@@ -16,9 +16,14 @@ while ((i <= opts.maxiter) && ((~logical(opts.term_eps)) || ...
     tic
     iter.lamOld      = iter.lam;
     if strcmp(opts.innerAlg, 'none')
-        % update scaling matrix
-        if strcmp(opts.DelUp,'dyn')
-            
+        % update scaling matrix for consensus violation slack
+        if opts.DelUp == true
+            if i > 2                            
+                [opts.Del, iter.consViol] = computeDynSig(opts.Del,...
+                         [sProb.AA{:}]*vertcat(iter.yy{:}),iter.consViol);
+            else
+                iter.consViol = [sProb.AA{:}]*vertcat(iter.yy{:});
+            end
         end
         
         % set up and solve coordination QP
