@@ -9,11 +9,12 @@
 % N = 8
 % sigma_i = 3
 
-addpath('../src');
+addpath(genpath('../src'));
 addpath(genpath('../tools/'));
 addpath('./solver');
 clear all;
 clc;
+total_time_sensor_network = tic;
 import casadi.*
 emptyfun      = @(x) [];
 
@@ -50,8 +51,8 @@ emptyfun      = @(x) [];
 % They are Gaussian distributed with variances sigma_i = sigma_i_bar = 10
 
 %Initialization:
-N_       = 10; % number of agents
-sigma_   = 10;  % variance of measurement error
+N_       = 50; % number of agents
+sigma_   = 2;  % variance of measurement error
 n_       = 4;   % dimension of design variables          
 d_       = 2;         % dimension of coordinate system (!!! hard coded for d = 2 !!!)
 
@@ -125,7 +126,7 @@ b = 0;
 
 %% initialize
 
-maxit_      = 50;
+maxit_      = 20;
 lam0_       = (rand(1) - 0.5)*ones(size(A1_, 1), 1);
 rho_        = 10;
 mu_         = 100;
@@ -138,7 +139,7 @@ for i = 1 : N_
     Sig_(i) = mat2cell(eye(n_), n_, n_);
 end
 
-opts = initializeOpts(rho_, mu_, maxit_, Sig_, term_eps_);
+opts = initializeOpts(rho_, mu_, maxit_, Sig_, term_eps_, 'false');
 
 % opts  =   struct('rho0',rho_,'rhoUpdate',1,'rhoMax',5e3,'mu0',...
 %                  mu_,'muUpdate',1,'muMax',1e5,'eps',eps_,...
@@ -195,90 +196,95 @@ end
 [xoptAL_, loggAL_] = run_ALADIN(ffifun_,ggifun_,hhifun_,AA_,yy0_,...
                                       lam0_,llbx_,uubx_,Sig_,opts);
                                   
-%% solve centralized problem with DasADi & IPOPT
+toc(total_time_sensor_network)
 
-y   =   SX.sym('y',[N_*n_,1]);
-
-
-yy0_vec = double.empty(n_ * N_, 0);
- 
-for i = 1 : N_-1
-    yy0_vec(4*i - 4 + 1: 4*i) = [eta_start_value(:, i); eta_start_value(:, i + 1)];
-end
-
-yy0_vec = yy0_vec';
-yy0_vec = vertcat(yy0_vec, [eta_start_value(:, N_); eta_start_value(:, 1)]);
-
-ffifun_f = zeros(N_, 1);
-ffifun_f = SX(ffifun_f);
-
-ffifun_f(1) = ffifun_{1}(y(4*(1) - 4 + 1 : 4 * 1));
-
-Hfun = zeros(N_, 1);
-Hfun = SX(Hfun);
-
-
-for i = 2 : N_
-    var_1 = y_sym_(4*(1) - 4 + 1 : 4 * 1);
-    ffifun_f(i) = ffifun_{i}(y(4*(i) - 4 + 1 : 4 * i)) + ffifun_f(i - 1);    
-end
-
-for i = 1 : N_
-    var = y_sym_(4*(1) - 4 + 1 : 4 * 1);
-    Hfun(i) = hhifun_{i}(y(4*(i) - 4 + 1 : 4 * i));
-end
-
-
-AA_vec = zeros(n_, n_ * N_);
-
-for i = 1 : 2 : N_
-    AA_vec(1 : 4, 4*i - 4 + 1 : 4 * i) = A1_;
-end
-
-for i = 2 : 2 : N_
-    AA_vec(1 : 4, 4*i - 4 + 1 : 4 * i) = A2_;
-end
-    
-last_entry = AA_vec * y(1 : n_ * N_);
-Hfun = vertcat(Hfun, last_entry);
-
-nlp =   struct('x',y,'f',ffifun_f(N_),'g',Hfun);
-
-cas =   nlpsol('solver','ipopt',nlp);
-
-% lbx, ubx, lbg, ubg
-lbx_vec = zeros(n_* N_, 1);
-ubx_vec = zeros(n_ * N_, 1);
-lbg_vec = zeros(N_ + n_, 1);
-ubg_vec = zeros(N_ + n_, 1);
-
-
-for i = 1 : n_ * N_
-    lbx_vec(i) = -inf;
-    ubx_vec(i) = inf;
-end
-
-for i = 1 : N_ + n_ -1
-    lbg_vec(i) = -inf;
-    ubg_vec(i) = inf; 
-end
-
-lbg_vec(N_ + n_) = b;
-ubg_vec(N_ + n_) = b;
-
-
- sol =   cas('x0' , yy0_vec, ...
-            'lbx', lbx_vec,...
-            'ubx', ubx_vec,...
-            'lbg', lbg_vec, ...
-            'ubg', ubg_vec);  
-        
- % plotting
-set(0,'defaulttextInterpreter','latex')
-figure(2)
-hold on
-plot(loggAL_.X')
-hold on
-plot(maxit_,full(sol.x),'ob')
-xlabel('$k$');
-ylabel('$x^k$');          
+opts = initializeOpts(rho_, mu_, maxit_, Sig_, term_eps_, 'true');
+[xoptAL_, loggAL_] = run_ALADIN(ffifun_,ggifun_,hhifun_,AA_,yy0_,...
+                                      lam0_,llbx_,uubx_,Sig_,opts);
+% % % %% solve centralized problem with DasADi & IPOPT
+% % % 
+% % % y   =   SX.sym('y',[N_*n_,1]);
+% % % 
+% % % 
+% % % yy0_vec = double.empty(n_ * N_, 0);
+% % %  
+% % % for i = 1 : N_-1
+% % %     yy0_vec(4*i - 4 + 1: 4*i) = [eta_start_value(:, i); eta_start_value(:, i + 1)];
+% % % end
+% % % 
+% % % yy0_vec = yy0_vec';
+% % % yy0_vec = vertcat(yy0_vec, [eta_start_value(:, N_); eta_start_value(:, 1)]);
+% % % 
+% % % ffifun_f = zeros(N_, 1);
+% % % ffifun_f = SX(ffifun_f);
+% % % 
+% % % ffifun_f(1) = ffifun_{1}(y(4*(1) - 4 + 1 : 4 * 1));
+% % % 
+% % % Hfun = zeros(N_, 1);
+% % % Hfun = SX(Hfun);
+% % % 
+% % % 
+% % % for i = 2 : N_
+% % %     var_1 = y_sym_(4*(1) - 4 + 1 : 4 * 1);
+% % %     ffifun_f(i) = ffifun_{i}(y(4*(i) - 4 + 1 : 4 * i)) + ffifun_f(i - 1);    
+% % % end
+% % % 
+% % % for i = 1 : N_
+% % %     var = y_sym_(4*(1) - 4 + 1 : 4 * 1);
+% % %     Hfun(i) = hhifun_{i}(y(4*(i) - 4 + 1 : 4 * i));
+% % % end
+% % % 
+% % % 
+% % % AA_vec = zeros(n_, n_ * N_);
+% % % 
+% % % for i = 1 : 2 : N_
+% % %     AA_vec(1 : 4, 4*i - 4 + 1 : 4 * i) = A1_;
+% % % end
+% % % 
+% % % for i = 2 : 2 : N_
+% % %     AA_vec(1 : 4, 4*i - 4 + 1 : 4 * i) = A2_;
+% % % end
+% % %     
+% % % last_entry = AA_vec * y(1 : n_ * N_);
+% % % Hfun = vertcat(Hfun, last_entry);
+% % % 
+% % % nlp =   struct('x',y,'f',ffifun_f(N_),'g',Hfun);
+% % % 
+% % % cas =   nlpsol('solver','ipopt',nlp);
+% % % 
+% % % % lbx, ubx, lbg, ubg
+% % % lbx_vec = zeros(n_* N_, 1);
+% % % ubx_vec = zeros(n_ * N_, 1);
+% % % lbg_vec = zeros(N_ + n_, 1);
+% % % ubg_vec = zeros(N_ + n_, 1);
+% % % 
+% % % 
+% % % for i = 1 : n_ * N_
+% % %     lbx_vec(i) = -inf;
+% % %     ubx_vec(i) = inf;
+% % % end
+% % % 
+% % % for i = 1 : N_ + n_ -1
+% % %     lbg_vec(i) = -inf;
+% % %     ubg_vec(i) = inf; 
+% % % end
+% % % 
+% % % lbg_vec(N_ + n_) = b;
+% % % ubg_vec(N_ + n_) = b;
+% % % 
+% % % 
+% % %  sol =   cas('x0' , yy0_vec, ...
+% % %             'lbx', lbx_vec,...
+% % %             'ubx', ubx_vec,...
+% % %             'lbg', lbg_vec, ...
+% % %             'ubg', ubg_vec);  
+% % %         
+% % %  % plotting
+% % % set(0,'defaulttextInterpreter','latex')
+% % % figure(2)
+% % % hold on
+% % % plot(loggAL_.X')
+% % % hold on
+% % % plot(maxit_,full(sol.x),'ob')
+% % % xlabel('$k$');
+% % % ylabel('$x^k$');      
