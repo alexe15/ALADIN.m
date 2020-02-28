@@ -105,7 +105,7 @@ ans =
     1.8369
 ```
 
-By default ALADIN-M shows progress in the iterations e.g. by the consensus gap $\text{log}_{10}(\|Ax-b\|_\infty)$ and the stepsizes in the local step and the coordination. 
+By default ALADIN-M shows progress in the iterations e.g. by the consensus gap ![\text{log}_{10}(\|Ax-b\|_\infty)](https://render.githubusercontent.com/render/math?math=%5Ctext%7Blog%7D_%7B10%7D(%5C%7CAx-b%5C%7C_%5Cinfty)) and the stepsizes in the local step and the coordination. 
 
 ![](docs/figures/microExOut.png)
 
