@@ -33,19 +33,19 @@ dec =  2;
 % output version 2 - 24.02.2020
 % disp(['                                                          '])
 % disp(['   ===============   Response from ALADIN   =============='])  
-disp(['                                                          '])
-disp(['   ==================   ALADIN timing   =================='])
+disp(['                                                           '])
+disp(['   -----------------   ALADIN-M timing   ------------------'])
 name = [" ";
-        "Tot time......:";
-        "Prob setup....:";
-        "Iter time.....:";
-        " ---------     ";
-        "NLP time......:";
-        "QP time.......:";
-        "Reg time......:";
-        "Plot time.....:"];
+        "   Tot time......:";
+        "   Prob setup....:";
+        "   Iter time.....:";
+        "    ---------     ";
+        "   NLP time......:";
+        "   QP time.......:";
+        "   Reg time......:";
+        "   Plot time.....:"];
     
-time = ["t[s]";
+time = ["  t[s]";
         convertCharsToStrings(num2str(round(timers.totTime, dec)));
         convertCharsToStrings(num2str(round(timers.setupT, dec)));
         convertCharsToStrings(num2str(round(timers.iter.iterTime, dec)));
@@ -104,6 +104,8 @@ outstr_char = char(outstr1{:});
 [m,n] = size(outstr1);
 p = size(outstr_char,2);
 out = reshape(permute(reshape(outstr_char.',p,m,[]),[1 3 2]),n*p,m).';
-disp(out)                                 
+disp(out)  
+disp(['                                                           '])
+disp(['   ========================================================'])
 end
 
