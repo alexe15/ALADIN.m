@@ -1,16 +1,17 @@
-visualizationFigure = figure;
+visualizationFigure = figure('Position', [500 400 1000 220]);
+movegui('center')
 
-plotMeritFunction = subplot(2, 2, 1);
-hold on;
-xlabel('k')
-ylabel('Merit function')
-xlim([0 opts.maxiter]);
-%ylim([-size(hhi, 2)-size(ggi, 2) size(hhi, 2)+size(ggi,2)]);
-axis manual;
-grid on
-box on
+% plotMeritFunction = subplot(2, 2, 1);
+% hold on;
+% xlabel('k')
+% ylabel('Merit function')
+% xlim([0 opts.maxiter]);
+% %ylim([-size(hhi, 2)-size(ggi, 2) size(hhi, 2)+size(ggi,2)]);
+% axis manual;
+% grid on
+% box on
 
-plotConsViol =  subplot(2, 2, 2);
+plotConsViol =  subplot(1, 3, 1);
 hold on
 xlabel('k')
 ylabel('log$ _{10}(||Ax-b||_\infty)$', 'Interpreter', 'latex')
@@ -23,7 +24,7 @@ axis manual;
 grid on
 box on
 
-plotSetChang = subplot(2, 2, 3);
+plotSetChang = subplot(1, 3, 3);
 hold on
 xlabel('k')
 ylabel('Working set changes')
@@ -33,7 +34,7 @@ axis manual;
 grid on
 box on
 
-plotStepSizes = subplot(2, 2, 4);
+plotStepSizes = subplot(1, 3, 2);
 hold on
 xlabel('k')
 ylabel('logarithmic step sizes')
