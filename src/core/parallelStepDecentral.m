@@ -48,7 +48,7 @@ parfor j=1:NsubSys % parfor???
          % after second iteration 
          if size(iter.logg.X,2) > 2 
              [SSig(j), loc_temp(j).locStep] = computeDynSig(opts.SSig{j},...
-                                 iter.yy{j}, loc_temp(j).xx,iter.loc.locStep{j});
+                                 iter.yy{j}, loc_temp(j).xx,iter.loc.locStep{j}, 'Sig');
          else
              loc_temp(j).locStep = iter.yy{j} - loc_temp(j).xx;
          end

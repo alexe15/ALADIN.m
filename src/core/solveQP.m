@@ -1,3 +1,4 @@
+
 function [ delx, lam  ] = solveQP( H, g, A, b, solver)
 
 if strcmp(solver, 'ipopt')

@@ -12,7 +12,7 @@ end
 
 for i=1:NsubSys
     % use warm start for speedup
-    if opts.warmStart == true
+    if strcmp(opts.warmStart, 'true')
         % D-CG
         lam{i}  = cond.IC{i}*lamOld;
         r{i}    = cond.IC{i}*(s - S*lamOld); 
@@ -44,7 +44,7 @@ for i = 1:NsubSys
 end
 
 %% D-CG
-if strcmp(opts.innerAlg,'CG')
+if strcmp(opts.innerAlg,'D-CG')
     
     % compute eta initialization
     for i=1:NsubSys
@@ -89,7 +89,7 @@ if strcmp(opts.innerAlg,'CG')
 
        % logg
        logg = false;
-       if logg == true
+       if logg == true 
            llam = zeros(Ncons,1);
            for i=1:NsubSys
               llam = llam + cond.IC{i}'*inv(cond.GGam{i})*lam{i};
@@ -100,7 +100,7 @@ if strcmp(opts.innerAlg,'CG')
     lamB = lam;
     
     % communication count 
-    if opts.warmStart == true
+    if strcmp(opts.warmStart,'true')
         % for warm start, we need one more loca comm step for CG
         comm.loc  = locComm*(opts.innerIter + 1);
     else
@@ -111,7 +111,7 @@ end
 
 %% D-ADMM
 % precompute inverse of (\hat S_i + \rho I)
-if strcmp(opts.innerAlg,'ADMM')
+if strcmp(opts.innerAlg,'D-ADMM')
 rhoADM = opts.rhoADM;
 
 for i=1:NsubSys
@@ -156,8 +156,8 @@ end
 comm.loc  = locComm*opts.innerIter;
 comm.glob = 0;
 
-figure
-semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
+%figure
+%semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
 
 end
 

@@ -3,7 +3,7 @@ function [ ] = dispSummary( neddedIter, opts, iter)
 %   Detailed explanation goes here
 disp(['                                                                ']);
 disp(['   ========================================================      ']);
-disp(['   ==               This is ALADIN-M V0.1                ==      ']);
+disp(['   ==               This is ALADIN-M v0.1                ==      ']);
 disp(['   ========================================================      ']);
 %disp(['Current iteration: ', num2str(iterationIndex)]);
 %disp(['                                                                ']);
@@ -24,7 +24,7 @@ if opts.term_eps == 0
 else
     disp(['   Given termination tolerance:', num2str(opts.term_eps)]);
     disp(['   Consensus violation:', num2str(iter.logg.consViol)]);
-    if iterationIdex == maxiter && opts.term_eps > iter.logg.consViol
+    if iterationIdex == maxiter && opts.term_eps > iter.logg.consViol(end)
         disp('   Maximum number of iterations is reached without satisfying given termination criterion.')
     elseif opts.term_eps <= iter.logg.consViol
         disp('   Success --- termination criterion satisfied.')

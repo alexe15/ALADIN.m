@@ -44,3 +44,5 @@ ylim([-12 2]);
 axis manual;
 grid on
 box on
+
+title('ALADIN-M v0.1');

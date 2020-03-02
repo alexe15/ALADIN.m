@@ -1,3 +1,4 @@
+
 function [ Lam, u ] = solveQPdecOld( cond, lamOld, opts, iter, sProb )
 %SOLVEQPDECOLD Summary of this function goes here
 
@@ -111,7 +112,7 @@ end
 
 
 
-if  strcmp(opts.innerAlg,'ADMM')
+if  strcmp(opts.innerAlg,'D-ADMM')
 % initialize z_i and y_i
 % rhoADM = 2e-2; %no preconditioning
 
@@ -200,7 +201,7 @@ end
 % end
 
 %% distributed CG
-if strcmp(opts.innerAlg,'CG')
+if strcmp(opts.innerAlg,'D-CG')
 
 C=J;
 

@@ -6,11 +6,19 @@ function [ HQP, gQP, AQP, bQP ] = createCoordQP( sProb, iter, opts )
     Ncons   = size(sProb.AA{1},1);
     if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
         % reduced space method with slacks       
+%         HQP =   [ blkdiag(iter.loc.sensEval.HHred{:}),   horzcat(iter.loc.sensEval.AAred{:})';
+%                   horzcat(iter.loc.sensEval.AAred{:}), - 1/iter.stepSizes.mu*eye(Ncons)];
+%         gQP = - [ - vertcat(iter.loc.sensEval.ggred{:});
+%                   - [sProb.AA{:}]*vertcat(iter.loc.xx{:}) + sProb.b  ...
+%                                            - 1/iter.stepSizes.mu*iter.lam];
+
         HQP =   [ blkdiag(iter.loc.sensEval.HHred{:}),   horzcat(iter.loc.sensEval.AAred{:})';
-                  horzcat(iter.loc.sensEval.AAred{:}), - 1/iter.stepSizes.mu*eye(Ncons)];
+                  horzcat(iter.loc.sensEval.AAred{:}), - opts.Del];
         gQP = - [ - vertcat(iter.loc.sensEval.ggred{:});
                   - [sProb.AA{:}]*vertcat(iter.loc.xx{:}) + sProb.b  ...
-                                           - 1/iter.stepSizes.mu*iter.lam];
+                                           - opts.Del*iter.lam];
+
+
         AQP = [];
         bQP = [];
         
