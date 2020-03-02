@@ -28,6 +28,7 @@ optVariants.hessian      = {'standard'};                % Hessian approx?
 optVariants.Hess         = {'standard'};
 optVariants.parfor       = {'false','true'};            % parallel computing?
 optVariants.DelUp        = {'true','false'};            % autoscaling for slacks?
+optVariants.reuse        = {'false','true'};            % return problem formulation for reuse
 
 % bi-level options
 optVariants.innerAlg     = {'none','D-CG','D-ADMM'};

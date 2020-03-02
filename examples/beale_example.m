@@ -82,7 +82,7 @@ sProb.lam0        = lam0;
 %xx0        = {[1 1]',[1 1]'};
 
 
-opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
+opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'false');
 
 
 sol_ALADIN   = run_ALADINnew(sProb, opts);

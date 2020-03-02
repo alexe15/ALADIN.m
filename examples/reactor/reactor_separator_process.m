@@ -98,7 +98,7 @@ sol = solver('x0', XX0, 'lbx', LLbx, 'ubx', UUbx,...
              'lbg', LLcon, 'ubg', UUcon, 'p', PP);
 
 XXopt1 = reshape(full(sol.x)',[],N);
-plotresults(XXopt1); % plot the results
+% plotresults(XXopt1); % plot the results
 
 %% distributed formulation
 for i = 1:Nunit
@@ -182,7 +182,7 @@ Usol = full([sol.x(N*Nunit*4+1:N*Nunit*4+N);...
             sol.x(N*Nunit*4*3+2*N+1:end)]);
 Uopt = reshape(Usol,N,[])';
 XXopt = vertcat(Xopt, Uopt);
-plotresults(XXopt);
+% plotresults(XXopt);
 
 %% solve with ALADIN
 
@@ -210,10 +210,10 @@ mu = 1e4;
 maxit = 20;
 term_eps = 0; % no termination criterion, stop after maxit
 
-opts = initializeOpts(rho, mu, maxit, SSig, term_eps);
+opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 % solve with ALADIN
-sol_ALADIN = run_ALADINnew(chem,opts);
+sol_ALADIN = run_ALADINnew(chem, opts);
 
 % plot the results
 Xsol = full(sol_ALADIN.xxOpt{1}(1:Nx));

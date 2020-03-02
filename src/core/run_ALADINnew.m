@@ -27,7 +27,11 @@ totTimer   = tic;
 setupTimer = tic;
 
 % set up local NLPs and sensitivities
-sProb                = createLocSolAndSens(sProb, opts);
+if strcmp(opts.reuse, 'false') || ~isfield(sProb, 'reuse')
+    sProb           = createLocSolAndSens(sProb, opts);
+else
+    sProb           = reform(sProb);
+end
 timers.setupT        = toc(setupTimer);
 
 % run ALADIN iterations
@@ -43,6 +47,11 @@ displayTimers(timers);
 % display comunication
 if ~strcmp(opts.innerAlg, 'none')
     displayComm(sol.iter.comm, opts.innerAlg);
+end
+
+% give problem formulation back
+if opts.reuse
+    sProbback;
 end
 
 end
