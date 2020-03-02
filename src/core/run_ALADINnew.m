@@ -28,9 +28,9 @@ setupTimer = tic;
 
 % set up local NLPs and sensitivities
 if strcmp(opts.reuse, 'false') || ~isfield(sProb, 'reuse')
-    sProb           = createLocSolAndSens(sProb, opts);
+    sProb            = createLocSolAndSens(sProb, opts);
 else
-    sProb           = reform(sProb);
+    sProb            = reform(sProb);
 end
 timers.setupT        = toc(setupTimer);
 

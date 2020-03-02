@@ -22,13 +22,8 @@ for i=1:length(defOptFields)
 end
 
 % compute default scaling matrices \Digma and \Delta
-[SSig , Del] = createDefaultSigDel( sProb, opts );
+[opts.SSig , Del] = createDefaultSigDel( sProb, opts );
 
-
-% set SSig independently, doesn't work in the loop below
-if ~isfield(opts,'SSig')
-    opts.SSig = SSig;
-end
 if ~isfield(opts,'Del')
     opts.Del  = Del;
 end

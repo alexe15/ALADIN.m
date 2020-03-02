@@ -1,6 +1,7 @@
 function sProb = setDefaultVals(sProb)
 % set functions to emptyfunctions if not present
 NsubSys = length(sProb.AA);
+Ncons   = size(sProb.AA{1},1);
 emptyfun      = @(x) [];
 
 % set ggi and hhi to emptyfun if not present
@@ -40,5 +41,9 @@ if ~isfield(sProb, 'lam0')
     sProb.lam0 = zeros(size(sProb.AA{1},1),1);
 end
 
+% set b to zero if not defined
+if ~isfield(sProb, 'b')
+    sProb.b    = zeros(Ncons,1);
+end
 end
 
