@@ -185,7 +185,6 @@ XXopt = vertcat(Xopt, Uopt);
 % plotresults(XXopt);
 
 %% solve with ALADIN
-
 for i = 1:Nunit
     chem.locFuns.ffi{i} = Function(['f' num2str(i)], {XXU{i}}, {JJ{i}});
     chem.locFuns.ggi{i} = Function(['g' num2str(i)], {XXU{i}}, {gg{i}});
@@ -435,7 +434,7 @@ end
 % function: definition of system parameters
 function par = parameters
     par.Nunit      = 3;
-    par.N          = 40;
+    par.N          = 10;
     par.dT         = 0.04;
 
     par.T10        = 300;

@@ -82,6 +82,7 @@ sol_ALADIN_centralized = run_ALADINnew( sProb, opts );
 
 
 %% solve centralized problem with CasADi & IPOPT
+import casadi.*
 y1  =   sym('y1',[n,1],'real');
 y2  =   sym('y2',[n,1],'real');
 f1fun   =   matlabFunction(f1,'Vars',{y1});
@@ -103,15 +104,7 @@ sol =   cas('lbx', [lb1; lb2],...
             'lbg', [-inf;-inf;b], ...
             'ubg', [0;0;b]);  
 
-%% plotting
-set(0,'defaulttextInterpreter','latex')
-figure(2)
-hold on
-plot(sol_ALADIN.iter.logg.X')
-hold on
-plot(maxit,full(sol.x),'ob')
-xlabel('$k$');
-ylabel('$x^k$');
+
 
 %% solve with ADMM
 % rhoADMM = 1000;
@@ -158,3 +151,13 @@ sProb.locFuns.ffi  = {f1, f2};
 sProb.locFuns.hhi  = {h1, h2};
 
 sol_ALADIN = run_ALADINnew( sProb, opts ); 
+
+%% plotting
+set(0,'defaulttextInterpreter','latex')
+figure(2)
+hold on
+plot(sol_ALADIN.iter.logg.X')
+hold on
+plot(maxit,full(sol.x),'ob')
+xlabel('$k$');
+ylabel('$x^k$');

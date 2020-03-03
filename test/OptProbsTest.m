@@ -12,8 +12,8 @@ end
 %% test first optimization example
 function testMainExample(testCase)
 
-    run ../examples/example_main.m                          
-    assert(full(norm(sol.x -xoptAL,inf)) < 1e-6, 'Out of tolerance for local minimizer!')
+    run ../examples/example_main.m   
+    assert(full(norm(sol.x -vertcat(sol_ALADIN.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minimizer!')
     
     close all;
 end
