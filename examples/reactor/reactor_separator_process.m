@@ -201,12 +201,12 @@ for i = 1:Nunit
     SSig{i} = eye(length(XXU{i}));
 end
 
-chem.lam0 = ones(size(AA{1},1),1);
+chem.lam0 = 0*ones(size(AA{1},1),1);
 
 % initialize the options for ALADIN
 rho = 1e3;
 mu = 1e4;
-maxit = 20;
+maxit = 100;
 term_eps = 0; % no termination criterion, stop after maxit
 
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
