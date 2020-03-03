@@ -22,7 +22,7 @@ end
 function testRosenbrock(TestRosenbrock)
 
     run ../examples/rosenbrock_example.m
-    assert(full(norm(sol.x -xoptAL,inf)) < 1e-6, 'Out of tolerance for local minimizer!')
+    assert(full(norm(sol.x -vertcat(sol_ALADIN.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minimizer!')
     
     close all;
 end
@@ -31,7 +31,7 @@ end
 function testBealeProblem(TestBealeProblem)
         
     run ../examples/beale_example.m
-    assert(full(norm(sol.x -xoptAL,inf)) < 1e-6, 'Out of tolerance for local minimizer!')
+    assert(full(norm(sol.x -vertcat(sol_ALADIN.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minimizer!')
 
     close all;
 end
@@ -41,27 +41,16 @@ function testMishrasBirdExample(TestMishrasBird)
 
 
     run ../examples/mishras_bird_example.m
-    assert(full(norm(sol.x -xoptAL,inf)) < 1e-1, 'Out of tolerance for local minimizer!')
+    assert(full(norm(sol.x -vertcat(sol_ALADIN.xxOpt{:}),inf)) < 1e-1, 'Out of tolerance for local minimizer!')
    
    close all;
 end
 
-%% test Rastrigin Problem
-function testRastriginProblem(TestRastriginProblem)
-
-
-    run ../examples/rastrigin_example.m
-    assert(full(norm(sol.x -xoptAL,inf)) < 1e-1, 'Out of tolerance for local minimizer!')
-
-    close all;
-end
 
 %% Test Convex example and ADMM solver
 function testConvexExample(testConvexExample)
 
-    run ../examples/convex_example.m
-    assert(full(norm(sol.x -xoptAL,inf)) < 1e-3, 'Out of tolerance for local minimizer!')
-    assert(full(norm(sol.x - xoptADM,inf)) < 1e-3, 'ADMM out of tolerance!')
+    %% New example needed, old one was non-convex.
     
     close all;
 

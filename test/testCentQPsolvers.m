@@ -1,11 +1,5 @@
 % reset envoronment variables for running the tests
-restoredefaultpath;
 clear all;
-clc;
-
-addpath('../src');
-addpath(genpath('../tools/'))
-
 import casadi.*
 
 % numerical tolerance for tests
@@ -28,7 +22,7 @@ b = rand(nc,1);
 
 %% test centralized QP solvers
 for solver = testedSolvers
-    [xOptQP, lamQP] = solveQP(H,h,A,b,solver,nc);   
+    [xOptQP, lamQP] = solveQP(H,h,A,b,solver);   
     xOpt.(solver{1}) = xOptQP;
 end
 

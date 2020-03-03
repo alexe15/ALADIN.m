@@ -27,7 +27,7 @@ optVariants.slack        = {'standard','redSpace'};     % reduced space?
 optVariants.hessian      = {'standard'};                % Hessian approx?
 optVariants.Hess         = {'standard'};
 optVariants.parfor       = {'false','true'};            % parallel computing?
-optVariants.DelUp        = {'true','false'};            % autoscaling for slacks?
+optVariants.DelUp        = {'false','true'};          % autoscaling for slacks?
 optVariants.reuse        = {'false','true'};            % return problem formulation for reuse
 
 % bi-level options

@@ -1,11 +1,5 @@
 % reset envoronment variables for running the tests
-restoredefaultpath;
 clear all;
-clc;
-
-addpath('../src');
-addpath(genpath('../tools/'))
-
 import casadi.*
 
 % numerical tolerance for tests
