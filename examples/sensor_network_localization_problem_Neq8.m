@@ -1,12 +1,12 @@
-restoredefaultpath;
+% restoredefaultpath;
 clear all;
 clc;
 
- addpath(genpath('../src/'));
- addpath(genpath('../tools/'));
- addpath('./solver');
+%  addpath(genpath('../src/'));
+%  addpath(genpath('../tools/'));
+%  addpath('./solver');
 
-% import casadi.*
+import casadi.*
 emptyfun        = @(x) [];
 
 %% define sensor network localization problem for N = 8

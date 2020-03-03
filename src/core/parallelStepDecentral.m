@@ -1,4 +1,4 @@
-function [ loc, timers ] = parallelStepDecentral( sProb, iter, timers, opts )
+function [ loc, timers, opts ] = parallelStepDecentral( sProb, iter, timers, opts )
 %DECENTRALIZEDPARALLELSTEP Summary of this function goes here
 NsubSys = length(sProb.AA);
 

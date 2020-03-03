@@ -23,7 +23,7 @@ optVariants.term_eps     = {0};
 optVariants.regParam     = {1e-4};
 
 % extensions
-optVariants.slack        = {'redSpace','standard'};     % reduced space?
+optVariants.slack        = {'standard','redSpace'};     % reduced space?
 optVariants.hessian      = {'standard'};                % Hessian approx?
 optVariants.Hess         = {'standard'};
 optVariants.parfor       = {'false','true'};            % parallel computing?

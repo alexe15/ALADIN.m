@@ -9,9 +9,9 @@
 % N = 8
 % sigma_i = 3
 
-addpath(genpath('../src'));
-addpath(genpath('../tools/'));
-addpath('./solver');
+% addpath(genpath('../src'));
+% addpath(genpath('../tools/'));
+% addpath('./solver');
 clear all;
 clc;
 total_time_sensor_network = tic;
