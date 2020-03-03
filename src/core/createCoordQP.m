@@ -30,7 +30,7 @@ function [ HQP, gQP, AQP, bQP ] = createCoordQP( sProb, iter, opts )
 
         HQP      = blkdiag(iter.loc.sensEval.HHiEval{:});
 
-        HQP     = blkdiag(HQP,-opts.Del); 
+        HQP     = blkdiag(HQP,iter.stepSizes.mu*eye(Ncons)); 
         JacCon   = blkdiag(iter.loc.sensEval.JJacCon{:});
 
         % check condition number of constraints

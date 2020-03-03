@@ -119,6 +119,8 @@ term_eps = 0; % no termination criterion, stop after maxit
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 % solve with ALADIN
+opts.slack = 'standard';
+
 sol_ALADIN{1} = run_ALADINnew(chem, opts);
 
 % plot the results

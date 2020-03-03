@@ -4,9 +4,9 @@ NsubSys = length(sProb.zz0);
 
 for i=1:NsubSys
     if isfield(opts, 'SSig')
-        SSig{i} = opts.rho0*opts.SSig{i};
+        SSig{i} = opts.SSig{i};
     else
-        SSig{i} = opts.rho0*eye(size(sProb.zz0{i},1));
+        SSig{i} = eye(size(sProb.zz0{i},1));
     end
 end
 
