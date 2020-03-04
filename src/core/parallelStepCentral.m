@@ -92,6 +92,9 @@ for j=1:NsubSys % parfor???
         loc.sensEval.ZZ{j}    = null(full(JJacCon{j}));
         loc.sensEval.HHred{j} = loc.sensEval.ZZ{j}'* ...
                           full(loc.sensEval.HHiEval{j})*loc.sensEval.ZZ{j};
+        % symmtrize because of numerical issues...
+        loc.sensEval.HHred{j} = 0.5*(loc.sensEval.HHred{j} + loc.sensEval.HHred{j}');
+        
         loc.sensEval.AAred{j} = sProb.AA{j}*loc.sensEval.ZZ{j};
         loc.sensEval.ggred{j} = loc.sensEval.ZZ{j}'*full(loc.sensEval.ggiEval{j});
 

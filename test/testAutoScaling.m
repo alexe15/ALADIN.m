@@ -49,7 +49,7 @@ sol_ALADIN = run_ALADINnew(chem, opts);
 res_IPOPT  = run_IPOPT(chem);
 
 % check whether primal solution is close enough to centralized one
-assert(norm(full(sol.x)-vertcat(sol_ALADIN.xxOpt{:}),inf) < 1e-6, 'Out of tolerance for local minimizer!')
+assert(norm(full(res_IPOPT.x)-vertcat(sol_ALADIN.xxOpt{:}),inf) < 1e-6, 'Out of tolerance for local minimizer!')
 
 
 %% test autoscaling for \Sigma penalization 118 bus
