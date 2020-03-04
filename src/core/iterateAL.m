@@ -61,8 +61,8 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
         iter.stepSizes.rho = iter.stepSizes.rho * opts.rhoUpdate;
     end
     % mu update
-    if iter.stepSizes.mu < opts.muMax
-        iter.stepSizes.mu  = iter.stepSizes.mu * opts.muUpdate;
+    if iter.stepSizes.mu < opts.muMax && strcmp(opts.DelUp, 'false')
+        opts.Del  = opts.Del * 1/opts.muUpdate;
     end
     
     % logging of variables?

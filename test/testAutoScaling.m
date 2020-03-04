@@ -2,8 +2,8 @@
 clear all;
 import casadi.*
 
-%% test BFGS for OPF 30 bus
-load('./problem_data/IEEE30busPrbFrm.mat')
+%% test autoscaling for slack penalization 118 bus
+load('./problem_data/IEEE118busPrbFrm.mat')
 
 
 % bring into the correct foormat
@@ -21,8 +21,9 @@ opts.plot         = 'true';
 opts.innerAlg     = 'none';
 opts.maxiter      = 30;
 
-opts.Hess         = 'DBFGS';   % damped BFGS
-opts.BFGSinit     = 'exact';   % with exact Hessian initialization
+% automatically update Delta scaling matrix for slacks
+opts.DelUp        = 'true';
+opts.Hess         = 'standard';
 
 % run ALADIN-M                       
 res_ALADIN = run_ALADINnew(sProb, opts);
@@ -35,7 +36,11 @@ assert(norm(vertcat(res_ALADIN.xxOpt{:}) - res_IPOPT.x,inf) < 1e-6, 'Out of tole
     
 %% test BFGS with chemical reactor
 load('./problem_data/chemReact.mat')
-opts.Hess = 'DBFGS';
+
+% automatically update Delta scaling matrix for slacks
+opts.DelUp        = 'true';
+opts.Hess         = 'standard';
+opts.maxiter      = 20;
 
 % solve with ALADIN
 sol_ALADIN = run_ALADINnew(chem, opts);
