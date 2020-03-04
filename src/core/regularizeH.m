@@ -21,7 +21,7 @@ function [ Hreg, didReg ] = regularizeH( H, opts )
             e(e<=reg)   = reg; % 1e-4
           
             % Regularization for small stepsize
-            Hreg  = V*diag(e)*transpose(V);
+            Hreg  = real(V*diag(e)*transpose(V));
 
 end
 
