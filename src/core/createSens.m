@@ -25,12 +25,21 @@ for i=1:NsubSys
         % gradient of Lagrangian for BFGS version
         if size(kkappCas,1) == 0
             gradiLag     = gradiCas;
+            
+            % standard Hessian (for initialization)
+            HHiCas    = hessian(sProb.locFunsCas.ffi{i}, sProb.xxCas{i});   
         else
             gradiLag     = gradient(sProb.locFunsCas.ffi{i} + kkappCas'* ...
                         [sProb.locFunsCas.ggi{i};sProb.locFunsCas.hhi{i}],...
                         sProb.xxCas{i});
+            % standard Hessian
+            HHiCas    = hessian(sProb.locFunsCas.ffi{i} + kkappCas'* ...
+                    [sProb.locFunsCas.ggi{i}; sProb.locFunsCas.hhi{i}], ...
+                                                           sProb.xxCas{i});  
         end
         sens.gL{i}  = Function(['g' num2str(i)],{sProb.xxCas{i},kkappCas},{gradiLag});
+        sens.HH{i}   = Function(['H' num2str(i)],{sProb.xxCas{i}, ... 
+                                      kkappCas,sProb.rhoCas},{HHiCas}); 
     else
         % compute the Hessian approximation
         if nngi{i}+nnhi{i} == 0

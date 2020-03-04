@@ -61,7 +61,14 @@ parfor j=1:NsubSys % parfor???
     if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
          loc_temp(j).sensEval.gLiEval   = sProb.sens.gL{j}(loc_temp(j).xx,loc_temp(j).KKapp);
          if ~isfield(iter.loc, 'sensEval')
-             loc_temp(j).sensEval.HHiEval   = eye(length(sProb.zz0{j}));
+            if strcmp(opts.BFGSinit, 'ident')
+                % initialize BFGS with identity matrix
+                loc_temp(j).sensEval.HHiEval   = eye(length(sProb.zz0{j}));
+            elseif strcmp(opts.BFGSinit, 'exact')
+                % initialize BFGS with exact Hessian
+                loc_temp(j).sensEval.HHiEval   =  ...
+                    sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
+            end
          else
              loc_temp(j).sensEval.HHiEval   = BFGS(iter.loc.sensEval.HHiEval{j},...
                                               loc_temp(j).sensEval.gLiEval,...

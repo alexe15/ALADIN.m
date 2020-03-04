@@ -220,7 +220,7 @@ Xopt = reshape(Xsol,[],N);
 Usol = full([sol_ALADIN.xxOpt{1}(Nx+1:Nx+N);...
              sol_ALADIN.xxOpt{2}(Nx+1:Nx+N);...
              sol_ALADIN.xxOpt{3}(Nx+1:Nx+N)]);
-Uopt = reshape(Usol,N,[])';
+Uopt  = reshape(Usol,N,[])';
 XXopt = vertcat(Xopt, Uopt);
 plotresults(XXopt);
 
