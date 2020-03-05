@@ -62,7 +62,14 @@ for j=1:NsubSys % parfor???
     if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
         loc.sensEval.gLiEval{j}   = sProb.sens.gL{j}(loc.xx{j},loc.KKapp{j});
         if ~isfield(iter.loc, 'sensEval')
-            loc.sensEval.HHiEval{j}   = eye(length(sProb.zz0{j}));
+            if strcmp(opts.BFGSinit, 'ident')
+                % initialize BFGS with identity matrix
+                loc.sensEval.HHiEval{j}   = eye(length(sProb.zz0{j}));
+            elseif strcmp(opts.BFGSinit, 'exact')
+                % initialize BFGS with exact Hessian
+                loc.sensEval.HHiEval{j}   =  ...
+                    sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
+            end
         else
             loc.sensEval.HHiEval{j}   = BFGS(iter.loc.sensEval.HHiEval{j},...
                                              loc.sensEval.gLiEval{j},...
@@ -92,6 +99,7 @@ for j=1:NsubSys % parfor???
         loc.sensEval.ZZ{j}    = null(full(JJacCon{j}));
         loc.sensEval.HHred{j} = loc.sensEval.ZZ{j}'* ...
                           full(loc.sensEval.HHiEval{j})*loc.sensEval.ZZ{j};
+        
         loc.sensEval.AAred{j} = sProb.AA{j}*loc.sensEval.ZZ{j};
         loc.sensEval.ggred{j} = loc.sensEval.ZZ{j}'*full(loc.sensEval.ggiEval{j});
 

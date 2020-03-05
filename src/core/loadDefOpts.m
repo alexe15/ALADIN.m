@@ -1,7 +1,5 @@
 function [ optVariants ] = loadDefOpts( )
-
-% define possible options and default values
-% standard ALADIN parameters
+% define possible options and default values (first entry of cells)
 optVariants.rho0         = {1e2};
 optVariants.rhoUpdate    = {1.1};
 optVariants.rhoMax       = {1e8};
@@ -23,12 +21,13 @@ optVariants.term_eps     = {0};
 optVariants.regParam     = {1e-4};
 
 % extensions
-optVariants.slack        = {'standard','redSpace'};     % reduced space?
-optVariants.hessian      = {'standard'};                % Hessian approx?
-optVariants.Hess         = {'standard'};
-optVariants.parfor       = {'false','true'};            % parallel computing?
-optVariants.DelUp        = {'false','true'};          % autoscaling for slacks?
-optVariants.reuse        = {'false','true'};            % return problem formulation for reuse
+optVariants.slack        = {'standard','redSpace'};   % reduced space?
+optVariants.hessian      = {'standard'};             % Hessian approx?
+optVariants.Hess         = {'standard','DBFGS','BFGS'};
+optVariants.BFGSinit     = {'ident','exact'};
+optVariants.parfor       = {'false','true'};         % parallel computing?
+optVariants.DelUp        = {'false','true'};         % autoscaling for slacks?
+optVariants.reuse        = {'false','true'};         % return problem formulation for reuse
 
 % bi-level options
 optVariants.innerAlg     = {'none','D-CG','D-ADMM'};
