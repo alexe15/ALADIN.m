@@ -4,7 +4,9 @@ import casadi.*
 NsubSys = length(sProb.AA);
 rhoCas  = opts.sym('rho',1,1);
 lamCas  = opts.sym('lam',size(sProb.AA{1},1),1);
-par     = opts.sym('par',size(sProb.p,1),1);
+if isfield(sProb, 'p')
+    par     = opts.sym('par',size(sProb.p,1),1);
+end
 
 for i=1:NsubSys     
     nnxi{i} = size(sProb.AA{i},2);

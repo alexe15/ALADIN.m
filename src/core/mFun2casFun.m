@@ -4,7 +4,6 @@ function [ locFunsCas, xxCas, varargout ] = mFun2casFun( sProb, opts )
 import casadi.*
 
 NsubSys    = length(sProb.locFuns.ffi);
-
 if ~isfield(sProb, 'p')
     for i=1:NsubSys
         % set up local variables
