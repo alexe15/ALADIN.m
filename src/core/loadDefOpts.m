@@ -33,7 +33,7 @@ optVariants.reuse        = {'false','true'};         % return problem formulatio
 optVariants.innerAlg     = {'none','D-CG','D-ADMM'};
 optVariants.rhoADM       = {2e-2};
 optVariants.warmStart    = {'true', 'false'};
-optVariants.innerIter    = {2400};
+optVariants.innerIter    = {200};
 
 
 end

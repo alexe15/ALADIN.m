@@ -10,6 +10,11 @@
 \title{ALADINp  Manual}
 \author{Alexander Engelmann}
 
+
+
+
+\newcommand{\Ae}[1]{\color{blue} #1\color{black}}
+
 \begin{document}
 
 
@@ -51,6 +56,9 @@ The input data for the solver are $f_i$, $g_i$, $h_i$, $A_i$, $b$, $\underline{x
 \texttt{cell\{f$_1$, f$_2$, $\cdots$, f$_n$\}}.$$
  The coupling matrices are similarly handed over via a cell, i.e. if we have $n$ coupling matrices $A_1, \cdots , A_n$ they are handed over as 
  $$\texttt{cell\{A$_1$, A$_2$ $\cdots$, A$_n$\}}.$$ Usually, every design variable has its own search domain. To transfer the feasble set to ALADIN, for each (multi dimensional) variable $x_i = (x_{i1}, \cdots , x_{in})$ a lower bound vector $\underline{x}_i = (\underline{x}_{i1}, \cdots , \underline{x}_{in})^T$ and an upper bound vector $\overline{x}_i = (\overline{x}_{i1}, \cdots , \overline{x}_{in})^T$ is transfered. All lower and upper bound vectors are again stored in two cells. $Sigma_i$ stores scaling matrices. They are handed over in the manner as the coupling matrices. The \texttt{opts} - struct contains several entries. They can be extracted from table \ref{tab: ALADIN options struct.}. \textcolor{red}{\textbf{TODO} opts struct vervollstaendigen!!!!!} 
+
+
+ \Ae{Comment on default options somewhere. }
 \begin{table}
 	\centering
 	\begin{tabular}{rcc}
@@ -370,13 +378,13 @@ such that overall the form of (\ref{eq:sepForm}) is given, i.e.
 \end{subequations}
 For implementation in \textsc{Matlab}, the objetive functions, the constraint functions, the coupling matrices and the upper and lower boundaries are handed over via a cells. The objective functions and the constraint functions are of the type \texttt{matlab function} to be able to use the matlab intern optimization toolbox. The lower boundary is stored as a vector. In the same manner, the upper boundary is stored. The coupling matrices are stored in matrix form. Further, the \texttt{opts} struct needs to be defined. Details on \texttt{opts} can be found in section TODO.
 \\So firstly, for using the MATLAB symbolic toolbox, we can define the split-up problem.
-\lstinputlisting[firstline=11,lastline=33]{../examples/example_main.m}
+\lstinputlisting[firstline=11,lastline=33]{../../examples/example_main.m}
 To solve the problem using ALADIN, we first have to convert the symbolic variables to MATLAB functions
-\lstinputlisting[firstline=35,lastline=40]{../examples/example_main.m}
+\lstinputlisting[firstline=35,lastline=40]{../../examples/example_main.m}
 Next, we set the solver options
-\lstinputlisting[firstline=42,lastline=52]{../examples/example_main.m}
+\lstinputlisting[firstline=42,lastline=52]{../../examples/example_main.m}
 Finally, we solve the problem with ALADIN
-\lstinputlisting[firstline=54,lastline=78]{../examples/example_main.m}
+\lstinputlisting[firstline=54,lastline=78]{../../examples/example_main.m}
 Fig. \ref{fig:example_main} shows the convergence property of ALADIN on the first example. It can be seen that it converges after about only 10 iterations, which is very fast.
 
 \begin{figure}
@@ -411,13 +419,13 @@ with $\tilde{y}_1 = (y_1)$ and $\tilde{y}_2 = (y_2, y_3)$.
 Using the MATLAB symbolic toolbox, we can now define the split-up problem 
 %(see \texttt{rosenbrock\_example.m}) 
 as 
-\lstinputlisting[firstline=7,lastline=26]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=7,lastline=26]{../../examples/rosenbrock_example.m}
 To solve the problem using ALADIN, we first have to convert the symbolic variables to MATLAB functions:
-\lstinputlisting[firstline=28,lastline=33]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=28,lastline=33]{../../examples/rosenbrock_example.m}
 Next, we set the solver options.
-\lstinputlisting[firstline=35,lastline=40]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=35,lastline=40]{../../examples/rosenbrock_example.m}
 Finally, we solve the problem with ALADIN
-\lstinputlisting[firstline=42,lastline=56]{../examples/rosenbrock_example.m}
+\lstinputlisting[firstline=42,lastline=56]{../../examples/rosenbrock_example.m}
 Fig. \ref{fig:rosenbrock} shows the convergence property of ALADIN on Rosenbrock function.
 
 
