@@ -4,6 +4,7 @@ import casadi.*
 NsubSys = length(sProb.AA);
 rhoCas  = opts.sym('rho',1,1);
 lamCas  = opts.sym('lam',size(sProb.AA{1},1),1);
+par     = opts.sym('par',size(sProb.p,1),1);
 
 for i=1:NsubSys     
     nnxi{i} = size(sProb.AA{i},2);
@@ -35,7 +36,11 @@ for i=1:NsubSys
     ubg{i}   = zeros(nngi{i}+nnhi{i},1);
     
      % parameters for local problems
-    ppCas{i} = [ rhoCas; lamCas; zzCas{i}];
+    if ~isfield(sProb, 'p')
+        ppCas{i} = [ rhoCas; lamCas; zzCas{i}];
+    else
+        ppCas{i} = [ rhoCas; lamCas; zzCas{i}; sProb.pCas];
+    end
     
     nlp      = struct('x',sProb.xxCas{i},'f',ffiLocCas, ...
                       'g',[sProb.locFunsCas.ggi{i}; sProb.locFunsCas.hhi{i}], ...
