@@ -61,33 +61,30 @@ sol_ALADIN = run_ALADINnew( sProb );
 ````
 This yields the output
 ```
-   ================== ALADIN response ===================    
-                                                                
-   ============== ALADIN iteration summary ==============    
-                                                                
-Current iteration: 30
-                                                                
-Applied solvers: 
+========================================================      
+==               This is ALADIN-M v0.1                ==      
+========================================================      
 QP solver:        MA57
 Local solver:     ipopt
 Inner algorithm:  none
-                                                                
-No specific termination error bound was handed over.
-Remaining iterations:         0
-Current constraint violation: 6.6531e-12
-                                                                
-Maximum number of iterations is reached.
-                                                          
-   ==================   ALADIN timing   ==================
-                  t[s]              %tot              %iter             
-Tot time......:     3.4                                                 
-Prob setup....:     0.14             4.2                                
-Iter time.....:     3.25            95.6                                
- ---------                                                              
-NLP time......:     0.93                              28.8              
-QP time.......:     0.08                               2.4              
-Reg time......:     0.02                               0.6              
-Plot time.....:     1.99                              61.4     
+
+No termination criterion was specified.
+Consensus violation: 6.6531e-12
+
+Maximum number of iterations reached.
+
+-----------------   ALADIN-M timing   ------------------
+                    t[s]                %tot       %iter                
+Tot time......:     3.92                                                         
+Prob setup....:     0.19                4.8                                      
+Iter time.....:     3.72                95                                        
+---------                                                                       
+NLP time......:     1.1                             29.7                 
+QP time.......:     0.11                             2.8                 
+Reg time......:     0.02                             0.6                 
+Plot time.....:     2.27                            60.8                 
+
+========================================================  
 ```
 and a primal-optimal solution
 ```

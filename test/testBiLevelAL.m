@@ -23,7 +23,7 @@ opts.maxiter      = 30;
 
 % automatically update Delta scaling matrix for slacks
 opts.innerAlg     = 'D-CG';
-opts.innerIter    = 300;
+opts.innerIter    = 50;
 opts.Hess         = 'standard';
 
 % run ALADIN-M                       
@@ -57,7 +57,7 @@ opts.maxiter      = 30;
 
 % automatically update Delta scaling matrix for slacks
 opts.innerAlg     = 'D-ADMM';
-opts.innerIter    = 300;
+opts.innerIter    = 130;
 opts.Hess         = 'standard';
 
 % run ALADIN-M                       
@@ -67,5 +67,5 @@ res_ALADIN = run_ALADINnew(sProb, opts);
 res_IPOPT  = run_IPOPT(sProb);
 
 % check whether primal solution is close enough to centralized one
-assert(norm(vertcat(res_ALADIN.xxOpt{:}) - res_IPOPT.x,inf) < 1e-6, 'Out of tolerance for local minimizer!')
+assert(norm(vertcat(res_ALADIN.xxOpt{:}) - res_IPOPT.x,inf) < 1e-5, 'Out of tolerance for local minimizer!')
     
