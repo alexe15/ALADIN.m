@@ -39,6 +39,7 @@ timers.setupT        = toc(setupTimer);
 
 % total time
 timers.totTime  = toc(totTimer);
+sol.timers = timers;
 
 % display solver output and timing
 dispSummary(size(sol.logg.X,2), opts, sol.iter);
