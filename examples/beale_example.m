@@ -63,7 +63,7 @@ rho        =   10;
 mu         =   1000;
 eps        =   1e-4;
 term_eps   =   0;
-Sig        =   {eye(n),eye(n),eye(n)};
+SSig       =   {eye(n),eye(n),eye(n)};
 
 %% solve with ALADIN
 emptyfun           = @(x) [];
@@ -82,7 +82,7 @@ sProb.lam0        = lam0;
 %xx0        = {[1 1]',[1 1]'};
 
 
-opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'false');
+opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 
 sol_ALADIN   = run_ALADINnew(sProb, opts);

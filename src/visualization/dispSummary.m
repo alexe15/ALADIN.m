@@ -24,7 +24,7 @@ if opts.term_eps == 0
 else
     disp(['   Given termination tolerance:', num2str(opts.term_eps)]);
     disp(['   Consensus violation:', num2str(iter.logg.consViol)]);
-    if iterationIdex == maxiter && opts.term_eps > iter.logg.consViol(end)
+    if neddedIter == opts.maxiter && opts.term_eps > iter.logg.consViol(end)
         disp('   Maximum number of iterations is reached without satisfying given termination criterion.')
     elseif opts.term_eps <= iter.logg.consViol
         disp('   Success --- termination criterion satisfied.')

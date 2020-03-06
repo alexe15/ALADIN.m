@@ -24,9 +24,9 @@ iter.logg.Y     = [iter.logg.Y y];
 %         logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
 %         logg.KappaIneq  = [logg.KappaIneq vertcat(KioptIneq{:})];
 iter.logg.lam        = [iter.logg.lam iter.lam];
-iter.logg.localStepS = [iter.logg.localStepS norm(x - yOld,inf)];
-iter.logg.QPstepS    = [iter.logg.QPstepS norm(y-x,inf)];
-iter.logg.Mfun       = [iter.logg.Mfun full(sProb.Mfun(y,iter.ls.muMeritMin*1.1))];
+iter.logg.localStepS = [iter.logg.localStepS norm(full(x - yOld),inf)];
+iter.logg.QPstepS    = [iter.logg.QPstepS norm(full(y-x),inf)];
+% iter.logg.Mfun       = [iter.logg.Mfun full(sProb.Mfun(y,iter.ls.muMeritMin*1.1))];
 iter.logg.consViol   = [iter.logg.consViol norm([sProb.AA{:}]*x,inf)];
 iter.logg.wrkSet     = [iter.logg.wrkSet ~vertcat(iter.loc.inact{:})];
 if i>2 % number of changing active constraints

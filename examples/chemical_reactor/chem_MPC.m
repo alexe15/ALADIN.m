@@ -96,8 +96,6 @@ AA{Nunit} = -repmat(Abase, Nunit-1, 1);
 
 X0 = vertcat(XX0{:});
 for i = 1:Nunit
-%     chem.locFuns.ffi{i} = Function(['f' num2str(i)], {XXU{i}}, {JJ{i}});
-%     chem.locFuns.ggi{i} = Function(['g' num2str(i)], {[XXU{i};X0]}, {gg{i}});
     chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i}});
     chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {[XXU{i};X0]});
     
@@ -127,6 +125,7 @@ opts.plot = 'false';
 
 % solve with ALADIN
 sol_ALADIN{1} = run_ALADINnew(chem,opts);
+chem.reuse    = sol_ALADIN{1}.reuse;
 
 Xopt = vertcat(x0{:});
 Uopt = [];
@@ -140,7 +139,6 @@ for i = 2:Nmpc
         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
     end
     chem.p = vertcat(xx0{:});
-    chem.reuse = sol_ALADIN{i-1}.reuse;
     sol_ALADIN{i} = run_ALADINnew(chem, opts);
     Xopt = [Xopt, Xopti];
     Uopt = [Uopt, Uopti];
@@ -152,16 +150,6 @@ Uopt_last = [sol_ALADIN{Nmpc}.xxOpt{1}(Nunit*N*4+1);
 Uopt = [Uopt,Uopt_last]
 
 plotresults([Xopt;Uopt])
-
-% plot the results
-% Xsol = full(sol_ALADIN.xxOpt{1}(1:Nx));
-% Xopt = reshape(Xsol,[],N);
-% Usol = full([sol_ALADIN.xxOpt{1}(Nx+1:Nx+N);...
-%              sol_ALADIN.xxOpt{2}(Nx+1:Nx+N);...
-%              sol_ALADIN.xxOpt{3}(Nx+1:Nx+N)]);
-% Uopt = reshape(Usol,N,[])';
-% XXopt = vertcat(Xopt, Uopt);
-% plotresults(XXopt);
 
 %% define the fuctions 
 % function: Runge-Kutte 4 Integrator
