@@ -1,6 +1,7 @@
 function [ loc, timers, opts ] = parallelStepDecentral( sProb, iter, timers, opts )
 %DECENTRALIZEDPARALLELSTEP Summary of this function goes here
 NsubSys = length(sProb.AA);
+loc     = iter.loc;
 
 % initialize space and parfor compatilbe datatype
 loc_temp = cell2struct(cell(5, NsubSys), {'xx', 'KKapp', 'LLam_x', 'inact', 'sensEval'}, 1);
@@ -131,6 +132,7 @@ parfor j=1:NsubSys % parfor???
 end 
 % copy local parfor data into global data
 parforVars2globalVars;
+
 
 % save information for next BFGS iteration
 if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')

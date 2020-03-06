@@ -31,3 +31,10 @@ octave-workspace
 
 # ignore mkdocs site
 /site
+
+# ignore latex
+*.aux
+*.blg
+*.log
+*.synctex.gz
+*.toc

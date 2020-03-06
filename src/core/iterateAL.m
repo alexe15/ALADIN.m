@@ -37,10 +37,10 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
         % solve coordination QP decentrally
         iter.loc.cond          = condenseLocally(sProb, iter);
         % solve condensed QP by decentralized CG/ADMM
-        [ iter.llam, iter.lam, iter.comm ] = ...
-                              solveQPdecNew(iter.loc.cond, iter.lam, opts);
-       % [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, ...
-        %                                               opts, iter, sProb );
+      %  [ iter.llam, iter.lam, iter.comm ] = ...
+        %                      solveQPdecNew(iter.loc.cond, iter.lam, opts);
+        [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, ...
+                                                       opts, iter, sProb );
         % expand again locally based on computed \lamda
         iter.ddelx             = expandLocally(iter.llam, iter.loc.cond);
     end        
@@ -82,7 +82,6 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
 end
 timers.iterTime = toc(iterTimer);
 
-sol.logg   = iter.logg;
 sol.xxOpt  = iter.yy;
 sol.lamOpt = iter.lam;
 sol.iter   = iter;
