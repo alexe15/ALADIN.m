@@ -42,7 +42,7 @@ timers.totTime  = toc(totTimer);
 sol.timers = timers;
 
 % display solver output and timing
-dispSummary(size(sol.logg.X,2), opts, sol.iter);
+dispSummary(size(sol.iter.logg.X,2), opts, sol.iter);
 displayTimers(timers);
 
 % display comunication
