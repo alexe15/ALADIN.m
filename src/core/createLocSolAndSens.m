@@ -2,7 +2,11 @@ function [ sProb ] = createLocSolAndSens(sProb, opts)
 % set up the local solvers and sensitivity functions for coord. QP
 
 % convert MATLAB functions to CasADi functions 
-[ sProb.locFunsCas, sProb.xxCas ] = mFun2casFun(sProb, opts);
+if ~isfield(sProb, 'p')
+    [ sProb.locFunsCas, sProb.xxCas ]             = mFun2casFun(sProb, opts);
+else
+    [ sProb.locFunsCas, sProb.xxCas, sProb.pCas ] = mFun2casFun(sProb, opts);
+end
 
 % create local solvers 
 [ sProb.nnlp, sProb.gBounds, sProb.rhoCas, sProb.lamCas, sProb.SSig ] = ...

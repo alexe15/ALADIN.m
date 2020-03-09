@@ -1,4 +1,4 @@
-function tests = OptProbsTest
+ function tests = OptProbsTest
 
     tests = functiontests(localfunctions);
     

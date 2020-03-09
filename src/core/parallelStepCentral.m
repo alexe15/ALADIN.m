@@ -8,9 +8,16 @@ for j=1:NsubSys % parfor???
     nnhi{j} = size(sProb.locFunsCas.hhi{j},1);    
     
     % set up parameter vector for local NLP's
-    pNum = [ iter.stepSizes.rho;
-             iter.lam;
-             iter.yy{j}];
+    if ~isfield(sProb, 'p')
+        pNum = [ iter.stepSizes.rho;
+                 iter.lam;
+                 iter.yy{j}];
+    else
+        pNum = [ iter.stepSizes.rho;
+                 iter.lam;
+                 iter.yy{j};
+                 sProb.p];
+    end
 
     
     % solve local NLP's

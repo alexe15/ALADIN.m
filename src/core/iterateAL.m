@@ -82,7 +82,6 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
 end
 timers.iterTime = toc(iterTimer);
 
-sol.logg   = iter.logg;
 sol.xxOpt  = iter.yy;
 sol.lamOpt = iter.lam;
 sol.iter   = iter;

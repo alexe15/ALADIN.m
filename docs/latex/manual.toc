@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 \contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
 \contentsline {section}{\numberline {2}Problem Formulation}{2}{section.2}%
 \contentsline {section}{\numberline {3}Solver Interface}{2}{section.3}%
@@ -30,3 +32,4 @@
 \contentsline {subsection}{\numberline {A.1}The \texttt {run\_ADMM} routine}{14}{subsection.A.1}%
 \contentsline {section}{\numberline {B}Problem Reformulations}{14}{appendix.B}%
 \contentsline {subsection}{\numberline {B.1}Consensus Reformulations in Form of \textup {\hbox {\mathsurround \z@ \normalfont (\ignorespaces \ref {eq:sepForm}\unskip \@@italiccorr )}}}{14}{subsection.B.1}%
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa

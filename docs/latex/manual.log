@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2019.5.5)  5 MAR 2020 11:52
+=======
 This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.21)  5 MAR 2020 12:11
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 entering extended mode
 **./manual.tex
 (manual.tex
@@ -560,18 +564,39 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
  ("C:\Users\yk1379\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd
 "
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+<<<<<<< HEAD
+) (./manual.toc)
+\tf@toc=\write4
+\openout4 = `manual.toc'.
+
+(c:/Software/texlive/2019/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
+File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
+
+)
+=======
 ) (manual.toc [1
 
 
 {C:/Users/yk1379/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
 \tf@toc=\write4
 \openout4 = `manual.toc'.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
+
+LaTeX Warning: Citation `Houska' on page 1 undefined on input line 25.
 
 
-
+<<<<<<< HEAD
+LaTeX Warning: Citation `Houska' on page 1 undefined on input line 43.
+=======
 LaTeX Warning: Citation `Houska' on page 2 undefined on input line 30.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
+[1
 
+<<<<<<< HEAD
+
+]
+=======
 LaTeX Warning: Citation `Houska' on page 2 undefined on input line 48.
 
 LaTeX Font Info:    Trying to load font information for OMS+cmtt on input line 
@@ -592,6 +617,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 88.
  [3]
 <figures/flowChart.pdf, id=103, 139.79828pt x 155.15767pt>
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 File: figures/flowChart.pdf Graphic file (type pdf)
 <use figures/flowChart.pdf>
 Package pdftex.def Info: figures/flowChart.pdf  used on input line 123.
@@ -600,13 +626,29 @@ Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 131.
 
 
+<<<<<<< HEAD
+LaTeX Warning: Citation `Houska2016' on page 2 undefined on input line 163.
+
+=======
 LaTeX Warning: Citation `Houska2016' on page 4 undefined on input line 171.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
+LaTeX Warning: Citation `Nocedal' on page 2 undefined on input line 185.
 
+<<<<<<< HEAD
+=======
 LaTeX Warning: Citation `Nocedal' on page 4 undefined on input line 193.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
+LaTeX Warning: Reference `sec:cycling' on page 2 undefined on input line 187.
 
+<<<<<<< HEAD
+[2] [3] [4]
+
+LaTeX Warning: Citation `somePappers' on page 5 undefined on input line 194.
+=======
 LaTeX Warning: Citation `somePappers' on page 4 undefined on input line 202.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
 
 Overfull \hbox (9.46327pt too wide) detected at line 210
@@ -619,10 +661,23 @@ L/cmm/m/it/10.95 A\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x[] \OT1/cmr/m/n/10.9
 OML/cmm/m/it/10.95 []C[]\OT1/cmr/m/n/10.95 \OML/cmm/m/it/10.95 x:
  []
 
+<<<<<<< HEAD
+[5]
+=======
 [4 <./figures/flowChart.pdf>] [5]
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
 LaTeX Warning: Citation `Nocedal' on page 6 undefined on input line 256.
 
+<<<<<<< HEAD
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 252.
+
+LaTeX Warning: Citation `Engelmann19' on page 6 undefined on input line 288.
+
+
+LaTeX Warning: Citation `Houska' on page 6 undefined on input line 293.
+=======
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 260.
 [6]
@@ -631,13 +686,21 @@ LaTeX Warning: Citation `Engelmann19' on page 7 undefined on input line 296.
 
 
 LaTeX Warning: Citation `Houska' on page 7 undefined on input line 301.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
-[7]
+[6]
 
+<<<<<<< HEAD
+LaTeX Warning: Citation `Engelmann' on page 7 undefined on input line 308.
+
+
+LaTeX Warning: Citation `Nocedal' on page 7 undefined on input line 310.
+=======
 LaTeX Warning: Citation `Engelmann' on page 8 undefined on input line 316.
 
 
 LaTeX Warning: Citation `Nocedal' on page 8 undefined on input line 318.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
@@ -659,6 +722,11 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 331.
 
+<<<<<<< HEAD
+[7]
+
+LaTeX Warning: Reference `coupling' on page 8 undefined on input line 355.
+=======
 [8]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 381.
@@ -775,13 +843,35 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 496.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 496.
 Package rerunfilecheck Info: File `manual.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
 
+[8]
 
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+! Package Listings Error: File `../examples/example_main(.m)' not found.
 
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: m)
 
-LaTeX Warning: There were undefined references.
+Enter file name: 
+! Emergency stop.
+<read *> 
+         
+l.373 ...,lastline=33]{../examples/example_main.m}
+                                                  ^^M
+*** (cannot \read from terminal in nonstop modes)
 
+<<<<<<< HEAD
+ 
+Here is how much of TeX's memory you used:
+ 13066 strings out of 492916
+ 196151 string characters out of 6132928
+ 409573 words of memory out of 5000000
+ 16985 multiletter control sequences out of 15000+600000
+ 13581 words of font info for 71 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 41i,19n,51p,9113b,407s stack positions out of 5000i,500n,10000p,200000b,80000s
+Output written on manual.pdf (8 pages).
+=======
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 496.
  ) 
 Here is how much of TeX's memory you used:
@@ -826,3 +916,4 @@ PDF statistics:
  200 named destinations out of 1000 (max. 500000)
  256 words of extra memory for PDF output out of 10000 (max. 10000000)
 
+>>>>>>> 1b8727a5cb8099a62dc38930b16aa91d4b69edfa
