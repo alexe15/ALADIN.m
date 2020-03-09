@@ -5,7 +5,6 @@ import casadi.*
 %% test BFGS for OPF 30 bus
 load('./problem_data/IEEE30busPrbFrm.mat')
 
-
 % bring into the correct foormat
 sProb.locFuns.ffi = ffifun;
 sProb.locFuns.ggi = ggifun;
@@ -33,6 +32,7 @@ res_IPOPT  = run_IPOPT(sProb);
 % check whether primal solution is close enough to centralized one
 assert(norm(vertcat(res_ALADIN.xxOpt{:}) - res_IPOPT.x,inf) < 1e-6, 'Out of tolerance for local minimizer!')
     
+
 %% test BFGS with chemical reactor
 load('./problem_data/chemReact.mat')
 opts.Hess = 'DBFGS';

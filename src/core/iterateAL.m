@@ -35,14 +35,14 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
         [ iter.ddelx iter.lam ] = decomposeX(xs, lamTot, iter, opts);
     else 
         % solve coordination QP decentrally
-        iter.loc.cond          = condenseLocally(sProb, iter);
+        iter.loc.cond           = condenseLocally(sProb, iter);
         % solve condensed QP by decentralized CG/ADMM
         [ iter.llam, iter.lam, iter.comm ] = ...
                               solveQPdecNew(iter.loc.cond, iter.lam, opts);
        % [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, ...
       %                                                 opts, iter, sProb );
         % expand again locally based on computed \lamda
-        iter.ddelx             = expandLocally(iter.llam, iter.loc.cond);
+        iter.ddelx              = expandLocally(iter.llam, iter.loc.cond);
     end        
     timers.QPtotTime      = timers.QPtotTime + toc;   
    
