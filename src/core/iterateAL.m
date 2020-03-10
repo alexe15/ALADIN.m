@@ -13,7 +13,7 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
    if (strcmp( opts.parfor, 'true' ))
         [ iter.loc, timers, opts ] = parallelStepDecentral( sProb, iter, timers, opts );
    else
-        [ iter.loc, timers, opts ] = parallelStepCentral( sProb, iter, timers, opts );
+        [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts );
    end
     % set up and solve the coordination QP
     tic

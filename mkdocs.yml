@@ -12,6 +12,8 @@ nav:
   - Start: index.md
   - The algorithm: ALADIN.md
   - Code structure: codeStruct.md
+  - Parallel Computing: ParallelExample.md
+  - Distributed MPC: robotEx.md
 
 markdown_extensions:
   - codehilite

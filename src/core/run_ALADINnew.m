@@ -43,12 +43,13 @@ sol.timers = timers;
 
 % display solver output and timing
 dispSummary(size(sol.iter.logg.X,2), opts, sol.iter);
-displayTimers(timers);
+displayTimers(timers, opts);
 
 % display comunication
-if ~strcmp(opts.innerAlg, 'none')
+if strcmp(opts.commCount, 'true')
     displayComm(sol.iter.comm, opts.innerAlg);
 end
+
 
 % give problem formulation back
 if opts.reuse

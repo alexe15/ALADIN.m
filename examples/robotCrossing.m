@@ -99,7 +99,7 @@ rob.p      = ppNumAll;
 opts.plot  = 'false';
 opts.reuse = 'true';
 opts.maxiter  = 50;
-opts.term_eps = 0;
+opts.term_eps = 1e-8;
 
 Xopt  = ppNumAll;
 for i = 1:Nmpc

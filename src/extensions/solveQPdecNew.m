@@ -33,15 +33,7 @@ for i=1:NsubSys
     end
 end
 
-%% communication count
-% count local communication by counting the 1s in Icc
-locComm  = 0;
-for i = 1:NsubSys
-    % not counting self-elements
-    for j = setdiff(1:NsubSys,i)
-        locComm = locComm + sum(sum(cond.Icc{i,j}));
-    end
-end
+
 
 %% D-CG
 if strcmp(opts.innerAlg,'D-CG')
@@ -99,14 +91,6 @@ if strcmp(opts.innerAlg,'D-CG')
     end
     lamB = lam;
     
-    % communication count 
-    if strcmp(opts.warmStart,'true')
-        % for warm start, we need one more loca comm step for CG
-        comm.loc  = locComm*(opts.innerIter + 1);
-    else
-        comm.loc  = locComm*opts.innerIter;
-    end
-    comm.glob = 2*opts.innerIter;
 end
 
 %% D-ADMM
@@ -151,11 +135,6 @@ for n = 1:opts.innerIter
     end
 end
 
-
-% communication count 
-comm.loc  = locComm*opts.innerIter;
-comm.glob = 0;
-
 %figure
 %semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
 
@@ -166,6 +145,20 @@ end
 Lam = zeros(Ncons,1);
 for i=1:NsubSys
   Lam = Lam + cond.IC{i}'*inv(cond.GGam{i})*lamB{i}; % *lam{i}
+end
+
+
+%% communication count
+% count local communication by counting the 1s in Icc
+for i = 1:NsubSys
+    % neighbor-neighbor communication not counting self-elements
+    comm.nn{i} = ones(1,opts.innerIter)* ...
+                   (sum(sum([cond.Icc{i,:}])) - sum(sum([cond.Icc{i,i}])));
+    if strcmp(opts.innerAlg,'D-CG')
+        comm.globF.globSum{i} = ones(1,opts.innerIter)*2;
+    elseif strcmp(opts.innerAlg,'D-ADMM')
+        comm.globF.globSum{i} = zeros(1,opts.innerIter);
+    end
 end
 
 

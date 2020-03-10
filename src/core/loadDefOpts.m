@@ -1,3 +1,4 @@
+
 function [ optVariants ] = loadDefOpts( )
 % define possible options and default values (first entry of cells)
 optVariants.rho0         = {1e2};
@@ -28,6 +29,7 @@ optVariants.BFGSinit     = {'ident','exact'};
 optVariants.parfor       = {'false','true'};         % parallel computing?
 optVariants.DelUp        = {'false','true'};         % autoscaling for slacks?
 optVariants.reuse        = {'false','true'};         % return problem formulation for reuse
+optVariants.commCount    = {'false','true'};         % forward communication count
 
 % bi-level options
 optVariants.innerAlg     = {'none','D-CG','D-ADMM'};

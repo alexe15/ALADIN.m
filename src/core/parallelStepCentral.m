@@ -1,4 +1,4 @@
-function [ loc, timers, opts ] = parallelStepCentral( sProb, iter, timers, opts )
+function [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts )
 %PARALLELSTEP Summary of this function goes here
 NsubSys = length(sProb.AA);
 
@@ -56,9 +56,11 @@ for j=1:NsubSys % parfor???
     end
 
     % evaluate sensitivities locally
-    % Hessians
     tic
+    % gradient of the objective
     loc.sensEval.ggiEval{j} = sProb.sens.gg{j}(loc.xx{j});
+    
+    % Hessian approximations
     if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
         loc.sensEval.gLiEval{j}   = sProb.sens.gL{j}(loc.xx{j},loc.KKapp{j});
         if ~isfield(iter.loc, 'sensEval')
@@ -78,8 +80,23 @@ for j=1:NsubSys % parfor???
                                              iter.loc.xxOld{j},...
                                              opts.Hess);
         end
+        if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
+            % communication for xx and the gradient of the Lagrangian and
+            % the objective
+            iter.comm.globF.Hess{j}    = [ iter.comm.globF.Hess{j} length(iter.loc.xx{j}) ];
+            iter.comm.globF.grad{j}    = [ iter.comm.globF.grad{j} length(iter.loc.xx{j}) ];
+            iter.comm.globF.primVal{j} = [ iter.comm.globF.primVal{j} length(iter.loc.xx{j}) ];
+        end
     else
         loc.sensEval.HHiEval{j}   = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
+        
+        if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
+            % communication for xx and the gradient of the Lagrangian and
+            % the objective
+            iter.comm.globF.Hess{j}    = [ iter.comm.globF.Hess{j} length(iter.loc.xx{j})*(length(iter.loc.xx{j}) + 1)/2 ];
+            iter.comm.globF.grad{j}    = [ iter.comm.globF.grad{j} length(iter.loc.xx{j}) ];
+            iter.comm.globF.primVal{j} = [ iter.comm.globF.primVal{j} length(iter.loc.xx{j}) ];
+        end
     end 
 
     % Jacobians of active nonlinear constraints/bounds
@@ -90,8 +107,8 @@ for j=1:NsubSys % parfor???
     JJacCon{j}       = sparse(JacCon(~loc.inact{j},:));      
     JacBounds        = JacBounds((sProb.llbx{j} - loc.xx{j})  ...
            > opts.actMargin |(loc.xx{j}-sProb.uubx{j}) > opts.actMargin,:);
-    loc.sensEval.JJacCon{j}      = [JJacCon{j}; JacBounds];     
-    timers.sensEvalT = timers.sensEvalT + toc;
+    loc.sensEval.JJacCon{j} = [JJacCon{j}; JacBounds];     
+    timers.sensEvalT        = timers.sensEvalT + toc;
     
     % for reduced-space method, compute reduced QP
     if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
@@ -108,7 +125,19 @@ for j=1:NsubSys % parfor???
         if strcmp(opts.reg,'true')
             loc.sensEval.HHred{j}  = regularizeH(loc.sensEval.HHred{j}, opts);
         end
-        timers.RegTotTime = timers.RegTotTime + toc;        
+        timers.RegTotTime = timers.RegTotTime + toc;    
+        
+        if strcmp(opts.commCount, 'true') && strcmp(opts.innerAlg, 'none')
+           % number of floats for the reduce-space method (no sparsity ex.)
+           sH = size(loc.sensEval.HHred{j});
+           sA = size(loc.sensEval.AAred{j});
+           iter.comm.globF.AAred{j}   = [ iter.comm.globF.AAred{j} sA(1)*sA(2) ];
+           iter.comm.globF.Hess{j}    = [ iter.comm.globF.Hess{j} sH(1)*(sH(1) + 1)/2 ];
+           iter.comm.globF.grad{j}    = [ iter.comm.globF.grad{j} sH(1) ];
+           iter.comm.globF.Jac{j}     = [ iter.comm.globF.Jac{j} 0 ];
+           % reduced primal values
+           iter.comm.globF.primVal{j} = [ iter.comm.globF.primVal{j} sH(1) ];
+        end
     else
         % regularization full Hessian
         tic
@@ -117,6 +146,12 @@ for j=1:NsubSys % parfor???
                                  regularizeH(loc.sensEval.HHiEval{j},opts);
         end
         timers.RegTotTime = timers.RegTotTime + toc;
+        
+        if strcmp(opts.commCount, 'true') && strcmp(opts.innerAlg, 'none')
+           % number of floats in the Jacobian of the active constraints
+           sJ = size(loc.sensEval.JJacCon{j});
+           iter.comm.globF.Jac{j} = [ iter.comm.globF.Jac{j} sJ(1)*sJ(2) ];
+        end
     end
 end 
 
@@ -125,6 +160,8 @@ if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
     loc.sensEval.gLiEvalOld = loc.sensEval.gLiEval;
     loc.xxOld               = loc.xx;
 end
+
+iter.loc = loc;
  
 end
 

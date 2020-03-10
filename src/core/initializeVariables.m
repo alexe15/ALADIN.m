@@ -21,7 +21,19 @@ iter.logg.wrkSetChang= [];
 iter.logg.localStepS = [];
 iter.logg.QPstepS    = [];
 iter.logg.lam        = [];
+iter.comm.globF      = {};
 
+% communication counters
+if strcmp(opts.commCount, 'true')
+    [iter.comm.globF.Hess{1:NsubSys}]    = deal([]);
+    [iter.comm.globF.grad{1:NsubSys}]    = deal([]);
+    [iter.comm.globF.AAred{1:NsubSys}]   = deal([]);
+    [iter.comm.globF.Hess{1:NsubSys}]    = deal([]);
+    [iter.comm.globF.grad{1:NsubSys}]    = deal([]);
+    [iter.comm.globF.Jac{1:NsubSys}]     = deal([]);
+    [iter.comm.globF.primVal{1:NsubSys}] = deal([]);
+    [iter.comm.nn{1:NsubSys}]            = deal([]);
+end
 
 
 % initialization
