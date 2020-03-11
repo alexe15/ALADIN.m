@@ -2,12 +2,14 @@ site_name: ALADIN-M
 site_url: https://alexe15.github.io/ALADIN.m/
 site_description: Project documentation ALADIN-M
 site_author: Alexander Engelmann
+docs_dir: docs/
 
+repo_name: 'alexe15/ALADIN.m'
 repo_url: https://github.com/alexe15/ALADIN.m
 edit_uri: ""
 
 theme:
-    name: readthedocs
+    name: material
     highlightjs: true
     hljs_languages:
         - matlab

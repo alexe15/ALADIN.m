@@ -21,7 +21,7 @@ $f_i(x_i)=\frac{1}{4\sigma_i^2}\vert\vert\chi_i - \eta_i\vert\vert_2^2 + \frac{1
 
 $h_i(x_i) = (\vert\vert\chi_i - \xi_i\vert\vert_2 - \bar{\eta_i})^2 - \bar{\sigma_i}^2$   
 
-$\xi_i = \chi_{i+1} \quad \forall i \in \{1, \cdots, N\}, $
+$\xi_i = \chi_{i+1} \quad \forall i \in \{1, \cdots, N\}$
 
 ### Implementation
 
