@@ -1,5 +1,5 @@
 
-# Algorithm description
+## Algorithm description
 
 
 **Initialization:** Initial guess $\left (\{z_i^0\}_{i\in \mathcal{R}},\lambda^0 \right )$, choose $\Sigma_i \succ 0,\rho^0,\mu^0,\epsilon$. 

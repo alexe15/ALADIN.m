@@ -3,9 +3,9 @@ We consider the sensor network localization problem for the usage of the ALADIN 
 
 ## Problem setup
 
-Declataion of variables:
+Declaration of variables:
 
-Let $N$ be the number of agents, let $\chi_i \in \mathbb{R}^2$ be the unknown position of the $i$-th sensor, let $\eta_i$ be its estimated position, let $\xi_i$be the position of senosor $i+1$ estimated by sensor $i$ let $\bar{\eta_i}$ be the estimated distance between sensor $i$ and its neighbours.    
+Let $N$ be the number of agents, let $\chi_i \in \mathbb{R}^2$ be the unknown position of the $i$-th sensor, let $\eta_i$ be its estimated position, let $\xi_i$be the position of senosor $i+1$ estimated by sensor $i$ let $\bar{\eta_i}$ be the estimated distance between sensor $i$ and its neighbors.    
 
 The measurement error is given by $\eta_i - \chi_i$ and is assumed to be Gaussian distributed with variance $\sigma_i^2 I_{2 \times 2}$. We further denote the measured distance between sensor $i$ and sensor $i + 1$ by $\bar{\eta_i}$.
 
@@ -183,4 +183,4 @@ The runtime result can be obtained from the following figure.
 
  ![Robot](./figures/run_time_comparison.png)
 
-Thus, for the case of the senor network localization problem a significant runtime improvement can be observed when the parfor option is set. Nonetheless it needs to be mentioned that an improvement on the runtime cannot always be achieved for every problem setup using the parfor option. In general, parfor is useful when the number of local optimization problems is large and the time for solving each of the local  optimizationproblems is relatively long. For details, see [decide when to use parfor](https://de.mathworks.com/help/parallel-computing/decide-when-to-use-parfor.html;jsessionid=4c67399db5b15c1b7951a965e1c7)
+Thus, for the case of the senor network localization problem a significant runtime improvement can be observed when the parfor option is set. Nonetheless it needs to be mentioned that an improvement on the runtime cannot always be achieved for every problem setup using the parfor option. In general, parfor is useful when the number of local optimization problems is large and the time for solving each of the local  optimization problems is relatively long. For details, see [decide when to use parfor](https://de.mathworks.com/help/parallel-computing/decide-when-to-use-parfor.html;jsessionid=4c67399db5b15c1b7951a965e1c7)

@@ -4,20 +4,19 @@ clc
 load('./problem_data/IEEE30busPrbFrm.mat')
 
 % bring into the correct foormat
-sProb.locFuns.ffi = ffifun;
-sProb.locFuns.ggi = ggifun;
-sProb.locFuns.hhi = hhifun;
-sProb.AA          = dOPF.AA;
-sProb.zz0         = dOPF.xx0;
-sProb.lam0        = 0.01*ones(Ncons,1); 
-sProb.llbx        = dOPF.lbx;
-sProb.uubx        = dOPF.ubx;
+% sProb.locFuns.ffi = fftestifun;
+% sProb.locFuns.ggi = ggifun;
+% sProb.locFuns.hhi = hhifun;
+% sProb.AA          = dOPF.AA;
+% sProb.zz0         = dOPF.xx0;
+% sProb.lam0        = 0.01*ones(Ncons,1); 
+% sProb.llbx        = dOPF.lbx;
+% sProb.uubx        = dOPF.ubx;
 
-opts.SSig         = dOPF.Sig;
+%opts.SSig         = dOPF.Sig;
 opts.plot         = 'true';
 opts.innerAlg     = 'none';
 opts.maxiter      = 30;
-
 
 opts.commCount    = 'true';
 

@@ -13,13 +13,18 @@ theme:
     highlightjs: true
     hljs_languages:
         - matlab
+    navigation_depth: 1
 
 nav:
-  - Start: index.md
-  - The algorithm: ALADIN.md
-  - Code structure: codeStruct.md
-  - Parallel Computing: ParallelExample.md
-  - Distributed MPC: robotEx.md
+  - ALADIN-M:
+     - Getting Started: index.md
+     - The Algorithm: ALADIN.md
+  - Application Examples:
+     - Parallel Computing: ParallelExample.md
+     - Distributed MPC: robotEx.md
+     - Reducing Communication: redComm.md
+  - Further Information:
+     - Code Structure: codeStruct.md
 
 markdown_extensions:
   - codehilite
