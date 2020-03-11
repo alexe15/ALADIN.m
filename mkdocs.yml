@@ -9,7 +9,7 @@ repo_url: https://github.com/alexe15/ALADIN.m
 edit_uri: ""
 
 theme:
-    name: material
+    name: readthedocs
     highlightjs: true
     hljs_languages:
         - matlab

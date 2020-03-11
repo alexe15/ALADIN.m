@@ -10,8 +10,10 @@
 Solve for each $i \in \mathcal{R}$
 
 $$
-\min_{x_i\in [\underline {x_i}, \overline x_i]} f_i(x_i) + (\lambda^k)^\top A_i x_i + \frac{\rho^k}{2}\left\|x_i-z_i^k\right\|_{\Sigma_i}^2 \;\;
-\text{subject to}\quad g_i(x_i) = 0, \quad h_i(x_i)\leq 0,\;\; \text{and} \;\; \underline{x_i} \leq x_i \leq  \overline{x}_i.
+\begin{aligned}
+\min_{x_i\in [\underline {x_i}, \overline x_i]} &f_i(x_i) + (\lambda^k)^\top A_i x_i + \frac{\rho^k}{2}\left\|x_i-z_i^k\right\|_{\Sigma_i}^2 \;\; \\
+\text{s.t.}\quad & g_i(x_i) = 0, \; \;h_i(x_i)\leq 0,\; \;\; \underline{x_i} \leq x_i \leq  \overline{x}_i.
+\end{aligned}
 $$
 
 2. **Termination Criterion:** If $\left\|\sum_{i\in \mathcal{R}}A_ix^k_i -b \right\|\leq \epsilon \text{ and } \left\| x^k - z^k \right \|\leq \epsilon\;,$ return $x^\star = x^k$.

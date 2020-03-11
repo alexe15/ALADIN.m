@@ -87,7 +87,6 @@ sProb.zz0  = {y0(1:2),y0(3:4)};
 sProb.lam0 = lam0;
 
 sol_ALADIN = run_ALADINnew( sProb, opts ); 
-
 ```
 # References
 ## Algorithmic Details
