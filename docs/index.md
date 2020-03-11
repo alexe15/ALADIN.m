@@ -16,7 +16,7 @@ ALADIN-M solves problem of the form
 $$
 \begin{aligned} 
 &\min_{x_1,\dots,x_R} && \sum_{i\in \mathcal{R}} f_i(x_i) \\
-&\;\;\text{subject to}&&g_{i}(x_i) = 0 \quad \;\, \mid \kappa_i,  &\forall i \in \mathcal{R}, \\
+&\;\;\text{subject to}&&g_{i}(x_i) = 0 \quad  \mid \kappa_i,  &\forall i \in \mathcal{R}, \\
 &&&h_{i}(x_i) \leq 0 \quad \;\, \mid \gamma_i,  &\forall i \in \mathcal{R}, \\
 &&&\underline{x}_i \leq x_i \leq  \overline{x}_i\;\, \mid\eta_i,  &\forall i \in \mathcal{R}, \\
 &&&\sum_{i\in \mathcal{R}}A_i x_i=0\;\mid\lambda.

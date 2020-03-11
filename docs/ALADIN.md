@@ -32,6 +32,7 @@ C^k_i \Delta x_i &= 0                                     \qquad   \forall i\in 
 \end{aligned}
 \end{aligned}
 $$ 
+
 yielding $\Delta x^k$ and $\lambda^{\mathrm{QP}k}$ as the solution to the above problem.
 		
 5. **Line Search:** Update primal and dual variables by
@@ -42,6 +43,7 @@ z^{k+1}&\leftarrow&z^k + \alpha^k_1(x^k-z^k) + \alpha_2^k\Delta x^k \qquad \qqua
 \lambda^{k+1}\leftarrow\lambda^k + \alpha^k_3 (\lambda^{\mathrm{QP}k}-\lambda^k),
 \end{aligned}
 $$
+
 with $\alpha^k_1,\alpha^k_2,\alpha^k_3$ from [HFD16](https://epubs.siam.org/doi/abs/10.1137/140975991). 
 If full step is accepted, i.e. $\alpha_1^k=\alpha_2^k=\alpha_3^k=1$, update $\rho^k$ and $\mu^k$ by
 

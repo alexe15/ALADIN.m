@@ -1,18 +1,21 @@
 # Distributed MPC for Mobile Robots
 Here we give an example how ALADIN-M can be used for distributed Model Predictive Control. In particular, we show how the distributed parametric programming option and the the problem reuse option of ALADIN-M are useful. The example is similar to the example from [1]. The goal here is that two modile robots exchange their positions while keeping a certain distance. This task can be formulated as a contiuous-time optimal control problem (OCP)
+
 $$
 \begin{aligned} 
-&\hspace{-2em}\min_{x_i(\cdot),u_i(\cdot), \forall i \in \mathcal{R}} \int_0^T \sum_{i\in \mathcal{R}} \|x_i-x^e_i\|_{Q_i}^2 + \|u_i\|_{R_i}^2\, dt  \\
-\quad \text{s.t.} \;\;\; & \dot x_i(t) = f_i(x_i(t),u_i(t)),\;\;  x_i(0)=z_{i0}, && \forall i \in \mathcal{R} \\ 
+&\min_{x_i(),u_i(), \forall i \in \mathcal{R}} \int_0^T \sum_{i\in \mathcal{R}} \|x_i-x^e_i\|_{Q_i}^2 + \|u_i\|_{R_i}^2\, dt  \\
+\quad \text{s.t.} \quad  & \dot x_i(t) = f_i(x_i(t),u_i(t)),  x_i(0)=z_{i0}, && \forall i \in \mathcal{R} \\ 
 &(z,y)_i^\top(T)=(z^e,y^e)_i^\top, &&\forall i \in \mathcal{R} \\
 & \|(z, y)_i^\top(t)-(z, y)_j^\top(t)\|_2^2\geq d^2, && i \neq j.
 \end{aligned}
 $$
+
 Here, $z_i=(x_i\; y_i\; \theta_i)^\top$ is the state of each robot $i \in \mathcal{R}$, $x_i$ and $y_i$ describe the robots position in the $x$-$y$-plane, and $\theta_i$ is the yaw angle with respect to the $x$-axis (cf. figure below). Note that the initial condition can here be interpreted as the parameter $p_i$ in the [format siutable for ALADIN-M](index.md). The robots' dynamics is given by 
 $$
 \dot x_i= f_i(x_i,u_i) :=
 \begin{pmatrix}
-v_i\cos (\theta_i)  & v_i\sin(\theta_i) & \omega_i \end{pmatrix}^\top \hspace{-2mm}, \;
+v_i\cos (\theta_i)  & v_i\sin(\theta_i) & \omega_i 
+\end{pmatrix}^\top , \;
 %\begin{pmatrix}
 %\cos (\theta_i) & 0 \\
 %\sin(\theta_i) & 0 \\
@@ -58,6 +61,7 @@ for i=1:Nrobot
 end
 ```
 Now we are ready to set-up a discretized version of the above OCP. Note that we contruct this OCP in a loop setting up the OCPs for all robots individually. Here we use a [Heun-discretization](https://en.wikipedia.org/wiki/Heun%27s_method) scheme. 
+
 ```matlab
 % starting points/destinations
 %            from  to       
@@ -96,7 +100,9 @@ for i=1:Nrobot
    XXU{i}    = [ ZZZi(:); UUi(:)];
 end
 ```
+
 Next, we construct the consensus matrices $\{A_i\}_{i \in \mathcal{R}}$. As mentioned before, we construct them such that the original trajectories coincide with the copied trajectories. 
+
 ```matlab
 % set up consensus constraints
 Abase   = [ eye(Nrobot*N*3) zeros(Nrobot*N*3,2*N)];
@@ -106,7 +112,9 @@ for i=1:Nrobot-1
 end
 AA{Nrobot} = - repmat(Abase,Nrobot-1,1);
 ```
+
 In a last step, we convert the CasADi symbolic expressions to evaluatable and set up the initial guesses $z_i^0$ and $\lambda^0$. Note that the local equality constraints collected in `rob.locFuns.gg` are parametrized with the initial condition `X0` for the ode of the robots here. With that, we will be able to efficiently reuse the problem formulation in an MPC  loop as we shall see next.
+
 ```matlab
 % convert expressions to MATLAB functions
 X0       = vertcat(XX0{:});
@@ -125,8 +133,10 @@ for i=1:Nrobot
     rob.zz0{i}   = [vec(DM(repmat(ppNumAll,1,N))); zeros(2*N,1)];
 end
 ```
+
 ## Distributed MPC with ALADIN-M
 After setting up some options, the discretized OCP can be solved with ALADIN-M. Here we do that within an Model Predictive Control loop, where we use the `reuse` option of ALADIN-M in order to to construct the derivatives and local solvers only once. Note that the initial position of the robots changes in each iteration, cf. [2] for more information on MPC.
+
 ```matlab
 rob.lam0   = 0*ones(size(AA{1},1),1);
 rob.p      = ppNumAll;
@@ -148,6 +158,7 @@ for i = 1:Nmpc
     rob.reuse = sol_rob{1}.reuse;
 end
 ```
+
 To see the advantage of distributed parametric programming in combination with the `reuse` option, we can have a look at the computation times. In the first iteration, ALADIN-M needs `.8` seconds for the problem setup and `.7` seconds for iterating. After the second iteration however, the time for problem setup will be `0` and also the iteration time is halfed on my computer to `.3` seconds due to the fact that also the previous solution is used as an initial guess for ALADIN-M. This shows how the `reuse` option of ALADIN-M can be used to make distributed MPC more efficient. 
 
 The resulting closed-loop trajectories are shown in the following figure. Not that the distance constraint ${\|(z, y)_i^\top(t)-(z, y)_j^\top(t)\|_2^2}\geq d^2$ is satisfied while the robots exchange tehir position. 
