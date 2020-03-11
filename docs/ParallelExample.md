@@ -26,7 +26,7 @@ $\xi_i = \chi_{i+1} \quad \forall i \in \{1, \cdots, N\}, $
 ### Implementation
 
 For the implementaiton, firstly the problem needs to be defined in a way that is compatible to the ALADIN solver:
-```
+```matlab
 function [sProb] = setupSolver(N, sigma)
 
 % general setup
@@ -151,7 +151,7 @@ sProb.zz0 = zz0;
 
 ```
 ### Runtime Analysis
-```
+```matlab
 N = [5, 10, 15 , 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 100];
 sigma = [0.5, 1, 1.5, 2, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5];
 
@@ -180,5 +180,7 @@ legend('decentral optimization', 'central optimization')
 ```
 ### Result
 The runtime result can be obtained from the following figure. 
+
  ![Robot](./figures/run_time_comparison.png)
+
 Thus, for the case of the senor network localization problem a significant runtime improvement can be observed when the parfor option is set. Nonetheless it needs to be mentioned that an improvement on the runtime cannot always be achieved for every problem setup using the parfor option. In general, parfor is useful when the number of local optimization problems is large and the time for solving each of the local  optimizationproblems is relatively long. For details, see [decide when to use parfor](https://de.mathworks.com/help/parallel-computing/decide-when-to-use-parfor.html;jsessionid=4c67399db5b15c1b7951a965e1c7)

@@ -6,7 +6,11 @@ site_author: Alexander Engelmann
 repo_url: https://github.com/alexe15/ALADIN.m
 edit_uri: ""
 
-theme: readthedocs
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - matlab
 
 nav:
   - Start: index.md

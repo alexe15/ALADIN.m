@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
-<ipe version="70206" creator="Ipe 7.2.7">
-<info created="D:20190109123153" modified="D:20190207120839"/>
+<ipe version="70212" creator="Ipe 7.2.12">
+<info created="D:20190109123153" modified="D:20200311104454"/>
 <preamble>\usepackage{amsmath}</preamble>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
@@ -411,8 +411,8 @@ h
 </path>
 <text matrix="1 0 0 1 0 -60" transformations="translations" pos="180 756" stroke="black" type="label" width="9.354" height="4.297" depth="1.93" valign="baseline" style="math">y_1</text>
 <text matrix="1 0 0 1 0 12" transformations="translations" pos="180 756" stroke="black" type="label" width="9.354" height="4.297" depth="1.93" valign="baseline" style="math">y_2</text>
-<text matrix="1 0 0 1 36 -96" transformations="translations" pos="180 756" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="center" style="math">x_1</text>
-<text matrix="0.865385 0 0 1 141.077 -96" transformations="translations" pos="180 756" stroke="black" type="label" width="10.163" height="4.294" depth="1.49" valign="center" style="math">x_2</text>
+<text matrix="1 0 0 1 36 -96" transformations="translations" pos="180 756" stroke="black" type="label" width="9.102" height="4.294" depth="1.49" valign="center" style="math">z_1</text>
+<text matrix="0.865385 0 0 1 141.077 -96" transformations="translations" pos="180 756" stroke="black" type="label" width="9.102" height="4.294" depth="1.49" valign="center" style="math">z_2</text>
 <text matrix="1 0 0 1 32 -72" transformations="translations" pos="220 760" stroke="black" type="label" width="49.984" height="20.406" depth="15.46" valign="baseline" style="math">z_1 =
 \begin{pmatrix}
 x_1 \\ 

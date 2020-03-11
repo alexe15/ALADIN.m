@@ -29,7 +29,7 @@ where $f_i:\mathbb{R}^{n_{xi}}\rightarrow\mathbb{R}$, $g_i:\mathbb{R}^{n_{xi}}\r
 
 Define problem in standard form.
 
-``` Matlab
+```matlab
 N   =   2;
 n   =   2;
 m   =   1;
@@ -56,7 +56,7 @@ h2 = @(y) (-1.5 + y(1) * y(2));
 
 Collect problem information and define minimal options.
 
-``` Matlab
+```matlab
 sProb.locFuns.ffi  = {f1, f2};
 sProb.locFuns.hhi  = {h1, h2};
 

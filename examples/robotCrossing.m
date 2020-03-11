@@ -2,32 +2,25 @@
 clear all;
 clc;
 close all;
-import casadi.*
 
-Nrobot = 2;
 
-H   = 1;       % Time horizon
-dT  = 0.1;      % sampling time
-d   = 2;        % minimal distance between robots
-
-N   = H/dT;
-Nmpc = 40;
-
-% starting points/destinations
-%            from  to       
-ppNum{1} = [ 0     10; 
-             0     10
-             0     0  ];
-ppNum{2} = [ 10    0; 
-             10    0;
-             0     0  ];
 
 % define robot models
 ode = @(x,u) [ u(1)*cos(x(3));
                u(1)*sin(x(3));
-               u(2)];    
+               u(2)];   
 
-%% distributed formulation
+%% set up OCP
+import casadi.*
+Nrobot = 2;
+
+T   = 1;        % Time horizon
+dT  = 0.1;      % sampling time
+d   = 2;        % minimal distance between robots
+
+N   = T/dT;
+Nmpc = 40;
+
 for i=1:Nrobot
     % inputs/states
     XX{i}  = SX.sym(['x' num2str(i)], [3 N]);
@@ -40,6 +33,15 @@ for i=1:Nrobot
 end
            
 
+% starting points/destinations
+%            from  to       
+ppNum{1} = [ 0     10; 
+             0     10
+             0     0  ];
+ppNum{2} = [ 10    0; 
+             10    0;
+             0     0  ];
+
 % for each robot ...           
 for i=1:Nrobot
     JJ{i}   = 0;
@@ -50,7 +52,7 @@ for i=1:Nrobot
 
     % over horizon ...
     for j=1:N - 1
-        % ode/stage cost with Euler forward/backward, Heun
+        % ode/stage cost with Heun discretization
         gg{i}      = [ gg{i}; XX{i}(:,j+1) - XX{i}(:,j) - dT*0.5*(ode(XX{i}(:,j),UU{i}(:,j))+ ode(XX{i}(:,j+1),UU{i}(:,j+1)))];
         JJ{i}      = JJ{i} + (XX{i}(:,j)-ppNum{i}(:,2))'*diag([1 1 0])*(XX{i}(:,j)-ppNum{i}(:,2)) ...
                            +  UU{i}(:,j)'*UU{i}(:,j);
@@ -72,7 +74,7 @@ end
 Abase   = [ eye(Nrobot*N*3) zeros(Nrobot*N*3,2*N)];
 zerBase = zeros(size(Abase));
 for i=1:Nrobot-1
-   AA{i} =  [repmat(zerBase,i-1,1); Abase; repmat(zerBase,Nrobot-i-1,1)];
+   AA{i}   =  [repmat(zerBase,i-1,1); Abase; repmat(zerBase,Nrobot-i-1,1)];
 end
 AA{Nrobot} = - repmat(Abase,Nrobot-1,1);
 
@@ -120,8 +122,10 @@ end
 
 %% plotting
 figure();
-h1 = animatedline;
+h1 = animatedline('Color','r');
 h2 = animatedline('Color','r');
+grid on
+box on
 
 for k = 1:Nmpc+1
     addpoints(h1,Xopt(1,k),Xopt(2,k));
@@ -130,3 +134,11 @@ for k = 1:Nmpc+1
     pause(0.1)
     drawnow
 end        
+
+% draw circle for distance constraint
+pos = [4 4 d d];
+rectangle('Position',pos,'Curvature',[1 1])
+axis equal
+
+
+

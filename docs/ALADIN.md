@@ -20,7 +20,7 @@ $$
 		Hessian approximations $0 \prec B_i^k \approx \nabla^2 \{ f_i( x_i^k )+\kappa_i^\top h_i(x_i^k)\}$   
         and constraint Jacobians $C^{k\top }_i :=\left [\nabla g_i(x^k_i)^\top\;  \left (\nabla \tilde  h_i(x^k_i) \right )_{j\in \mathbb{A}^k}^\top \right ]$. 
 		
-3. **Consensus Step:** Solve the coordination QP 
+3. **Consensus Step:** Solve the coordination QP
 
 $$
 \begin{aligned}
