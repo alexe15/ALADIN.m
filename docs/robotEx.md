@@ -138,10 +138,10 @@ end
 After setting up some options, the discretized OCP can be solved with ALADIN-M. Here we do that within an Model Predictive Control loop, where we use the `reuse` option of ALADIN-M in order to to construct the derivatives and local solvers only once. Note that the initial position of the robots changes in each iteration, cf. [2] for more information on MPC.
 
 ```matlab
-rob.lam0   = 0*ones(size(AA{1},1),1);
-rob.p      = ppNumAll;
-opts.plot  = 'false';
-opts.reuse = 'true';
+rob.lam0      = 0*ones(size(AA{1},1),1);
+rob.p         = ppNumAll;
+opts.plot     = 'false';
+opts.reuse    = 'true';
 opts.maxiter  = 50;
 opts.term_eps = 1e-8;
 
@@ -155,7 +155,12 @@ for i = 1:Nmpc
     Xopt = [Xopt, Xopti];
     rob.zz0 = sol_rob{i}.xxOpt;
     rob.p = Xopt(:,i+1);
-    rob.reuse = sol_rob{1}.reuse;
+    
+    % reuse problem formulation 
+    fNames = fieldnames(sol_rob{1}.problemForm);
+    for i = 1:length(fNames)
+       rob.(fNames{i}) = sol_rob{1}.problemForm.(fNames{i});
+    end
 end
 ```
 

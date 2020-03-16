@@ -26,11 +26,10 @@ checkInput(sProb);
 totTimer   = tic;
 setupTimer = tic;
 
-% set up local NLPs and sensitivities
-if strcmp(opts.reuse, 'false') || ~isfield(sProb, 'reuse')
-    sProb            = createLocSolAndSens(sProb, opts);
-else
-    sProb            = reform(sProb);
+% check whether problem setupt is present already
+if ~isfield(sProb, 'nnlp') || ~isfield(sProb, 'sens') || ...
+        ~isfield(sProb, 'locFunsCas') ||  ~isfield(sProb, 'gBounds')
+    sProb            = createLocSolAndSens(sProb, opts);   
 end
 timers.setupT        = toc(setupTimer);
 
@@ -50,9 +49,8 @@ if strcmp(opts.commCount, 'true')
     displayComm(sol.iter.comm, opts.innerAlg);
 end
 
-
 % give problem formulation back
-if opts.reuse
+if strcmp(opts.reuse, 'true')
     sProbback;
 end
 

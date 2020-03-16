@@ -34,7 +34,15 @@ for i = 2:Nmpc
     for j = 1:Nunit
         xx0{j} = sol_ALADIN_re{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
     end
-    chem.reuse = sol_ALADIN_re{i-1}.reuse;
+    
+    % reuse problem formulation 
+    fNames = fieldnames(sol_ALADIN_re{1}.problemForm);
+    for j = 1:length(fNames)
+       chem.(fNames{j}) = sol_ALADIN_re{i-1}.problemForm.(fNames{j});
+    end
+    
+    
+  %  chem.reuse = sol_ALADIN_re{i-1}.reuse;
     chem.p = vertcat(xx0{:});
     sol_ALADIN_re{i} = run_ALADINnew(chem, opts);
 end

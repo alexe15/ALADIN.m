@@ -1,7 +1,6 @@
 %return the needed information if reuse is active
-
-sol.reuse.nnlp = sProb.nnlp;
-sol.reuse.sens = sProb.sens;
-sol.reuse.locFunsCas = sProb.locFunsCas;
-sol.reuse.gBounds = sProb.gBounds;
-sol.reuse.Mfun = sProb.Mfun;
+sol.problemForm.nnlp = sProb.nnlp;
+sol.problemForm.sens = sProb.sens;
+sol.problemForm.locFunsCas = sProb.locFunsCas;
+sol.problemForm.gBounds = sProb.gBounds;
+sol.problemForm.Mfun = sProb.Mfun;

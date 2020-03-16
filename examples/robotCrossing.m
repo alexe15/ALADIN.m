@@ -115,7 +115,12 @@ for i = 1:Nmpc
 %     rob.zz0 = {xx0,xx0};
     rob.zz0 = sol_rob{i}.xxOpt;
     rob.p = Xopt(:,i+1);
-    rob.reuse = sol_rob{1}.reuse;
+    
+    % reuse problem formulation 
+    fNames = fieldnames(sol_rob{1}.problemForm);
+    for i = 1:length(fNames)
+       rob.(fNames{i}) = sol_rob{1}.problemForm.(fNames{i});
+    end
 end
 
 
