@@ -5,6 +5,8 @@ sigma = [0.5, 1, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
 opts.maxiter = 5;
 
 time = zeros(2, length(N));
+
+
 for i = 1 : length(N)
     sProb = setupSolver(N(i), sigma(i));
     opts.parfor = 'true'; 
