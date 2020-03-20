@@ -5,6 +5,15 @@ function [ solADM ] = run_ADMMnew(sProb, opts)
 % based algorithm for distributed nonconvex optimization. SIAM Journal 
 % on Optimization, 26(2), 1101-1127.
 import casadi.*
+opts.alg   = 'ADMM';
+
+% set constraints to empty functions/default initial guess
+sProb      = setDefaultVals(sProb);
+
+% set default options
+opts       = setDefaultOpts(sProb, opts);
+
+
 NsubSys = length(sProb.AA);
 AA      = sProb.AA;
 Ncons   = size(AA{1},1);
@@ -88,7 +97,7 @@ i                   = 1;
 xx                  = sProb.zz0;
 [llam{1:NsubSys}]   = deal(sProb.lam0);
 
-while i <= opts.maxIter% && norm(delx,inf)>eps   
+while i <= opts.maxiter% && norm(delx,inf)>eps   
     for j = 1:NsubSys
         % set up parameter vector for local NLP's
         pNum = [ opts.rho;
@@ -176,7 +185,7 @@ while i <= opts.maxIter% && norm(delx,inf)>eps
     % rho update rule for ISEO paper
 
     % Erseghe update parameter is 1.025 and starts with 2 fort IEEE 57?
-    if opts.rhoUpdate == true
+    if strcmp(opts.rhoUpdate,'true')
         %rho = rho*1.01;
         
         % update rule according to Guo 17 from remote point

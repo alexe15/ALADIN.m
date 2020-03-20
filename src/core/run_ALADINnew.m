@@ -12,6 +12,7 @@
 function [ sol ] = run_ALADINnew( sProb, opts )
 import casadi.*
 opts.sym   = @SX.sym;
+opts.alg   = 'ALADIN';
 
 % set constraints to empty functions/default initial guess
 sProb      = setDefaultVals(sProb);

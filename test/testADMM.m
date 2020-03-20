@@ -15,7 +15,7 @@ sProb.llbx        = dOPF.lbx;
 sProb.uubx        = dOPF.ubx;
 
 % solve with ADMM
-optsADM    = struct('rho',1e4,'scaling',false,'rhoUpdate',false,'maxIter',400);
+optsADM    = struct('rho',1e4,'scaling','false','rhoUpdate','false','maxiter',400);
 sol_ADMM   = run_ADMMnew(sProb, optsADM);
 
 % centralized solution
