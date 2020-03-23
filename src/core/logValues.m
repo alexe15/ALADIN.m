@@ -5,21 +5,21 @@
 
 
 % logging
-x               = vertcat(iter.loc.xx{:});
-y               = vertcat(iter.yy{:});
-yOld            = vertcat(iter.yyOld{:});
+x                 = vertcat(iter.loc.xx{:});
+y                 = vertcat(iter.yy{:});
+yOld              = vertcat(iter.yyOld{:});
 
-iter.logg.X     = [iter.logg.X x];
-iter.logg.Y     = [iter.logg.Y y];
+iter.logg.X(:,i)  =  x;
+iter.logg.Y(:,i)  =  y;
 %         logg.delY       = [logg.delY delx];
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];
 %         logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
 %         logg.KappaIneq  = [logg.KappaIneq vertcat(KioptIneq{:})];
-iter.logg.lam        = [iter.logg.lam iter.lam];
-iter.logg.localStepS = [iter.logg.localStepS norm(full(x - yOld),inf)];
-iter.logg.QPstepS    = [iter.logg.QPstepS norm(full(y-x),inf)];
+iter.logg.lam(:,i)        = iter.lam;
+iter.logg.localStepS(:,i) = norm(full(x - yOld),inf);
+iter.logg.QPstepS(:,i)    = norm(full(y-x),inf);
 % iter.logg.Mfun       = [iter.logg.Mfun full(sProb.Mfun(y,iter.ls.muMeritMin*1.1))];
-iter.logg.consViol   = [iter.logg.consViol norm([sProb.AA{:}]*x,inf)];
+iter.logg.consViol(:,i+1)   = norm([sProb.AA{:}]*x,inf);
 
 
 %         logg.obj        = [logg.obj obj];
@@ -35,9 +35,9 @@ if strcmp(opts.alg, 'ALADIN')
             KioptIneq{j}    = iter.loc.KKapp{j}(nngi{j}+1:end); 
     end
     
-    iter.logg.wrkSet     = [iter.logg.wrkSet ~vertcat(iter.loc.inact{:})];
+    iter.logg.wrkSet(:,i)   = ~vertcat(iter.loc.inact{:});
     
     if i>2 % number of changing active constraints
-        iter.logg.wrkSetChang = [iter.logg.wrkSetChang sum(abs(iter.logg.wrkSet(:,end-1) - ~vertcat(iter.loc.inact{:})))];
+        iter.logg.wrkSetChang(:,i) = sum(abs(iter.logg.wrkSet(:,end-1) - ~vertcat(iter.loc.inact{:})));
     end
 end

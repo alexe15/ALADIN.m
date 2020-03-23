@@ -49,6 +49,10 @@ elseif strcmp(opts.alg, 'ADMM')
     optVariants.rhoUpdate    = {'false','true'};   
     optVariants.plot         = {'true', 'false'};
     optVariants.commCount    = {'false','true'};   
+    optVariants.solveQP      = {'MA57','ipopt','pinv','linsolve','sparseBs','MOSEK','quadprog'};
+    optVariants.locSol       = {'ipopt','sqpmethod'};
+    optVariants.innerAlg     = {'none'};
+    optVariants.term_eps     = {0};
     
     optVariants.Alg          = {'ADMM'};
 end

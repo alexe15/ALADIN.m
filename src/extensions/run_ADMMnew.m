@@ -19,8 +19,11 @@ sProb      = setDefaultVals(sProb);
 % set default options
 opts       = setDefaultOpts(sProb, opts);
 
-
 %% built local subproblems and CasADi functions
+% timers
+totTimer   = tic;
+setupTimer = tic;
+
 rhoCas      = SX.sym('rho',1,1);
 for i=1:NsubSys
     nx       = length(sProb.zz0{i});
@@ -59,10 +62,12 @@ for i=1:NsubSys
     end
 
     % set up local solvers
-    nlp     = struct('x',iter.yyCas,'f',ffiLocCas,'g',[sProb.locFunsCas.ggi; sProb.locFunsCas.hhi],'p',pCas);
-    nnlp{i} = nlpsol('solver','ipopt',nlp);
+    nlp       = struct('x',iter.yyCas,'f',ffiLocCas,'g',[sProb.locFunsCas.ggi; sProb.locFunsCas.hhi],'p',pCas);
+    nnlp{i}   = nlpsol('solver',opts.locSol,nlp);
 
 end
+timers.setupT = toc(setupTimer);
+
 
 %% build H and A for ctr. QP
 A   = horzcat(AA{:});
@@ -84,12 +89,13 @@ nx  = size(horzcat(AA{:}),2);
 % HQP = eye(nx);
 
 %% ADMM iterations
-initializeVariables
 % initialization
-i                   = 1;
-iter.yy                  = sProb.zz0;
-[llam{1:NsubSys}]   = deal(sProb.lam0);
+initializeVariables
 
+i                   = 1;
+iter.yy             = sProb.zz0;
+[llam{1:NsubSys}]   = deal(sProb.lam0);
+iterTimer           = tic;
 while i <= opts.maxiter% && norm(delx,inf)>eps   
     for j = 1:NsubSys
         % set up parameter vector for local NLP's
@@ -105,8 +111,7 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
                       'ubx', sProb.uubx{j},...
                       'lbg', lbg{j}, ...
                       'ubg', ubg{j});           
-        iter.logg.maxNLPt    = max(iter.logg.maxNLPt, toc );          
-        
+        timers.NLPtotTime = timers.NLPtotTime + toc;   
                                     
         iter.loc.xx{j}  = full(sol.x);
         kapp{j}         = full(sol.lam_g);
@@ -135,8 +140,10 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
     hQP   = hQP - gam*L'*L*x;
     
     % solve QP
-    [y, ~] = solveQP(HQP,hQP,AQP,bQP,'linsolve');
-        
+    tic
+    [y, ~] = solveQP(HQP,hQP,AQP,bQP,opts.solveQP);
+    timers.QPtotTime      = timers.QPtotTime + toc; 
+    
     % divide into subvectors
     ctr   = 1;
     iter.yyOld = iter.yy;
@@ -167,19 +174,29 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
     if loggFl == true
         logValues;
     end
-   
             
     % plot iterates?
     if strcmp(opts.plot,'true') 
-       plotIterates;
+        tic
+        plotIterates;
+        timers.plotTimer = timers.plotTimer + toc;
     end
     
     i = i+1;
 end
+timers.iterTime = toc(iterTimer);
+
+% total time
+timers.totTime  = toc(totTimer);
+sol.timers = timers;
+
+% display solver output and timing
+dispSummary(opts.maxiter, opts, iter);
+displayTimers(timers, opts);
+
 solADM.logg   = iter.logg;
 solADM.xxOpt  = iter.loc.xx;
 solADM.lamOpt = llam;
 
-disp(['Max NLP time:            ' num2str(iter.logg.maxNLPt) ' sec'])
 end
 

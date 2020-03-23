@@ -8,6 +8,7 @@ disp(['   ========================================================      ']);
 %disp(['Current iteration: ', num2str(iterationIndex)]);
 %disp(['                                                                ']);
 %disp(['Applied solvers: ' ]);
+disp(['   Algorithm:        ', (opts.alg)]);
 disp(['   QP solver:        ', (opts.solveQP)]);
 disp(['   Local solver:     ', (opts.locSol)]);
 disp(['   Inner algorithm:  ', (opts.innerAlg)]);

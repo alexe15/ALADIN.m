@@ -47,7 +47,7 @@ for j=1:NsubSys % parfor???
     % dynamically changing \Sigma?
     if strcmp(opts.Sig,'dyn')
         % after second iteration 
-        if size(iter.logg.X,2) > 2 
+        if iter.i > 2 
             [opts.SSig{j}, loc.locStep{j}] = computeDynSig(opts.SSig{j},...
                                iter.yy{j} - loc.xx{j},iter.loc.locStep{j}, 'Sig');
         else

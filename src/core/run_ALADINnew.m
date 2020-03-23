@@ -35,7 +35,7 @@ end
 timers.setupT        = toc(setupTimer);
 
 % run ALADIN iterations
-[ sol, timers.iter ] = iterateAL( sProb, opts );
+[ sol, timers ] = iterateAL( sProb, opts, timers );
 
 % total time
 timers.totTime  = toc(totTimer);

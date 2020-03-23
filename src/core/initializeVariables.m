@@ -1,27 +1,48 @@
 % variable initialization
-nngi    = {};
-nnhi    = {};
 HHiEval = cell(NsubSys, 1);
 
 
-iter.logg.X          = [];
-iter.logg.Y          = [];
-iter.logg.Z          = [];
-iter.logg.delY       = [];   
-iter.logg.Kappa      = [];
-iter.logg.KappaEq    = [];
-iter.logg.KappaIneq  = [];
-iter.logg.Mfun       = [];
-iter.logg.consViol   = inf;
-iter.logg.wrkSet     = [];
-iter.logg.obj        = [];
-iter.logg.desc       = [];
-iter.logg.alpha      = [];
-iter.logg.distrDiff  = [];
-iter.logg.wrkSetChang= [];
-iter.logg.localStepS = [];
-iter.logg.QPstepS    = [];
-iter.logg.lam        = [];
+nh = 0;
+ng = 0;
+nx = 0;
+
+% initialization
+iter.yy              = sProb.zz0;
+iter.loc.xx          = sProb.zz0;
+iter.lam             = sProb.lam0;
+iter.delxs           = inf;
+
+for j=1:NsubSys
+   nngi{j} = size(sProb.locFunsCas.ggi{j},1);
+   nnhi{j} = size(sProb.locFunsCas.hhi{j},1);  
+
+   iter.KKapp{j} = zeros(nngi{j}+nnhi{j},1);
+   iter.LLam_x{j}= zeros(length(iter.loc.xx{j}),1);
+   
+   nx = nx + size(sProb.zz0{j},1);
+   nh = nh + nnhi{j};
+   ng = ng + nngi{j};
+end
+
+
+iter.logg.X          = zeros(nx,opts.maxiter);
+iter.logg.Y          = zeros(nx,opts.maxiter);
+iter.logg.Z          = zeros(nx,opts.maxiter);
+iter.logg.delY       = zeros(nx,opts.maxiter);
+% iter.logg.Kappa      = [];
+% iter.logg.KappaEq    = [];
+% iter.logg.KappaIneq  = [];
+iter.logg.Mfun        = [];
+iter.logg.consViol    = inf;
+iter.logg.wrkSet      = zeros(ng + nh,opts.maxiter);
+iter.logg.wrkSetChang = zeros(ng + nh,opts.maxiter);
+iter.logg.obj         = zeros(1,opts.maxiter);
+% iter.logg.desc       = [];
+% iter.logg.alpha      = [];
+% iter.logg.distrDiff  = [];
+iter.logg.localStepS = zeros(1,opts.maxiter);
+iter.logg.QPstepS    = zeros(1,opts.maxiter);
+iter.logg.lam        = zeros(Ncons,opts.maxiter);
 iter.logg.maxNLPt    = 0;
 iter.comm.globF      = {};
 
@@ -47,19 +68,9 @@ if strcmp(opts.commCount, 'true')
 end
 
 
-% initialization
-iter.yy              = sProb.zz0;
-iter.loc.xx          = sProb.zz0;
-iter.lam             = sProb.lam0;
-iter.delxs           = inf;
 
-for j=1:NsubSys
-   nngi{j} = size(sProb.locFunsCas.ggi{j},1);
-   nnhi{j} = size(sProb.locFunsCas.hhi{j},1);  
 
-   iter.KKapp{j} = zeros(nngi{j}+nnhi{j},1);
-   iter.LLam_x{j}= zeros(length(iter.loc.xx{j}),1);
-end
+
 
 iter.ls.kappaMax        = 0;
 iter.ls.lamMeritNum     = 0;

@@ -1,11 +1,12 @@
-function [ sol, timers ] = iterateAL( sProb, opts )
+function [ sol, timers ] = iterateAL( sProb, opts, timers )
 %ITERATEAL Summary of this function goes here
 NsubSys = length(sProb.AA);
 Ncons   = size(sProb.AA{1},1);
 initializeVariables;
 
 iterTimer = tic;
-i                   = 1;
+i         = 1;
+iter.i    = 1;
 while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
                                       (iter.logg.consViol(i) >= opts.term_eps)))
                                   
@@ -78,7 +79,8 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
        timers.plotTimer = timers.plotTimer + toc;
     end
     
-    i = i+1;
+    i      = i+1;
+    iter.i = i;
 end
 timers.iterTime = toc(iterTimer);
 
