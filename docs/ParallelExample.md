@@ -1,22 +1,19 @@
 # Example for the usage of ALADIN with parfor option
-We consider the sensor network localization problem for the usage of the ALADIN solver presented in the original [ALADIN publication](https://www.researchgate.net/publication/299465495_An_Augmented_Lagrangian_Based_Algorithm_for_Distributed_NonConvex_Optimization). The problem is stated as follows:
+Here we consider a sensor network localization problem from the [SIAM ALADIN paper](https://www.researchgate.net/publication/299465495_An_Augmented_Lagrangian_Based_Algorithm_for_Distributed_NonConvex_Optimization). 
+We illustrate, how the `parfor` option of ALADIN-M can be used for parallel execution.
+For this example the MATLAB parallel computing toolbox is reuired.
 
 ## Problem setup
 
-Declaration of variables:
+Let $N$ be the number of agents and let $\chi_i =(x_i,y_i)^\top \in \mathbb{R}^2$ be the unknown position of the $i$th sensor, let $\eta_i$ be its estimated position, let $\xi_i$be the position of senosor $i+1$ estimated by sensor $i$ let $\bar{\eta_i}$ be the estimated distance between sensor $i$ and its neighbors. The measurement error is given by $\eta_i - \chi_i$ and is assumed to be Gaussian distributed with variance $\sigma_i^2 I_{2 \times 2}$. We further denote the measured distance between sensor $i$ and sensor $i + 1$ by $\bar{\eta_i}$. If we define the decision variable as $x_i = (\chi_i^\top, \xi_i^\top)^\top \in \mathbb{R}^4$ then we obtain the overall problem
 
-Let $N$ be the number of agents, let $\chi_i \in \mathbb{R}^2$ be the unknown position of the $i$-th sensor, let $\eta_i$ be its estimated position, let $\xi_i$be the position of senosor $i+1$ estimated by sensor $i$ let $\bar{\eta_i}$ be the estimated distance between sensor $i$ and its neighbors.    
-
-The measurement error is given by $\eta_i - \chi_i$ and is assumed to be Gaussian distributed with variance $\sigma_i^2 I_{2 \times 2}$. We further denote the measured distance between sensor $i$ and sensor $i + 1$ by $\bar{\eta_i}$.
-
-
-If we define the design variable as $x_i = (\chi_i^\top, \xi_i^\top)^\top \in \mathbb{R}^4$ then we obtain the overall problem
-
-
-\begin{align}
-\displaystyle \min_x \sum_{i = 1}^N f_i(x_i)\quad \text{ s.t. } &\quad h_i(x_i) \leq 0 \quad \forall i \in \{1, \cdots, N\}\\
-& \quad\xi_i = \chi_{i+1}  \quad \text{ }\text{ }\forall i \in \{1, \cdots, N\}
-\end{align}
+$$
+\begin{aligned}
+\displaystyle \min_x &\sum_{i = 1}^N f_i(x_i)\quad  \\
+\text{ s.t. } &\quad h_i(x_i) \leq 0 \quad \forall i \in \{1, \dots, N\}\\
+& \quad\xi_i = \chi_{i+1}  \quad \text{ }\text{ }\forall i \in \{1, \dots, N\}
+\end{aligned}
+$$
 
 with 
   

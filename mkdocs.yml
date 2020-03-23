@@ -9,7 +9,7 @@ repo_url: https://github.com/alexe15/ALADIN.m
 edit_uri: ""
 
 theme:
-    name: material
+    name: readthedocs
     highlightjs: true
     hljs_languages:
         - matlab
@@ -27,26 +27,22 @@ nav:
      - Code Structure: codeStruct.md
 
 markdown_extensions:
-  - codehilite
+ # - codehilite
   - pymdownx.arithmatex
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.critic
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_generator: !!python/name:pymdownx.emoji.to_svg
-  - pymdownx.inlinehilite
-  - pymdownx.magiclink
-  - pymdownx.mark
-  - pymdownx.smartsymbols
-  - pymdownx.superfences:
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.tilde
+  - smarty
+  - tables
+  - toc
+  - admonition
+ # - codehilite:
+ #     linenums: True
 
-#plugins:
+plugins:
+  - search
+  - awesome-pages:
+      collapse_single_pages: true
 #  - markdownmermaid
+      
+  
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML

@@ -47,21 +47,3 @@ z^{k+1}&\leftarrow&z^k + \alpha^k_1(x^k-z^k) + \alpha_2^k\Delta x^k \qquad \qqua
 $$
 
 with $\alpha^k_1,\alpha^k_2,\alpha^k_3$ from [HFD16](https://epubs.siam.org/doi/abs/10.1137/140975991). 
-If full step is accepted, i.e. $\alpha_1^k=\alpha_2^k=\alpha_3^k=1$, update $\rho^k$ and $\mu^k$ by
-
-$$
-\begin{aligned} 
-\rho^{k+1} =
-\begin{cases}
-r_\rho \rho^k\   &\text{if} \; \rho^k < \bar \rho\\ 
-\rho^k &\text{otherwise} 
-\end{cases} 
-\qquad   \text{and} \qquad  
-\mu^{k+1} =
-\begin{cases}
-r_\mu \mu^k   &\text{if} \; \mu^k < \bar \mu\\ 
-\mu^k  &\text{otherwise} 
-\end{cases}. 
-\end{aligned}
-$$
-
