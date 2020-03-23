@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Install dependencies
         run:  pip install mkdocs-mermaid-plugin
-        run:  pip install mkdocs-material
       - name: Checkout master
         uses: actions/checkout@v1
 
