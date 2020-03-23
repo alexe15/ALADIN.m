@@ -17,7 +17,19 @@ in a distributed fashion.
 
 ## An example
 
-Here's an example how to use ALADIN-M. First, define your problem in the above form.
+Here's an example how to use ALADIN-M. Let us consider an inequality-constrained non-convex problem
+
+$$
+	\begin{aligned}  
+&	\min_{y_1,y_2 \in \mathbb{R}^2}   2 \,(y_{11} - 1)^2 +   (y_{22} - 2)^2\\
+	\;\;\text{subject to} \;\;    &  1 - y_{11}\,y_{12} \leq 0, \quad 
+	 -1.5 + y_{21} y_{22} \leq 0, \\
+	 &(\,0 \;\; 1\, )\,y_1 \;\;+\; \;(\,-1 \;\; 0 \,)\,y_2 = 0,
+	\end{aligned}
+$$
+
+which is in the above form. In MATLAB code, this looks as follows:
+
 ``` matlab
 % define local objective functions
 f1 = @(x) 2 * ( x(1) - 1)^2;
@@ -37,8 +49,11 @@ A2  =   [-1   0;
 sProb.locFuns.ffi  = {f1, f2};
 sProb.locFuns.hhi  = {h1, h2};
 sProb.AA           = {A1, A2};
+```
 
-% solve with ALADIN-M
+That's all! Now we are ready to solve our problem with the `run_ALADIN` function.
+
+``` matlab
 sol_ALADIN = run_ALADINnew( sProb ); 
 ```
 
