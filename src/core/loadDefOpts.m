@@ -43,10 +43,12 @@ if strcmp(opts.alg, 'ALADIN')
     
 elseif strcmp(opts.alg, 'ADMM')
     
-    optVariants.rho          = {1e2};
+    optVariants.rho0         = {1e2};
     optVariants.scaling      = {'false','true'};   
     optVariants.maxiter      = {30};
     optVariants.rhoUpdate    = {'false','true'};   
+    optVariants.plot         = {'true', 'false'};
+    optVariants.commCount    = {'false','true'};   
     
     optVariants.Alg          = {'ADMM'};
 end

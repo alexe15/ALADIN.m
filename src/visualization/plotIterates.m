@@ -7,7 +7,7 @@
              'DisplayName', 'local step size');
      line(plotStepSizes,i,log10(iter.logg.QPstepS(i)),'Marker', '.',...
              'MarkerSize', 5, 'Color', 'red', 'HandleVisibility', 'on', ...
-             'DisplayName', 'QP step sizes');
+             'DisplayName', 'QP step size');
      drawnow
 
  elseif i >= 3  
@@ -15,12 +15,14 @@
      % line(plotMeritFunction, i-1, log10(logg.Mfun(i-1)));
      line(plotConsViol, i,log10(iter.logg.consViol(i)), 'Marker', '.',...
              'MarkerSize', 5, 'Color', 'b');
-     line(plotSetChang, i-2, iter.logg.wrkSetChang(i-2), 'Marker', '.', ...
-             'MarkerSize', 5, 'Color', 'b');
      line(plotStepSizes,i,log10(iter.logg.localStepS(i)),'Marker', '.',  ...
              'MarkerSize', 5, 'Color', 'black', 'HandleVisibility', 'off');
      line(plotStepSizes,i,log10(iter.logg.QPstepS(i)),'Marker', '.',...
              'MarkerSize', 5, 'Color', 'red', 'HandleVisibility', 'off');
+     if strcmp(opts.alg, 'ALADIN')
+         line(plotSetChang, i-2, iter.logg.wrkSetChang(i-2), 'Marker', '.', ...
+                 'MarkerSize', 5, 'Color', 'b');
+     end        
      drawnow
      
   elseif i >= 2

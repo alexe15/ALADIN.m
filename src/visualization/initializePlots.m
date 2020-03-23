@@ -29,7 +29,7 @@ hold on
 xlabel('k')
 ylabel('Working set changes')
 xlim([0 opts.maxiter]);
-%ylim([-size(hhi,2)-size(ggi,2) size(hhi,2)+size(ggi,2)]);
+ylim([0 30]);
 axis manual;
 grid on
 box on
@@ -45,4 +45,8 @@ axis manual;
 grid on
 box on
 
-title('ALADIN-M v0.1');
+if strcmp(opts.alg, 'ALADIN')
+    title('ALADIN-M v0.1');
+elseif strcmp(opts.alg, 'ADMM')
+    title('ALADIN-M v0.1 (ADMM)');
+end

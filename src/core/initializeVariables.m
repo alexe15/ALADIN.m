@@ -6,6 +6,7 @@ HHiEval = cell(NsubSys, 1);
 
 iter.logg.X          = [];
 iter.logg.Y          = [];
+iter.logg.Z          = [];
 iter.logg.delY       = [];   
 iter.logg.Kappa      = [];
 iter.logg.KappaEq    = [];
@@ -21,7 +22,17 @@ iter.logg.wrkSetChang= [];
 iter.logg.localStepS = [];
 iter.logg.QPstepS    = [];
 iter.logg.lam        = [];
+iter.logg.maxNLPt    = 0;
 iter.comm.globF      = {};
+
+
+timers.NLPtotTime = 0;
+timers.RegTotTime = 0;
+timers.sensEvalT  = 0;
+timers.plotTimer  = 0;
+timers.QPtotTime  = 0;
+
+
 
 % communication counters
 if strcmp(opts.commCount, 'true')
@@ -38,14 +49,14 @@ end
 
 % initialization
 iter.yy              = sProb.zz0;
-iter.loc.xx              = sProb.zz0;
+iter.loc.xx          = sProb.zz0;
 iter.lam             = sProb.lam0;
 iter.delxs           = inf;
 
 for j=1:NsubSys
    nngi{j} = size(sProb.locFunsCas.ggi{j},1);
    nnhi{j} = size(sProb.locFunsCas.hhi{j},1);  
-    
+
    iter.KKapp{j} = zeros(nngi{j}+nnhi{j},1);
    iter.LLam_x{j}= zeros(length(iter.loc.xx{j}),1);
 end
@@ -58,7 +69,7 @@ iter.HHQP            = {};
 NLPtotTime      = 0;
 QPtotTime       = 0;    
 RegTotTime      = 0;
-  
+
 nonMonSteps     = 0;
 
 % compute matrices for ineq. QP
@@ -72,13 +83,10 @@ iter.ls.muMeritMin     = 1e4;
 iter.logg.consViolEq   = [];
 
 iter.stepSizes.rho     = opts.rho0;
-iter.stepSizes.mu      = opts.mu0;
+
+if strcmp(opts.alg, 'ALADIN')
+    iter.stepSizes.mu      = opts.mu0;
+end
 
 iter.stepSizes.alpha   = 1;
 
-timers.NLPtotTime = 0;
-timers.RegTotTime = 0;
-timers.sensEvalT  = 0;
-timers.plotTimer  = 0;
-
-timers.QPtotTime       = 0;

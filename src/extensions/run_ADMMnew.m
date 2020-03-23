@@ -4,8 +4,14 @@ function [ solADM ] = run_ADMMnew(sProb, opts)
 % Houska, B., Frasch, J., & Diehl, M. (2016). An augmented Lagrangian 
 % based algorithm for distributed nonconvex optimization. SIAM Journal 
 % on Optimization, 26(2), 1101-1127.
+
 import casadi.*
 opts.alg   = 'ADMM';
+
+NsubSys = length(sProb.AA);
+AA      = sProb.AA;
+Ncons   = size(AA{1},1);
+
 
 % set constraints to empty functions/default initial guess
 sProb      = setDefaultVals(sProb);
@@ -14,25 +20,20 @@ sProb      = setDefaultVals(sProb);
 opts       = setDefaultOpts(sProb, opts);
 
 
-NsubSys = length(sProb.AA);
-AA      = sProb.AA;
-Ncons   = size(AA{1},1);
-
-
 %% built local subproblems and CasADi functions
 rhoCas      = SX.sym('rho',1,1);
 for i=1:NsubSys
     nx       = length(sProb.zz0{i});
-    yyCas    = SX.sym('z',nx,1);
-    xxCas    = SX.sym('x',nx,1);
+    iter.yyCas    = SX.sym('z',nx,1);
+    iter.loc.xxCas    = SX.sym('x',nx,1);
     
     % local inequality constraints
-    ggiCas  = sProb.locFuns.ggi{i}(yyCas);
-    hhiCas  = sProb.locFuns.hhi{i}(yyCas);
+    sProb.locFunsCas.ggi  = sProb.locFuns.ggi{i}(iter.yyCas);
+    sProb.locFunsCas.hhi  = sProb.locFuns.hhi{i}(iter.yyCas);
     
     % output dimensions of local constraints
-    nngi{i} = size(ggiCas,1);
-    nnhi{i} = size(hhiCas,1);
+    nngi{i} = size(sProb.locFunsCas.ggi,1);
+    nnhi{i} = size(sProb.locFunsCas.hhi,1);
                 
     
     % set up bounds for equalities/inequalities
@@ -45,20 +46,20 @@ for i=1:NsubSys
     % parameter vector of CasADi
     pCas        = [ rhoCas;
                     lamCas;
-                    xxCas];
+                    iter.loc.xxCas];
                 
     if opts.scaling == true
         % scaled version for consensus
-        ffiLocCas = sProb.locFuns.ffi{i}(yyCas) + lamCas'*AA{i}*yyCas ...
-            + rhoCas/2*(yyCas - xxCas)'*Sig{i}*AA{i}'*AA{i}*(yyCas - xxCas);
+        ffiLocCas = sProb.locFuns.ffi{i}(iter.yyCas) + lamCas'*AA{i}*iter.yyCas ...
+            + rhoCas/2*(iter.yyCas - iter.loc.xxCas)'*Sig{i}*AA{i}'*AA{i}*(iter.yyCas - iter.loc.xxCas);
     else
             % objective function for local NLP's
-        ffiLocCas = sProb.locFuns.ffi{i}(yyCas) + lamCas'*AA{i}*yyCas ...
-                + rhoCas/2*(AA{i}*(yyCas - xxCas))'*(AA{i}*(yyCas - xxCas));
+        ffiLocCas = sProb.locFuns.ffi{i}(iter.yyCas) + lamCas'*AA{i}*iter.yyCas ...
+                + rhoCas/2*(AA{i}*(iter.yyCas - iter.loc.xxCas))'*(AA{i}*(iter.yyCas - iter.loc.xxCas));
     end
 
     % set up local solvers
-    nlp     = struct('x',yyCas,'f',ffiLocCas,'g',[ggiCas; hhiCas],'p',pCas);
+    nlp     = struct('x',iter.yyCas,'f',ffiLocCas,'g',[sProb.locFunsCas.ggi; sProb.locFunsCas.hhi],'p',pCas);
     nnlp{i} = nlpsol('solver','ipopt',nlp);
 
 end
@@ -68,7 +69,7 @@ A   = horzcat(AA{:});
 
 HQP = [];
 for i=1:NsubSys
-   HQP = blkdiag(HQP, opts.rho*AA{i}'*AA{i});
+   HQP = blkdiag(HQP, opts.rho0*AA{i}'*AA{i});
    % scaled version
   % HQP = blkdiag(HQP, rho*AA{i}'*Sig{i}*AA{i});
 end
@@ -83,106 +84,73 @@ nx  = size(horzcat(AA{:}),2);
 % HQP = eye(nx);
 
 %% ADMM iterations
-logg            = struct();
-logg.X          = [];
-logg.Z          = [];
-logg.lambda     = [];
-logg.Kappa      = [];
-logg.KappaEq    = [];
-logg.KappaIneq  = [];
- logg.maxNLPt   = 0;
-
+initializeVariables
 % initialization
 i                   = 1;
-xx                  = sProb.zz0;
+iter.yy                  = sProb.zz0;
 [llam{1:NsubSys}]   = deal(sProb.lam0);
 
 while i <= opts.maxiter% && norm(delx,inf)>eps   
     for j = 1:NsubSys
         % set up parameter vector for local NLP's
-        pNum = [ opts.rho;
+        pNum = [ opts.rho0;
                  llam{j};
-                 xx{j}];
+                 iter.yy{j}];
                                    
         tic     
         % solve local NLP's
-        sol = nnlp{j}('x0' , xx{j},...
+        sol = nnlp{j}('x0' , iter.yy{j},...
                       'p',   pNum,...
                       'lbx', sProb.llbx{j},...
                       'ubx', sProb.uubx{j},...
                       'lbg', lbg{j}, ...
                       'ubg', ubg{j});           
-        logg.maxNLPt    = max(logg.maxNLPt, toc );          
+        iter.logg.maxNLPt    = max(iter.logg.maxNLPt, toc );          
         
                                     
-        yy{j}           = full(sol.x);
+        iter.loc.xx{j}  = full(sol.x);
         kapp{j}         = full(sol.lam_g);
         
         % multiplier update
-%              llam{j} = llam{j} + 1e3*AA{j}*(yy{j}-xx{j}); 
-  %      llam{j} = llam{j} + rho*AA{j}*(yy{j}-xx{j});
+  %      llam{j} = llam{j} + rho*AA{j}*(iter.yy{j}-iter.loc.xx{j});
               
         KioptEq{j}      = kapp{j}(1:nngi{j});
         KioptIneq{j}    = kapp{j}(nngi{j}+1:end);
     end
     % gloabl x vector
-    y = vertcat(yy{:});
+    x = vertcat(iter.loc.xx{:});
 
          
     % Solve ctr. QP
     hQP_T=[];
     for j=1:NsubSys
-       hQP_T  = [hQP_T -opts.rho*yy{j}'*AA{j}'*AA{j}-llam{j}'*AA{j}];
+       hQP_T  = [hQP_T -opts.rho0*iter.loc.xx{j}'*AA{j}'*AA{j}-llam{j}'*AA{j}];
     end
     hQP   = hQP_T';
     AQP   = A;
-    bQP   = zeros(size(A,1),1);
-    
-%     % regularization, because some states aren't involved in the solution
-%     HQP   = HQP + eye(size(HQP,1))*1e-9;    
-%     
-
-    % advanced regularization to avoid changing solution 
-    % eigenvalue decomposition of the hessian
-%     [V,D]       = eig(full(HQP));
-%     e           = diag(D);              
-%     % modify zero eigenvalues (regularization)
-%     % (large regularization doesn't matter here since these entries do not enter the
-%     % local problems anyway due to multiplication with Ai)
-%     e(e<=1e-3)   = 1e-3; % 1e-4
-%     HQP  = V*diag(e)*transpose(V);
-%     xOld = x;
-    
+    bQP   = zeros(size(A,1),1);    
     
     % regularization only for components not involved in consensus and
     % project them back on x_k
-    hQP   = hQP - gam*L'*L*y;
+    hQP   = hQP - gam*L'*L*x;
     
     % solve QP
-    [x, ~] = solveQP(HQP,hQP,AQP,bQP,'linsolve');
-    
-    % solve by identity replacement, no ill-condiiotning for large rho
-%    [x, ~] = solveQP(eye(nx),y,A,zeros(size(A,1),1),'linsolve');
-    % alternatively solve by averaging
-%    x2 = (x+y)/2;
-
-
-    
+    [y, ~] = solveQP(HQP,hQP,AQP,bQP,'linsolve');
+        
     % divide into subvectors
-    ctr = 1;
+    ctr   = 1;
+    iter.yyOld = iter.yy;
     for j=1:NsubSys
-        ni          = length(xx{j});
-        xx{j}       = x(ctr:(ctr+ni-1)); 
+        ni          = length(iter.yy{j});
+        iter.yy{j}       = y(ctr:(ctr+ni-1)); 
         ctr = ctr + ni;
     end
     
     % lambda update after z update
     for j = 1:NsubSys
-         llam{j} = llam{j} + opts.rho*AA{j}*(yy{j}-xx{j}); 
+         llam{j} = llam{j} + opts.rho0*AA{j}*(iter.loc.xx{j}-iter.yy{j}); 
     end
     
-        
-    % rho update rule for ISEO paper
 
     % Erseghe update parameter is 1.025 and starts with 2 fort IEEE 57?
     if strcmp(opts.rhoUpdate,'true')
@@ -194,20 +162,24 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
         end
     end
     
-    i = i+1;
+    % logging of variables?
+    loggFl = true;
+    if loggFl == true
+        logValues;
+    end
+   
+            
+    % plot iterates?
+    if strcmp(opts.plot,'true') 
+       plotIterates;
+    end
     
-    % logging
-    logg.X          = [logg.X y];
-    logg.Z          = [logg.Z x];
-    logg.lambda     = [logg.lambda vertcat(llam{:})];
-    logg.Kappa      = [logg.Kappa vertcat(kapp{:})];
-    logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
-    logg.KappaIneq  = [logg.KappaIneq vertcat(KioptIneq{:})];
+    i = i+1;
 end
-solADM.logg   = logg;
-solADM.xxOpt  = yy;
+solADM.logg   = iter.logg;
+solADM.xxOpt  = iter.loc.xx;
 solADM.lamOpt = llam;
 
-disp(['Max NLP time:            ' num2str(logg.maxNLPt) ' sec'])
+disp(['Max NLP time:            ' num2str(iter.logg.maxNLPt) ' sec'])
 end
 
