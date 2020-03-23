@@ -38,8 +38,6 @@ markdown_extensions:
 
 plugins:
   - search
-  - awesome-pages:
-      collapse_single_pages: true
 #  - markdownmermaid
       
   
