@@ -31,12 +31,12 @@ for i=1:NsubSys
     iter.loc.xxCas    = SX.sym('x',nx,1);
     
     % local inequality constraints
-    sProb.locFunsCas.ggi  = sProb.locFuns.ggi{i}(iter.yyCas);
-    sProb.locFunsCas.hhi  = sProb.locFuns.hhi{i}(iter.yyCas);
+    sProb.locFunsCas.ggi{i}  = sProb.locFuns.ggi{i}(iter.yyCas);
+    sProb.locFunsCas.hhi{i}  = sProb.locFuns.hhi{i}(iter.yyCas);
     
     % output dimensions of local constraints
-    nngi{i} = size(sProb.locFunsCas.ggi,1);
-    nnhi{i} = size(sProb.locFunsCas.hhi,1);
+    nngi{i} = size(sProb.locFunsCas.ggi{i},1);
+    nnhi{i} = size(sProb.locFunsCas.hhi{i},1);
                 
     
     % set up bounds for equalities/inequalities
@@ -62,7 +62,7 @@ for i=1:NsubSys
     end
 
     % set up local solvers
-    nlp       = struct('x',iter.yyCas,'f',ffiLocCas,'g',[sProb.locFunsCas.ggi; sProb.locFunsCas.hhi],'p',pCas);
+    nlp       = struct('x',iter.yyCas,'f',ffiLocCas,'g',[sProb.locFunsCas.ggi{i}; sProb.locFunsCas.hhi{i}],'p',pCas);
     nnlp{i}   = nlpsol('solver',opts.locSol,nlp);
 
 end
