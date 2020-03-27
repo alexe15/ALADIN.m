@@ -1,9 +1,3 @@
-% logg consensus violation, objective value and gradient 
-%consViol        = full(sol.g);
-%consViolEq      = [consViolEq; consViol(1:nngi{j})];
-%iinact{j}       = inact;
-
-
 % logging
 x                 = vertcat(iter.loc.xx{:});
 y                 = vertcat(iter.yy{:});
