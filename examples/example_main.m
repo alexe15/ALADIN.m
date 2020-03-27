@@ -6,6 +6,9 @@ clc;
 % addpath(genpath('../tools/'))
 % import casadi.*
 
+global use_fmincon
+use_fmincon = false;
+
 %% define Alex's non-convex problem
 % give general settings
 N   =   2;
@@ -120,25 +123,26 @@ sol =   cas('lbx', [lb1; lb2],...
 %                                       lam0,llbx,uubx,Sig,opts);
 
 %% define this problem using casadi functions
-y_1 = SX.sym('y_1', n);
-y_2 = SX.sym('y_2', n);
-
-f1f = 2 * (y_1(1) - 1)^2;
-f2f = (y_2(2) - 2)^2;
-
-f1 = Function('f_1', {y_1}, {f1f});
-f2 = Function('f_2', {y_2}, {f2f});
-
-h1f = 1 - y_1(1)*y_1(2);
-h2f = -1.5 + y_2(1)*y_2(2);
-
-h1 = Function('h_1', {y_1}, {h1f});
-h2 = Function('h_2', {y_2}, {h2f});
-
-sProb.locFuns.ffi  = {f1, f2};
-sProb.locFuns.hhi  = {h1, h2};
-
-sol_ALADIN = run_ALADINnew( sProb, opts ); 
+% import casadi.*
+% y_1 = SX.sym('y_1', n);
+% y_2 = SX.sym('y_2', n);
+% 
+% f1f = 2 * (y_1(1) - 1)^2;
+% f2f = (y_2(2) - 2)^2;
+% 
+% f1 = Function('f_1', {y_1}, {f1f});
+% f2 = Function('f_2', {y_2}, {f2f});
+% 
+% h1f = 1 - y_1(1)*y_1(2);
+% h2f = -1.5 + y_2(1)*y_2(2);
+% 
+% h1 = Function('h_1', {y_1}, {h1f});
+% h2 = Function('h_2', {y_2}, {h2f});
+% 
+% sProb.locFuns.ffi  = {f1, f2};
+% sProb.locFuns.hhi  = {h1, h2};
+% 
+% sol_ALADIN = run_ALADINnew( sProb, opts ); 
 
 %% define the problem using function handle
 f1 = @(x) 2 * ( x(1) - 1)^2;
@@ -154,7 +158,7 @@ sol_ALADIN = run_ALADINnew( sProb, opts );
 
 %% plotting
 set(0,'defaulttextInterpreter','latex')
-figure(2)
+figure()
 hold on
 plot(sol_ALADIN.iter.logg.X')
 hold on
