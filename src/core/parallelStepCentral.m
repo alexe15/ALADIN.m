@@ -26,18 +26,14 @@ for j=1:NsubSys % parfor???
     %sol = sProb.nnlp{j}('x0' ,    iter.yy{j},... this should be correct
     %but is not working for BFGS example    
     
+    x0 = iter.yy{j};
+    z = iter.yy{j};
+    rho = iter.stepSizes.rho;
+    lambda = iter.lam;
+    Sigma = opts.SSig{j};
     
-    if use_fmincon
-        sol = sProb.nnlp{j}(iter.yy{j}, iter.yy{j}, iter.stepSizes.rho, iter.lam, opts.SSig{j});
-    else
-        sol = sProb.nnlp{j}(iter.yy{j},iter.KKapp{j},...
-                    iter.LLam_x{j},...
-                    [pNum; opts.SSig{j}(:)],...
-                    sProb.llbx{j},...
-                    sProb.uubx{j},...
-                    sProb.gBounds.llb{j}, ...
-                    sProb.gBounds.uub{j});   
-    end
+    problem = sProb.nnlp{j};
+    sol = problem.solve_nlp(x0, z, rho, lambda, Sigma, problem.pars);
 
     % collect variables 
     [ loc.xx{j}, loc.KKapp{j}, loc.LLam_x{j} ] = deal(full(sol.x), ...

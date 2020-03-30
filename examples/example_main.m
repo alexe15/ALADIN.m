@@ -7,7 +7,7 @@ clc;
 % import casadi.*
 
 global use_fmincon
-use_fmincon = false;
+use_fmincon = false;    
 
 %% define Alex's non-convex problem
 % give general settings
