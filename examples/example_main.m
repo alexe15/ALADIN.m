@@ -6,6 +6,7 @@ clc;
 % addpath(genpath('../tools/'))
 % import casadi.*
 
+addpath(genpath('../../numerical-differentiation'))
 global use_fmincon
 use_fmincon = false;    
 

@@ -2,9 +2,12 @@ function [ sens ] = createSens(sProb, opts)
 import casadi.*
 NsubSys = length(sProb.AA);
 
+funs = sProb.locFuns;
+z0 = sProb.zz0;
+
 for i=1:NsubSys
-    nngi{i}  = size(sProb.locFunsCas.ggi{i},1);
-    nnhi{i}  = size(sProb.locFunsCas.hhi{i},1);    
+    nngi{i} = size(funs.ggi{i}(z0{i}), 1);
+    nnhi{i} = size(funs.hhi{i}(z0{i}), 1);   
     
     % Lagrange multipliers for nonlinear constraints
     kkappCas = opts.sym('kapp',nngi{i}+nnhi{i},1);
