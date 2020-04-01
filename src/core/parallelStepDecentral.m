@@ -172,7 +172,7 @@ end
 
 % hand over parfor variables
 loc = iter.loc;
-[loc, timers ] = parforVars2globalVars(parforTmpVar, loc, iter, opts, NsubSys, timers);
+[loc, timers, opts ] = parforVars2globalVars(parforTmpVar, loc, iter, opts, NsubSys, timers);
 
 % save information for next BFGS iteration
 if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')

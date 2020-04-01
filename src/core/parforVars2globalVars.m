@@ -1,4 +1,4 @@
-function [loc, timers ]= parforVars2globalVars(parforTmpVar, loc, iter, opts, NsubSys, timers)
+function [loc, timers, opts ]= parforVars2globalVars(parforTmpVar, loc, iter, opts, NsubSys, timers)
 % Copy temporary data from parforTmpVar to global variables
 
 %% universal variables
