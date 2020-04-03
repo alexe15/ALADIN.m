@@ -27,7 +27,8 @@ for i=1:NsubSys
     if use_fmincon
         pars = [];
         funs = sProb.locFuns;
-        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i});   
+        jacs = sProb.locSens;
+        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, jacs.ggi{i});   
     else
         assert(isfield(sProb, 'locFunsCas'), 'locFunsCas field is missing')
         nlp_reference = build_nlp_reference(sProb.xxCas{i},...
@@ -78,9 +79,15 @@ function res = build_nlp_with_casadi(x, z, rho, lambda, Sigma, pars, nlp, lbx, u
     res.pars.lam_x = res.lam_x;
 end
 
-function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx)
-    cost = build_cost_function(f, lambda, A, rho, z, Sigma);
-    nonlcon = @(x)build_nonlcon(x, g, h);
+function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx)
+    opts = optimoptions('fmincon');
+    opts.Algorithm = 'trust-region-reflective';
+    opts.CheckGradients = false;
+    opts.SpecifyConstraintGradient = true;
+    opts.SpecifyObjectiveGradient = true;
+
+    cost = @(x)build_cost_function(x, f(x), lambda, A, rho, z, Sigma);
+    nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
     [xopt, fval, flag, out, multiplier] = fmincon(cost, x0, [], [], [], [], lbx, ubx, nonlcon);
     res.x = xopt;
     res.lam_g = [multiplier.eqnonlin; multiplier.ineqnonlin];
@@ -88,13 +95,22 @@ function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx)
     res.pars = [];
 end
 
-function fun = build_cost_function(f, lambda, A, rho, z, Sigma)
-    fun = @(x)f(x) + lambda'*A*x + 0.5*rho*(x - z)'*Sigma*(x - z);
+function [fun, grad] = build_cost_function(x, f, lambda, A, rho, z, Sigma)
+%     try chol(Sigma)
+%         disp('Matrix is symmetric positive definite.')
+%     catch ME
+%         disp('Matrix is not symmetric positive definite')
+%     end
+    fun = f + lambda'*A*x + 0.5*rho*(x - z)'*Sigma*(x - z);
+    if nargout > 1
+        grad = A'*lambda + 0.5*rho*Sigma*(x - z);
+    end
 end
 
-
-function [ineq, eq] = build_nonlcon(x, g, h)
+function [ineq, eq, jac_ineq, jac_eq] = build_nonlcon(x, g, h, dgdx)
     ineq = h(x);
     eq = g(x);
+    jac_ineq = [];
+    iac_eq = dgdx(x);
 end
 
