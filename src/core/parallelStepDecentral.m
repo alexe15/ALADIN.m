@@ -8,7 +8,7 @@ NsubSys = length(sProb.AA);
 
 
 % solve local problems
-parfor j=1:NsubSys % parfor???
+for j=1:NsubSys % parfor???
   %  nparngi{j} = size(sProb.locFunsCas.ggi{j},1);
   %  nnhi{j} = size(sProb.locFunsCas.hhi{j},1);
   
@@ -144,7 +144,7 @@ parfor j=1:NsubSys % parfor???
         if strcmp(opts.commCount, 'true') && strcmp(opts.innerAlg, 'none')
            % number of floats for the reduce-space method (no sparsity ex.)
            sH = size(parforTmpVar(j).loc.sensEval.HHred);
-           sA = size(parforTmpVar(j).loc.sensEval.AAred{j});
+           sA = size(parforTmpVar(j).loc.sensEval.AAred);
            parforTmpVar(j).comm.globF.AAred   = [ iter.comm.globF.AAred{j} sA(1)*sA(2) ];
            parforTmpVar(j).comm.globF.Hess    = [ iter.comm.globF.Hess{j} sH(1)*(sH(1) + 1)/2 ];
            parforTmpVar(j).comm.globF.grad    = [ iter.comm.globF.grad{j} sH(1) ];

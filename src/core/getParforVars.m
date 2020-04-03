@@ -66,13 +66,24 @@ if strcmp(opts.Sig,'dyn')
 end
 
 if strcmp(opts.commCount, 'true')
-    for i = 1 : NsubSys
-        parforTmpVar(i).comm.globF.Hess = iter.comm.globF.Hess{i};
-        parforTmpVar(i).comm.globF.grad = iter.comm.globF.grad{i};
-        parforTmpVar(i).comm.globF.primVal = iter.comm.globF.primVal{i};
+    if (isfield(iter.comm.globF,'Hess'))
+        for i = 1 : NsubSys
+            parforTmpVar(i).comm.globF.Hess = iter.comm.globF.Hess{i};
+        end
+    end
+    
+    if (isfield( iter.comm.globF, 'grad'))
+        for i = 1 : NsubSys
+            parforTmpVar(i).comm.globF.grad = iter.comm.globF.grad{i};
+        end
+    end
+    if (isfield(iter.comm.globF, 'primVal'))
+        for i = 1 : NsubSys
+            parforTmpVar(i).comm.globF.primVal = iter.comm.globF.primVal{i};
+        end
+        
     end
 end
-
 for i = 1 : NsubSys
    parforTmpVar(i).loc.xx =iter.loc.xx{i}; 
 end
