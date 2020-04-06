@@ -99,8 +99,8 @@ A_3 = \begin{pmatrix} 0 & 0 \\
  0 & 0 \\
  0 & 0
  \end{pmatrix}, \quad \cdots \quad,  \text{ } \quad
-A_N = \begin{pmatrix} -I & 0 \\
- 0 & I \\
+A_N = \begin{pmatrix} 0 & 0 \\
+ 0 & 0 \\
  0 & 0 \\
  \vdots & \vdots \\
  -I & 0 \\
