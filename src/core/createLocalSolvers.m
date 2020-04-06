@@ -27,8 +27,8 @@ for i=1:NsubSys
     if use_fmincon
         pars = [];
         funs = sProb.locFuns;
-        jacs = sProb.locSens;
-        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, jacs.ggi{i});   
+        sens = sProb.sens;
+        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i});   
     else
         assert(isfield(sProb, 'locFunsCas'), 'locFunsCas field is missing')
         nlp_reference = build_nlp_reference(sProb.xxCas{i},...

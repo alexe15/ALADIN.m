@@ -12,10 +12,20 @@ end
 % [ sProb.nnlp, sProb.gBounds, sProb.rhoCas, sProb.lamCas, sProb.SSig ] = ...
 %                                            createLocalSolvers(sProb, opts);
 
+% compute sensitivities (gradient, Jacobian, ...)
+sProb.rhoCas = opts.sym('rho',1,1);
+if ~isfield(sProb, 'sens')
+    fprintf('Using casadi to compute sensitivities...')
+    sProb.sens = createSens(sProb, opts);
+    fprintf('done\n\n');
+else
+    fprintf('Using given sensitivities...\n');
+end
+pause(1)
+
 [ sProb.nnlp, sProb.gBounds, sProb.rhoCas] = createLocalSolvers(sProb, opts);
 
-% compute sensitivities (gradient, Jacobian, ...)
-sProb.sens          = createSens(sProb, opts);
+
                              
 % set up a merit function for line search
 sProb.Mfun          = createMfun(sProb, opts);
