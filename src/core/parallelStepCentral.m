@@ -30,8 +30,9 @@ for j=1:NsubSys % parfor???
     z = iter.yy{j};
     rho = iter.stepSizes.rho;
     lambda = iter.lam;
-    Sigma = opts.SSig{j};
+    Sigma = sparse(opts.SSig{j});
     
+    fprintf('Solving NLP in region %i\n', j);
     problem = sProb.nnlp{j};
     sol = problem.solve_nlp(x0, z, rho, lambda, Sigma, problem.pars);
 

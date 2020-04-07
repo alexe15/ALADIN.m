@@ -81,14 +81,16 @@ end
 
 function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx)
     opts = optimoptions('fmincon');
-    opts.Algorithm = 'trust-region-reflective';
+    opts.Algorithm = 'interior-point';
     opts.CheckGradients = false;
     opts.SpecifyConstraintGradient = true;
     opts.SpecifyObjectiveGradient = true;
+    opts.MaxFunctionEvaluations = 5e3;
+%     opts.Display = 'iter';
 
     cost = @(x)build_cost_function(x, f(x), lambda, A, rho, z, Sigma);
     nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
-    [xopt, fval, flag, out, multiplier] = fmincon(cost, x0, [], [], [], [], lbx, ubx, nonlcon);
+    [xopt, fval, flag, out, multiplier] = fmincon(cost, x0, [], [], [], [], lbx, ubx, nonlcon, opts);
     res.x = xopt;
     res.lam_g = [multiplier.eqnonlin; multiplier.ineqnonlin];
     res.lam_x = max(multiplier.lower, multiplier.upper);
@@ -103,7 +105,7 @@ function [fun, grad] = build_cost_function(x, f, lambda, A, rho, z, Sigma)
 %     end
     fun = f + lambda'*A*x + 0.5*rho*(x - z)'*Sigma*(x - z);
     if nargout > 1
-        grad = A'*lambda + 0.5*rho*Sigma*(x - z);
+        grad = A'*lambda + rho*Sigma*(x - z);
     end
 end
 
@@ -111,6 +113,6 @@ function [ineq, eq, jac_ineq, jac_eq] = build_nonlcon(x, g, h, dgdx)
     ineq = h(x);
     eq = g(x);
     jac_ineq = [];
-    iac_eq = dgdx(x);
+    jac_eq = dgdx(x)';
 end
 

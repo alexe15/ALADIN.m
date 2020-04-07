@@ -7,8 +7,7 @@ initializeVariables;
 iterTimer = tic;
 i         = 1;
 iter.i    = 1;
-while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
-                                      (iter.logg.consViol(i) >= opts.term_eps)))
+while (i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || (iter.logg.consViol(i) >= opts.term_eps))
                                   
     % solve local NLPs and evaluate sensitivities
    if (strcmp( opts.parfor, 'true' ))

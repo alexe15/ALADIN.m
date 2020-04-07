@@ -11,7 +11,7 @@ if strcmp(opts.alg, 'ALADIN')
     optVariants.muUpdate     = {2};
     optVariants.muMax        = {2*1e6};
 
-    optVariants.eps          = {0};
+    optVariants.eps          = {1e-10};
     optVariants.maxiter      = {30};
     optVariants.actMargin    = {-1e-6};
     optVariants.solveQP      = {'MA57','ipopt','pinv','linsolve','sparseBs','MOSEK','quadprog'};
@@ -20,7 +20,7 @@ if strcmp(opts.alg, 'ALADIN')
     optVariants.plot         = {'true', 'false'};
     optVariants.Sig          = {'const','dyn'};
     optVariants.lamInit      = {'false','true'};
-    optVariants.term_eps     = {0};
+    optVariants.term_eps     = {1e-10};
     optVariants.regParam     = {1e-4};
 
     % extensions
