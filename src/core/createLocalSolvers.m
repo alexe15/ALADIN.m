@@ -85,8 +85,7 @@ function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, 
     opts.CheckGradients = false;
     opts.SpecifyConstraintGradient = true;
     opts.SpecifyObjectiveGradient = true;
-    opts.MaxFunctionEvaluations = 5e3;
-%     opts.Display = 'iter';
+    opts.Display = 'iter';
 
     cost = @(x)build_cost_function(x, f(x), lambda, A, rho, z, Sigma);
     nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
@@ -98,11 +97,9 @@ function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, 
 end
 
 function [fun, grad] = build_cost_function(x, f, lambda, A, rho, z, Sigma)
-%     try chol(Sigma)
-%         disp('Matrix is symmetric positive definite.')
-%     catch ME
-%         disp('Matrix is not symmetric positive definite')
-%     end
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % the code assumes that Sigma is symmetric and positive definite!!!
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fun = f + lambda'*A*x + 0.5*rho*(x - z)'*Sigma*(x - z);
     if nargout > 1
         grad = A'*lambda + rho*Sigma*(x - z);
