@@ -122,35 +122,35 @@ opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 % solve with ALADIN
 sol_ALADIN{1}   = run_ALADINnew(chem,opts);
-% chem.nnlp       = sol_ALADIN{1}.problemForm.nnlp;
-% chem.sens       = sol_ALADIN{1}.problemForm.sens;
-% chem.locFunsCas = sol_ALADIN{1}.problemForm.locFunsCas;
-% chem.gBounds    = sol_ALADIN{1}.problemForm.gBounds;
-% chem.Mfun       = sol_ALADIN{1}.problemForm.Mfun;
-% 
-% Xopt = vertcat(x0{:});
-% Uopt = [];
-% for i = 2:Nmpc
-%     chem.zz0 = sol_ALADIN{i-1}.xxOpt;
-%     Xopti = [];
-%     Uopti = [];
-%     for j = 1:Nunit
-%         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
-%         Xopti = [Xopti; xx0{j}];
-%         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
-%     end
-%     chem.p = xx0;
-%     sol_ALADIN{i} = run_ALADINnew(chem, opts);
-%     Xopt = [Xopt, Xopti];
-%     Uopt = [Uopt, Uopti];
-% end
-% Uopt_last = [sol_ALADIN{Nmpc}.xxOpt{1}(Nunit*N*4+1);
-%              sol_ALADIN{Nmpc}.xxOpt{2}(Nunit*N*4+1);
-%              sol_ALADIN{Nmpc}.xxOpt{3}(Nunit*N*4+1)];
-% 
-% Uopt = [Uopt,Uopt_last];
-% 
-% plotresults([Xopt;Uopt]);
+chem.nnlp       = sol_ALADIN{1}.problemForm.nnlp;
+chem.sens       = sol_ALADIN{1}.problemForm.sens;
+chem.locFunsCas = sol_ALADIN{1}.problemForm.locFunsCas;
+chem.gBounds    = sol_ALADIN{1}.problemForm.gBounds;
+chem.Mfun       = sol_ALADIN{1}.problemForm.Mfun;
+
+Xopt = vertcat(x0{:});
+Uopt = [];
+for i = 2:Nmpc
+    chem.zz0 = sol_ALADIN{i-1}.xxOpt;
+    Xopti = [];
+    Uopti = [];
+    for j = 1:Nunit
+        xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
+        Xopti = [Xopti; xx0{j}];
+        Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
+    end
+    chem.p = xx0;
+    sol_ALADIN{i} = run_ALADINnew(chem, opts);
+    Xopt = [Xopt, Xopti];
+    Uopt = [Uopt, Uopti];
+end
+Uopt_last = [sol_ALADIN{Nmpc}.xxOpt{1}(Nunit*N*4+1);
+             sol_ALADIN{Nmpc}.xxOpt{2}(Nunit*N*4+1);
+             sol_ALADIN{Nmpc}.xxOpt{3}(Nunit*N*4+1)];
+
+Uopt = [Uopt,Uopt_last];
+
+plotresults([Xopt;Uopt]);
 
 
 %% define the fuctions 
