@@ -5,7 +5,8 @@ close all;
 import casadi.*
 
 % import the parameters
-par = parameters();
+par  = parameters();
+Nmpc = 10;
 
 % number of reactors
 Nunit = par.Nunit;
@@ -46,66 +47,14 @@ end
 Qc = diag([20*sc_tem^2, 1000, 1000, 1000]);
 Rc = 1e-10*sc_in^2;
 
-%% centralized formulation
-% for each reactor
-for i = 1:Nunit
-    % inputs/states
-    XX{i} = SX.sym(['x' num2str(i)], [4 N]); % state variables
-    UU{i} = SX.sym(['u' num2str(i)], [1 N]); % inpput variables
-    % parameters
-    pp{i} = SX.sym(['sp' num2str(i)], [4 1]); % initial states
-end
-
-
-for i = 1:Nunit
-    JJ{i}   = 0;
-    gg{i}   = [];
-%     hh{i}   = [];
-    llbu{i} = [];
-    uubu{i} = [];
-    gg{i} = [XX{i}(:,1) - pp{i}(:)]; % initial constraint
-    
-    % over horizon
-    for j = 1:N-1
-        % the states of other reactors are parameter for i_th reactor-  
-        state = [];
-        for k = setdiff(1:Nunit,i)
-            state = [state; XX{k}(:,j)];
-        end
-        % ode cost with Runge-Kutta Method
-        XX_next      = rk4(@(t,x,u) ode_reactor(t,x,u,i,state), dT, 0, XX{i}(:,j), UU{i}(j));
-        gg{i} = [gg{i}; XX{i}(:,j+1) - XX_next];
-        % cost function
-        dx      = XX{i}(:,j+1) - xs{i};
-        du      = UU{i}(j) - Qs(i); 
-        JJ{i}   = JJ{i} + dx'*Qc*dx + du'*Rc*du;
-    end
-end
-
-% solve OCP
-OCP    = struct('f', ones(1,Nunit)*[JJ{:}]', 'x', vec(vertcat(XX{:},UU{:})),...
-              'g', vertcat(gg{:}), 'p', vec(vertcat(pp{:} )));
-solver = nlpsol('solver','ipopt',OCP);
-% initial guess
-XX0   = vec(DM(repmat([x0{1};x0{2};x0{3};Qs(:)],[1 N])));
-LLbx  = vec(DM(repmat([zeros(4*Nunit,1); Ql], [1 N])));
-UUbx  = vec(DM(repmat([inf*ones(4*Nunit,1); Qu], [1 N])));
-LLcon = vec(DM(zeros(size(vertcat(gg{:}),1),1)));
-UUcon = vec(DM(zeros(size(vertcat(gg{:}),1),1)));
-PP    = vec(DM(vertcat(x0{:} )));
-% solve the NLP
-sol = solver('x0', XX0, 'lbx', LLbx, 'ubx', UUbx,...
-             'lbg', LLcon, 'ubg', UUcon, 'p', PP);
-
-XXopt1 = reshape(full(sol.x)',[],N);
-% plotresults(XXopt1); % plot the results
-
 %% distributed formulation
 for i = 1:Nunit
     for k = 1:Nunit
         ZZ{i}{k} = SX.sym(['z' num2str(i) num2str(k)], [4 N]); % states
     end
     UU{i} = SX.sym(['u' num2str(i)], [1 N]); % inputs
+    
+    XX0{i} = SX.sym(['x0' num2str(i)], [4 1]);
 end
 
 % for each reactor
@@ -114,7 +63,7 @@ for i = 1:Nunit
     gg{i}   = [];
     llbu{i} = [];
     uubu{i} = [];
-    gg{i} = [gg{i}; ZZ{i}{i}(:,1)-x0{i}];
+    gg{i} = [gg{i}; ZZ{i}{i}(:,1)-XX0{i}];
     state = [];
     for k = setdiff(1:Nunit,i)
         state = vertcat(state, ZZ{i}{k});
@@ -144,59 +93,18 @@ for i = 1:Nunit-1
 end
 AA{Nunit} = -repmat(Abase, Nunit-1, 1);
 
-
-%% solve centralized
-A   = horzcat(AA{:});
-
-% consensus constraint
-gg{Nunit+1} = A*vertcat(XXU{:});
-
-% bounds
-% set the bound of x and u and initial guess of x0
-LLbx = [];
-UUbx = [];
-XX0  = [];
-for i = 1:Nunit
-    LLbx = [LLbx; zeros(Nunit*N*4,1); Ql(i)*ones(N,1)];
-    UUbx = [UUbx; inf*ones(Nunit*N*4,1); Qu(i)*ones(N,1)];
-    XX0  = [XX0; repmat(vertcat(xs{:}),N,1); Qs(i)*ones(N,1)];
-end
-LLbx    = vec(DM(LLbx));
-UUbx    = vec(DM(UUbx));
-XX0     = vec(DM(XX0));
-LLcon   = vec(DM( 0*ones(size( vertcat(gg{:}) )) ));
-UUcon   = vec(DM( 0*ones(size( vertcat(gg{:}) )) ));
-
-% solve the OCP
-OCP     = struct('f', ones(1,Nunit)*[JJ{:}]', 'x', vertcat(XXU{:}),...
-             'g', vertcat(gg{:}) );
-solver  = nlpsol('solver', 'ipopt', OCP);
-sol = solver('x0', XX0, 'lbx', LLbx, 'ubx', UUbx,...
-             'lbg', LLcon, 'ubg', UUcon);
-
-% plot the results
-Xsol = full(sol.x(1:N*Nunit*4));
-Xopt = reshape(Xsol,[],N);
-Usol = full([sol.x(N*Nunit*4+1:N*Nunit*4+N);...
-            sol.x(N*Nunit*4*2+N+1:(N*Nunit*4+N)*2);...
-            sol.x(N*Nunit*4*3+2*N+1:end)]);
-Uopt = reshape(Usol,N,[])';
-XXopt = vertcat(Xopt, Uopt);
-% plotresults(XXopt);
-
 %% solve with ALADIN
 for i = 1:Nunit
-    chem.locFuns.ffi{i} = Function(['f' num2str(i)], {XXU{i}}, {JJ{i}});
-    chem.locFuns.ggi{i} = Function(['g' num2str(i)], {XXU{i}}, {gg{i}});
-    
-    emptyfun = @(x) [];
-    chem.locFuns.hhi{i} = emptyfun;
+    chem.locFuns.ffi{i} = Function(['f' num2str(i)], {XXU{i},XX0{i}}, {JJ{i}});
+    chem.locFuns.ggi{i} = Function(['g' num2str(i)], {XXU{i},XX0{i}}, {gg{i}});
+    chem.locFuns.hhi{i} = Function(['h' num2str(i)], {XXU{i},XX0{i}}, {[]});
     
     % set up aladin parameters    
     chem.llbx{i} = [zeros(Nunit*N*4,1); Ql(i)*ones(N,1)];
     chem.uubx{i} = [inf*ones(Nunit*N*4,1); Qu(i)*ones(N,1)];
     chem.AA{i}   = AA{i};
     chem.zz0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
+    chem.p{i}    = x0{i};
     
     SSig{i} = eye(length(XXU{i}));
 end
@@ -210,19 +118,40 @@ maxit = 100;
 term_eps = 0; % no termination criterion, stop after maxit
 
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
+% opts.plot = 'false';
 
 % solve with ALADIN
-sol_ALADIN = run_ALADINnew(chem, opts);
+sol_ALADIN{1}   = run_ALADINnew(chem,opts);
+% chem.nnlp       = sol_ALADIN{1}.problemForm.nnlp;
+% chem.sens       = sol_ALADIN{1}.problemForm.sens;
+% chem.locFunsCas = sol_ALADIN{1}.problemForm.locFunsCas;
+% chem.gBounds    = sol_ALADIN{1}.problemForm.gBounds;
+% chem.Mfun       = sol_ALADIN{1}.problemForm.Mfun;
+% 
+% Xopt = vertcat(x0{:});
+% Uopt = [];
+% for i = 2:Nmpc
+%     chem.zz0 = sol_ALADIN{i-1}.xxOpt;
+%     Xopti = [];
+%     Uopti = [];
+%     for j = 1:Nunit
+%         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
+%         Xopti = [Xopti; xx0{j}];
+%         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
+%     end
+%     chem.p = xx0;
+%     sol_ALADIN{i} = run_ALADINnew(chem, opts);
+%     Xopt = [Xopt, Xopti];
+%     Uopt = [Uopt, Uopti];
+% end
+% Uopt_last = [sol_ALADIN{Nmpc}.xxOpt{1}(Nunit*N*4+1);
+%              sol_ALADIN{Nmpc}.xxOpt{2}(Nunit*N*4+1);
+%              sol_ALADIN{Nmpc}.xxOpt{3}(Nunit*N*4+1)];
+% 
+% Uopt = [Uopt,Uopt_last];
+% 
+% plotresults([Xopt;Uopt]);
 
-% plot the results
-Xsol = full(sol_ALADIN.xxOpt{1}(1:Nx));
-Xopt = reshape(Xsol,[],N);
-Usol = full([sol_ALADIN.xxOpt{1}(Nx+1:Nx+N);...
-             sol_ALADIN.xxOpt{2}(Nx+1:Nx+N);...
-             sol_ALADIN.xxOpt{3}(Nx+1:Nx+N)]);
-Uopt  = reshape(Usol,N,[])';
-XXopt = vertcat(Xopt, Uopt);
-plotresults(XXopt);
 
 %% define the fuctions 
 % function: Runge-Kutte 4 Integrator
@@ -434,8 +363,8 @@ end
 % function: definition of system parameters
 function par = parameters
     par.Nunit      = 3;
-    par.N          = 40;
-    par.dT         = 0.04;
+    par.N          = 10;
+    par.dT         = 0.01;
 
     par.T10        = 300;
     par.T20        = 300;

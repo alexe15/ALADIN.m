@@ -61,7 +61,7 @@ parfor j=1:NsubSys % parfor???
        pNum = [ iter.stepSizes.rho;
                 iter.lam;
                 iter.yy{j};
-                sProb_local.p];
+                sProb_local.p{j}];
    end
 
     % solve local NLP's

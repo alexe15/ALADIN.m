@@ -16,7 +16,7 @@ for j=1:NsubSys % parfor???
         pNum = [ iter.stepSizes.rho;
                  iter.lam;
                  iter.yy{j};
-                 sProb.p];
+                 sProb.p{j}];
     end
 
     
@@ -89,7 +89,6 @@ for j=1:NsubSys % parfor???
         end
     else
         loc.sensEval.HHiEval{j}   = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
-        
         if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
             % communication for xx and the gradient of the Lagrangian and
             % the objective

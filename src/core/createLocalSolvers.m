@@ -41,7 +41,7 @@ for i=1:NsubSys
     if ~isfield(sProb, 'p')
         ppCas{i} = [ rhoCas; lamCas; zzCas{i}];
     else
-        ppCas{i} = [ rhoCas; lamCas; zzCas{i}; sProb.pCas];
+        ppCas{i} = [ rhoCas; lamCas; zzCas{i}; sProb.pCas{i}];
     end
     
     nlp      = struct('x',sProb.xxCas{i},'f',ffiLocCas, ...
