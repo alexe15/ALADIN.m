@@ -9,8 +9,7 @@ else
 end
 
 % create local solvers 
-% [ sProb.nnlp, sProb.gBounds, sProb.rhoCas, sProb.lamCas, sProb.SSig ] = ...
-%                                            createLocalSolvers(sProb, opts);
+% [ sProb.nnlp, sProb.gBounds, sProb.rhoCas, sProb.lamCas, sProb.SSig ] = createLocalSolvers(sProb, opts);
 
 % compute sensitivities (gradient, Jacobian, ...)
 sProb.rhoCas = opts.sym('rho',1,1);
