@@ -150,10 +150,8 @@ if strcmp(solver, 'MA57')
     neq = size(A,1);
     nx  = size(H,1);
      
-    
     % sparse solution
-    LEQS_As = [H A';
-                      A zeros(neq)];
+    LEQS_As = [H A'; A sparse(neq, neq)];
     
     LEQS_Bs = [-g; b];
     
