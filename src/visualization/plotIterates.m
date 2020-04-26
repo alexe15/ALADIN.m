@@ -20,8 +20,10 @@
      line(plotStepSizes,i,log10(iter.logg.QPstepS(i)),'Marker', '.',...
              'MarkerSize', 5, 'Color', 'red', 'HandleVisibility', 'off');
      if strcmp(opts.alg, 'ALADIN')
-         line(plotSetChang, i-2, iter.logg.wrkSetChang(i-2), 'Marker', '.', ...
-                 'MarkerSize', 5, 'Color', 'b');
+         if ~isempty(iter.logg.wrkSetChang)
+             line(plotSetChang, i-2, iter.logg.wrkSetChang(i-2), 'Marker', '.', ...
+                     'MarkerSize', 5, 'Color', 'b');
+         end
      end        
      drawnow
      

@@ -81,7 +81,7 @@ end
 % regularization only for components not involved in consensus and
 % project them back on x_k
 gam   = 1e-3;
-L     = diag(double(~sum(abs(A))));
+L     = diag(double(~sum(abs(A),1)));
 HQP   = HQP + gam*L'*L;
 
 % replacement with Identity matrix should also gain ADMM according to Yuning

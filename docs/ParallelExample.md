@@ -1,7 +1,5 @@
 # Example for the usage of ALADIN with parfor option
-Here we consider a sensor network localization problem from the [SIAM ALADIN paper](https://www.researchgate.net/publication/299465495_An_Augmented_Lagrangian_Based_Algorithm_for_Distributed_NonConvex_Optimization). 
-We illustrate, how the `parfor` option of ALADIN-M can be used for parallel execution.
-For this example the MATLAB parallel computing toolbox is reuired.
+Here we consider a sensor network localization problem from the [SIAM ALADIN paper](https://www.researchgate.net/publication/299465495_An_Augmented_Lagrangian_Based_Algorithm_for_Distributed_NonConvex_Optimization). We illustrate, how the `parfor` option of ALADIN-M can be used for parallel execution. For this example the MATLAB parallel computing toolbox is required.
 
 ## Problem setup
 

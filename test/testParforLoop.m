@@ -32,7 +32,7 @@ assert(norm(vertcat(sol_parfor.xxOpt{:}) - vertcat(sol_for.xxOpt{:}), inf) < 1e-
 
 % check BFGS option for parfor
 opts.Hess = 'BFGS';
-opts.maxiter = 30;
+opts.maxiter = 40;
 opts.parfor = 'true';
 time = tic;
 sol_parfor = run_ALADINnew(sProb_test, opts);
