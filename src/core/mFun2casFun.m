@@ -17,7 +17,7 @@ if ~isfield(sProb, 'p')
     end
 else
     for i=1:NsubSys
-        pCas{i} = opts.sym(['par' num2str(i)],length(sProb.p),1);
+        pCas{i} = opts.sym(['par' num2str(i)],length(sProb.p{i}),1);
         
         % set up local variables
         nx        = length(sProb.zz0{i});

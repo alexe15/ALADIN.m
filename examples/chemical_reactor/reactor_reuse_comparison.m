@@ -113,7 +113,7 @@ chem.lam0 = ones(size(AA{1},1),1);
 % initialize the options for ALADIN
 rho = 1e3;
 mu = 1e4;
-maxit = 20;
+maxit = 50;
 term_eps = 0; % no termination criterion, stop after maxit
 
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
@@ -133,7 +133,12 @@ plotresults(XXopt);
 
 
 % reuse the problem formulation
-chem.reuse = sol_ALADIN{1}.reuse;
+chem.nnlp              = sol_ALADIN{1}.problemForm.nnlp;
+chem.sens              = sol_ALADIN{1}.problemForm.sens;
+chem.locFunsCas        = sol_ALADIN{1}.problemForm.locFunsCas;
+chem.gBounds           = sol_ALADIN{1}.problemForm.gBounds;
+chem.Mfun              = sol_ALADIN{1}.problemForm.Mfun;
+
 sol_ALADIN{2} = run_ALADINnew(chem, opts);
 
 %% define the fuctions 

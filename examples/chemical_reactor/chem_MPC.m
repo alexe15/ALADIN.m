@@ -94,12 +94,10 @@ AA{Nunit} = -repmat(Abase, Nunit-1, 1);
 
 %% solve with ALADIN
 
-X0 = vertcat(XX0{:});
 for i = 1:Nunit
-    chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i},X0});
-    chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {XXU{i},X0});
-    
-    emptyfun = @(x) [];
+    chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i},XX0{i}});
+    chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {XXU{i},XX0{i}});
+    emptyfun = @(x,y) [];
     chem.locFuns.hhi{i} = emptyfun;
     
     % set up aladin parameters    
@@ -142,9 +140,8 @@ for i = 2:Nmpc
         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
         Xopti = [Xopti; xx0{j}];
         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
+        chem.p{j} = xx0{j};
     end
-    par_i = vertcat(xx0{:});
-    chem.p = [{par_i}; {par_i}; {par_i}];
     sol_ALADIN{i} = run_ALADINnew(chem, opts);
     Xopt = [Xopt, Xopti];
     Uopt = [Uopt, Uopti];
