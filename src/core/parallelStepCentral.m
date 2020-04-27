@@ -6,6 +6,7 @@ NsubSys = length(sProb.AA);
 % untangle sProb into sProbScalars and sProbCasadiFunctions
 [sProbCas, sProbValues, parforTmpVar] = getParforVars(sProb, iter, opts);
 
+
 if (strcmp( opts.parfor, 'true' ))
     parfor j=1:NsubSys % parfor???
         

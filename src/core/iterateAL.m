@@ -4,12 +4,17 @@ NsubSys = length(sProb.AA);
 Ncons   = size(sProb.AA{1},1);
 initializeVariables;
 
+if isfield(sProb, 'p')
+    parSubstitution;
+end
+
 iterTimer = tic;
 i         = 1;
 iter.i    = 1;
+
 while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
                                       (iter.logg.consViol(i) >= opts.term_eps)))
-                                  
+                             
     % solve local NLPs and evaluate sensitivities
     [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts );
 

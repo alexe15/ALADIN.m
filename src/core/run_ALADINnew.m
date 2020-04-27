@@ -27,12 +27,17 @@ checkInput(sProb);
 totTimer   = tic;
 setupTimer = tic;
 
-% check whether problem setupt is present already
+% check whether problem setup is present already
 if ~isfield(sProb, 'nnlp') || ~isfield(sProb, 'sens') || ...
         ~isfield(sProb, 'locFunsCas') ||  ~isfield(sProb, 'gBounds')
     sProb            = createLocSolAndSens(sProb, opts);   
 end
 timers.setupT        = toc(setupTimer);
+
+% give problem formulation back
+if strcmp(opts.reuse, 'true')
+    sProbback;
+end
 
 % run ALADIN iterations
 [ sol, timers ] = iterateAL( sProb, opts, timers );
@@ -50,9 +55,8 @@ if strcmp(opts.commCount, 'true')
     displayComm(sol.iter.comm, opts.innerAlg);
 end
 
-% give problem formulation back
 if strcmp(opts.reuse, 'true')
-    sProbback;
+    sol.problemForm = problemForm;
 end
 
 end

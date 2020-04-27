@@ -96,8 +96,8 @@ AA{Nunit} = -repmat(Abase, Nunit-1, 1);
 
 X0 = vertcat(XX0{:});
 for i = 1:Nunit
-    chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i}});
-    chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {[XXU{i};X0]});
+    chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i},X0});
+    chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {XXU{i},X0});
     
     emptyfun = @(x) [];
     chem.locFuns.hhi{i} = emptyfun;
@@ -107,12 +107,13 @@ for i = 1:Nunit
     chem.uubx{i} = [inf*ones(Nunit*N*4,1); Qu(i)*ones(N,1)];
     chem.AA{i}   = AA{i};
     chem.zz0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
+    chem.p{i}    = x0{i};
     
     SSig{i} = eye(length(XXU{i}));
 end
 
 chem.lam0 = ones(size(AA{1},1),1);
-chem.p    = vertcat(x0{:});
+
 
 % initialize the options for ALADIN
 rho = 1e3;
@@ -124,8 +125,12 @@ opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 opts.plot = 'false';
 
 % solve with ALADIN
-sol_ALADIN{1} = run_ALADINnew(chem,opts);
-chem.reuse    = sol_ALADIN{1}.reuse;
+sol_ALADIN{1}   = run_ALADINnew(chem,opts);
+chem.nnlp       = sol_ALADIN{1}.problemForm.nnlp;
+chem.sens       = sol_ALADIN{1}.problemForm.sens;
+chem.locFunsCas = sol_ALADIN{1}.problemForm.locFunsCas;
+chem.gBounds    = sol_ALADIN{1}.problemForm.gBounds;
+chem.Mfun       = sol_ALADIN{1}.problemForm.Mfun;
 
 Xopt = vertcat(x0{:});
 Uopt = [];
@@ -138,7 +143,8 @@ for i = 2:Nmpc
         Xopti = [Xopti; xx0{j}];
         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
     end
-    chem.p = vertcat(xx0{:});
+    par_i = vertcat(xx0{:});
+    chem.p = [{par_i}; {par_i}; {par_i}];
     sol_ALADIN{i} = run_ALADINnew(chem, opts);
     Xopt = [Xopt, Xopti];
     Uopt = [Uopt, Uopti];

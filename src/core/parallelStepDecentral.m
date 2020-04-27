@@ -9,6 +9,34 @@ NsubSys = length(sProb.AA);
 
 % solve local problems
 parfor j=1:NsubSys % parfor???
+<<<<<<< HEAD
+=======
+  gi = locFunsCas_temp(j).ggi; 
+  nngi = size(gi, 1);
+    % set up parameter vector for local NLP's
+   if ~isfield(sProb_local, 'p')
+       pNum = [ iter.stepSizes.rho;
+                iter.lam;
+                iter.yy{j}];
+  else
+       pNum = [ iter.stepSizes.rho;
+                iter.lam;
+                iter.yy{j};
+                sProb_local.p{j}];
+   end
+
+    % solve local NLP's
+    tic
+    sol = loc_nnlp{j}('x0' ,   xxTmp {j},...
+                        'lam_g0', iter.KKapp{j},...
+                        'lam_x0', iter.LLam_x{j},...
+                        'p',      [pNum; SSig{j}(:)],...
+                        'lbx',    sProb_local.llbx{j},...
+                        'ubx',    sProb_local.uubx{j},...
+                        'lbg',    sProb_local.gBounds.llb{j}, ...
+                        'ubg',    sProb_local.gBounds.uub{j});     
+                
+>>>>>>> origin/Ruchuan
     
     
     parforTmpVar(j) = parallelStepInnerLoop(j, ...
