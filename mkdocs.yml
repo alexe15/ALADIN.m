@@ -15,6 +15,7 @@ theme:
         - matlab
     navigation_depth: 1
 
+    
 nav:
   - ALADIN-M:
      - Getting Started: index.md
