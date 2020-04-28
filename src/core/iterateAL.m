@@ -16,7 +16,7 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
                                       (iter.logg.consViol(i) >= opts.term_eps)))
                              
     % solve local NLPs and evaluate sensitivities
-    [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts );
+    [ timers, opts, iter ] = parallelStep( sProb, iter, timers, opts );
 
     % set up and solve the coordination QP
     tic
