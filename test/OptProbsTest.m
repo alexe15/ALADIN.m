@@ -46,12 +46,3 @@ function testMishrasBirdExample(TestMishrasBird)
    close all;
 end
 
-
-%% Test Convex example and ADMM solver
-function testConvexExample(testConvexExample)
-
-    %% New example needed, old one was non-convex.
-    
-    close all;
-
-end

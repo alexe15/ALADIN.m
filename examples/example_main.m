@@ -74,11 +74,11 @@ sProb.lam0 = lam0;
 
 % define the options for ALADIN algorthm in parallel form
  opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'true');
- sol_ALADIN_parallel = run_ALADINnew( sProb, opts ); 
+ sol_ALADIN_parallel = run_ALADIN( sProb, opts ); 
 
 % define the options for ALADIN algorthm in centralized form
 opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'false');
-sol_ALADIN_centralized = run_ALADINnew( sProb, opts ); 
+sol_ALADIN_centralized = run_ALADIN( sProb, opts ); 
 
 
 %% solve centralized problem with CasADi & IPOPT
@@ -138,7 +138,7 @@ h2 = Function('h_2', {y_2}, {h2f});
 sProb.locFuns.ffi  = {f1, f2};
 sProb.locFuns.hhi  = {h1, h2};
 
-sol_ALADIN = run_ALADINnew( sProb, opts ); 
+sol_ALADIN = run_ALADIN( sProb, opts ); 
 
 %% define the problem using function handle
 f1 = @(x) 2 * ( x(1) - 1)^2;
@@ -150,7 +150,7 @@ h2 = @(y) (-1.5 + y(1) * y(2));
 sProb.locFuns.ffi  = {f1, f2};
 sProb.locFuns.hhi  = {h1, h2};
 
-sol_ALADIN = run_ALADINnew( sProb, opts ); 
+sol_ALADIN = run_ALADIN( sProb, opts ); 
 
 %% plotting
 set(0,'defaulttextInterpreter','latex')

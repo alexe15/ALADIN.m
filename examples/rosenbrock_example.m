@@ -53,7 +53,7 @@ Sig                 =   {eye(1),eye(2)};
 
 opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
 
-sol_ALADIN =   run_ALADINnew(sProb,opts);
+sol_ALADIN =   run_ALADIN(sProb,opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[1,1],'real');

@@ -51,7 +51,7 @@ opts.term_eps = 0; % no termination criterion, stop after maxit
 opts.reuse = 'true';
 opts.plot = 'false';
 
-sol_ML = run_ALADINnew(ML,opts);
+sol_ML = run_ALADIN(ML,opts);
 
 %% in this section the data set will be divided into 10 groups
 clear ML;
@@ -111,4 +111,4 @@ opts.term_eps = 0; % no termination criterion, stop after maxit
 opts.reuse = 'true';
 opts.plot = 'true';
 
-sol_ML_group = run_ALADINnew(ML,opts);
+sol_ML_group = run_ALADIN(ML,opts);

@@ -122,7 +122,7 @@ opts.plot = 'false';
 opts.reuse = 'true';
 
 % solve with ALADIN
-sol_ALADIN{1}   = run_ALADINnew(chem,opts);
+sol_ALADIN{1}   = run_ALADIN(chem,opts);
 % reuse problem formulation 
 fNames = fieldnames(sol_ALADIN{1}.problemForm);
 for j = 1:length(fNames)
@@ -141,7 +141,7 @@ for i = 2:Nmpc
         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
         chem.p{j} = xx0{j};
     end
-    sol_ALADIN{i} = run_ALADINnew(chem, opts);
+    sol_ALADIN{i} = run_ALADIN(chem, opts);
     Xopt = [Xopt, Xopti];
     Uopt = [Uopt, Uopti];
 end

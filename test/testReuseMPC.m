@@ -10,7 +10,7 @@ Nmpc = 3;
 % first solve with deactive reuse option
 opts.reuse = 'false';
 opts.plot  = 'false';
-sol_ALADIN{1} = run_ALADINnew(chem,opts);
+sol_ALADIN{1} = run_ALADIN(chem,opts);
 
 for i = 2:Nmpc
     chem.zz0 = sol_ALADIN{i-1}.xxOpt;
@@ -18,7 +18,7 @@ for i = 2:Nmpc
         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
         chem.p{j}  = xx0{j};
     end
-    sol_ALADIN{i} = run_ALADINnew(chem, opts);
+    sol_ALADIN{i} = run_ALADIN(chem, opts);
 end
 
 % solve with active reuse option
@@ -27,7 +27,7 @@ for i = 1:Nunit
     chem.p{i}    = x0{i};
     chem.zz0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
 end
-sol_ALADIN_re{1} = run_ALADINnew(chem,opts);
+sol_ALADIN_re{1} = run_ALADIN(chem,opts);
 
 for i = 2:Nmpc
     chem.zz0 = sol_ALADIN_re{i-1}.xxOpt;
@@ -41,9 +41,8 @@ for i = 2:Nmpc
     for j = 1:length(fNames)
        chem.(fNames{j}) = sol_ALADIN_re{i-1}.problemForm.(fNames{j});
     end
-    
-  %  chem.reuse = sol_ALADIN_re{i-1}.reuse
-    sol_ALADIN_re{i} = run_ALADINnew(chem, opts);
+  
+    sol_ALADIN_re{i} = run_ALADIN(chem, opts);
 end
 
 % check whether solutions with/without resuing problem formulation are close enough 

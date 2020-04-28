@@ -5,47 +5,7 @@ j = iteration_index;
 
 gi = sProbCas_j.locFunsCas_ggi;
 nngi = size(gi,1);
-
-
-% 
-% <<<<<<< HEAD
-% =======
-% % solve local problems
-% for j=1:NsubSys % parfor???
-% 
-%     
-%     % solve local NLP's
-%     tic
-%     %sol = sProb.nnlp{j}('x0' ,    iter.yy{j},... this should be correct
-%     %but is not working for BFGS example
-%     sol = sProb.nnlp{j}('x0' ,    iter.yy{j},...
-%                         'lam_g0', iter.KKapp{j},...
-%                         'lam_x0', iter.LLam_x{j},...
-%                         'p',      [pNum; opts.SSig{j}(:)],...
-%                         'lbx',    sProb.llbx{j},...
-%                         'ubx',    sProb.uubx{j},...
-%                         'lbg',    sProb.gBounds.llb{j}, ...
-%                         'ubg',    sProb.gBounds.uub{j});     
-% 
-%     % collect variables 
-%     [ loc.xx{j}, loc.KKapp{j}, loc.LLam_x{j} ] = deal(full(sol.x), ...
-%                                          full(sol.lam_g), full(sol.lam_x));
-%     timers.NLPtotTime = timers.NLPtotTime + toc;                           
-% 
-%     % primal active set detection
-%     loc.inact{j}    = logical([false(nngi{j},1); ...
-%                       full(sProb.locFuns.hhi{j}(loc.xx{j}) < opts.actMargin)]);
-%     KKapp{j}(loc.inact{j}) = 0;
-% >>>>>>> origin/Ruchuan
-% 
-% 
-
-
-%nngi{j} = size(sProb.locFunsCas.ggi{j},1);
-
-    
-
-
+   
 
 %-------------------------------------------------------------------------
 % set up parameter vector for local NLP's
@@ -93,80 +53,13 @@ parforTmpVar_j.loc.KKapp(parforTmpVar_j.loc.inact) = 0;
 if strcmp(opts.Sig,'dyn')
     % after second iteration
     if iter.i > 1
-        [parforTmpVar_j.opts_SSig, parforTmpVar_j.loc.locStep] = computeDynSig(opts.SSig{j},...
+        [parforTmpVar_j.opts_SSig, parforTmpVar_j.loc.locStep] = updateParam(opts.SSig{j},...
             iter.yy{j} - parforTmpVar_j.loc.xx, iter.loc.locStep{j}, 'Sig');
     else
         parforTmpVar_j.loc.locStep = iter.yy{j} - parforTmpVar_j.loc.xx;
     end
 end
 
-
-
-% 
-% 
-% =======
-%     % evaluate sensitivities locally
-%     tic
-%     % gradient of the objective
-%     loc.sensEval.ggiEval{j} = sProb.sens.gg{j}(loc.xx{j});
-%     
-%     % Hessian approximations
-%     if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
-%         loc.sensEval.gLiEval{j}   = sProb.sens.gL{j}(loc.xx{j},loc.KKapp{j});
-%         if ~isfield(iter.loc, 'sensEval')
-%             if strcmp(opts.BFGSinit, 'ident')
-%                 % initialize BFGS with identity matrix
-%                 loc.sensEval.HHiEval{j}   = eye(length(sProb.zz0{j}));
-%             elseif strcmp(opts.BFGSinit, 'exact')
-%                 % initialize BFGS with exact Hessian
-%                 loc.sensEval.HHiEval{j}   =  ...
-%                     sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
-%             end
-%         else
-%             loc.sensEval.HHiEval{j}   = BFGS(iter.loc.sensEval.HHiEval{j},...
-%                                              loc.sensEval.gLiEval{j},...
-%                                              iter.loc.sensEval.gLiEvalOld{j},...
-%                                              loc.xx{j},...
-%                                              iter.loc.xxOld{j},...
-%                                              opts.Hess);
-%         end
-%         if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
-%             % communication for xx and the gradient of the Lagrangian and
-%             % the objective
-%             iter.comm.globF.Hess{j}    = [ iter.comm.globF.Hess{j} length(iter.loc.xx{j}) ];
-%             iter.comm.globF.grad{j}    = [ iter.comm.globF.grad{j} length(iter.loc.xx{j}) ];
-%             iter.comm.globF.primVal{j} = [ iter.comm.globF.primVal{j} length(iter.loc.xx{j}) ];
-%         end
-%     else
-%         loc.sensEval.HHiEval{j}   = sProb.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
-%         if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
-%             % communication for xx and the gradient of the Lagrangian and
-%             % the objective
-%             iter.comm.globF.Hess{j}    = [ iter.comm.globF.Hess{j} length(iter.loc.xx{j})*(length(iter.loc.xx{j}) + 1)/2 ];
-%             iter.comm.globF.grad{j}    = [ iter.comm.globF.grad{j} length(iter.loc.xx{j}) ];
-%             iter.comm.globF.primVal{j} = [ iter.comm.globF.primVal{j} length(iter.loc.xx{j}) ];
-%         end
-%     end 
-% 
-%     % Jacobians of active nonlinear constraints/bounds
-%     JacCon           = full(sProb.sens.JJac{j}(loc.xx{j}));    
-%     JacBounds        = eye(size(loc.xx{j},1));
-% 
-%     % eliminate inactive entries  
-%     JJacCon{j}       = sparse(JacCon(~loc.inact{j},:));      
-%     JacBounds        = JacBounds((sProb.llbx{j} - loc.xx{j})  ...
-%            > opts.actMargin |(loc.xx{j}-sProb.uubx{j}) > opts.actMargin,:);
-%     loc.sensEval.JJacCon{j} = [JJacCon{j}; JacBounds];     
-%     timers.sensEvalT        = timers.sensEvalT + toc;
-%     
-%     % for reduced-space method, compute reduced QP
-%     if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
-% 
-%         loc.sensEval.ZZ{j}    = null(full(JJacCon{j}));
-%         loc.sensEval.HHred{j} = loc.sensEval.ZZ{j}'* ...
-%                           full(loc.sensEval.HHiEval{j})*loc.sensEval.ZZ{j};
-% >>>>>>> origin/Ruchuan
-% 
 
 
 % evaluate sensitivities locally

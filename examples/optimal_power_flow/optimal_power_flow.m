@@ -29,7 +29,7 @@ opts.maxiter      = 30;
 
                                 
 % run ALADIN-M                           
-res_ALADIN = run_ALADINnew(sProb, opts);
+res_ALADIN = run_ALADIN(sProb, opts);
 
 %% compare to centralized solution
 res_IPOPT  = run_IPOPT(sProb);

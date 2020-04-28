@@ -44,7 +44,7 @@ opts.term_eps = 0; % no termination criterion, stop after maxit
 opts.reuse = 'true';
 opts.plot = 'false';
 
-sol_ML = run_ALADINnew(ML,opts);
+sol_ML = run_ALADIN(ML,opts);
 
 eyebase = eye(n);
 zerobase = zeros(n);
@@ -80,4 +80,4 @@ for i = 1:N
 end
 ML.lam0 = 1*ones(size(ML.AA{1},1),1);
 
-sol = run_ALADINnew(ML, opts)
+sol = run_ALADIN(ML, opts)
