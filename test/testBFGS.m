@@ -2,7 +2,7 @@
 clear all;
 import casadi.*
 
-%% test BFGS for OPF 30 bus
+%% test BFGS for OPF 30bus
 load('./problem_data/IEEE30busPrbFrm.mat')
 
 % bring into the correct foormat
