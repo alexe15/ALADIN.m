@@ -25,11 +25,11 @@ opts.maxiter      = 30;
 
 % run ALADIN-M with full space             
 opts.slack = 'standard';
-res_ALADIN = run_ALADINnew(sProb, opts);
+res_ALADIN = run_ALADIN(sProb, opts);
 
 % run ALADIN-M with reduced space             
 opts.slack    = 'redSpace';
-res_ALADINred = run_ALADINnew(sProb, opts);
+res_ALADINred = run_ALADIN(sProb, opts);
 
 % compare solutions
 assert(norm(vertcat(res_ALADIN.xxOpt{:}) - vertcat(res_ALADINred.xxOpt{:}),inf) ...
@@ -51,11 +51,11 @@ opts.Hess = 'standard';
 chem.lam0 = 0.1*ones(length(chem.lam0),1);
 opts.slack    = 'redSpace';
 
-res_ALADINred = run_ALADINnew(chem, opts);
+res_ALADINred = run_ALADIN(chem, opts);
 
 % run ALADIN-M with full space             
 opts.slack = 'standard';
-res_ALADIN = run_ALADINnew(chem, opts);
+res_ALADIN = run_ALADIN(chem, opts);
 
 % compare solutions
 assert(norm(vertcat(res_ALADIN.xxOpt{:}) - vertcat(res_ALADINred.xxOpt{:}),inf) ...

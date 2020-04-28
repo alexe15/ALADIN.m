@@ -12,12 +12,12 @@ for i = 1 : length(N)
     opts.parfor = 'true'; 
 
     time_parfor = tic;
-    sol = run_ALADINnew(sProb, opts);
+    sol = run_ALADIN(sProb, opts);
     time(1, i) = toc(time_parfor);
 
     time_for = tic;
     opts.parfor = 'false';
-    sol = run_ALADINnew(sProb, opts);
+    sol = run_ALADIN(sProb, opts);
     time(2, i) = toc(time_for);
 end
 

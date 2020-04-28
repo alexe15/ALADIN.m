@@ -24,7 +24,7 @@ opts.Hess         = 'DBFGS';   % damped BFGS
 opts.BFGSinit     = 'exact';   % with exact Hessian initialization
 
 % run ALADIN-M                       
-res_ALADIN = run_ALADINnew(sProb, opts);
+res_ALADIN = run_ALADIN(sProb, opts);
 
 % centralized solution
 res_IPOPT  = run_IPOPT(sProb);
@@ -38,7 +38,7 @@ load('./problem_data/chemReact.mat')
 opts.Hess = 'DBFGS';
 
 % solve with ALADIN
-sol_ALADIN = run_ALADINnew(chem, opts);
+sol_ALADIN = run_ALADIN(chem, opts);
 
 % centralized solution
 res_IPOPT  = run_IPOPT(chem);

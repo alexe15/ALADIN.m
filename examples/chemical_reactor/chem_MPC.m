@@ -123,7 +123,7 @@ opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 opts.plot = 'false';
 
 % solve with ALADIN
-sol_ALADIN{1}   = run_ALADINnew(chem,opts);
+sol_ALADIN{1}   = run_ALADIN(chem,opts);
 chem.nnlp       = sol_ALADIN{1}.problemForm.nnlp;
 chem.sens       = sol_ALADIN{1}.problemForm.sens;
 chem.locFunsCas = sol_ALADIN{1}.problemForm.locFunsCas;
@@ -142,7 +142,7 @@ for i = 2:Nmpc
         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
         chem.p{j} = xx0{j};
     end
-    sol_ALADIN{i} = run_ALADINnew(chem, opts);
+    sol_ALADIN{i} = run_ALADIN(chem, opts);
     Xopt = [Xopt, Xopti];
     Uopt = [Uopt, Uopti];
 end

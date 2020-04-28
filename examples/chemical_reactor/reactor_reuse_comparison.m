@@ -119,7 +119,7 @@ term_eps = 0; % no termination criterion, stop after maxit
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 % solve with ALADIN
-sol_ALADIN{1} = run_ALADINnew(chem, opts);
+sol_ALADIN{1} = run_ALADIN(chem, opts);
 
 % plot the results
 Xsol = full(sol_ALADIN{1}.xxOpt{1}(1:Nx));
@@ -139,7 +139,7 @@ chem.locFunsCas        = sol_ALADIN{1}.problemForm.locFunsCas;
 chem.gBounds           = sol_ALADIN{1}.problemForm.gBounds;
 chem.Mfun              = sol_ALADIN{1}.problemForm.Mfun;
 
-sol_ALADIN{2} = run_ALADINnew(chem, opts);
+sol_ALADIN{2} = run_ALADIN(chem, opts);
 
 %% define the fuctions 
 % function: Runge-Kutte 4 Integrator

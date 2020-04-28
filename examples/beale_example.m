@@ -85,7 +85,7 @@ sProb.lam0        = lam0;
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 
-sol_ALADIN   = run_ALADINnew(sProb, opts);
+sol_ALADIN   = run_ALADIN(sProb, opts);
                                   
 %% solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');

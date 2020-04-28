@@ -88,11 +88,13 @@ AA          = {A1,A2};
 opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
     'muMax',1e5,'eps',eps,'maxiter',maxit);
 
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+% convert to new interface
+[sProb, opts] = old2new(ffifun,ggifun,hhifun,AA,yy0,lam0,llbx,uubx,Sig,opts);
+
+res_ALADIN    = run_ALADIN(sProb,opts);
 
 % check result                                  
-assert(full(norm(sol.x -xoptAL,inf)) < 1e-6, 'Out of tolerance for local minizer!')
+assert(full(norm(sol.x -vertcat(res_ALADIN.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minizer!')
 
 %clean up
 clear all;
@@ -151,8 +153,10 @@ AA          = {A1,A2};
 opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1.2,...
     'muMax',1e5,'eps',eps,'maxiter',maxit);
 
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+% convert to new interface
+[sProb, opts] = old2new(ffifun,ggifun,hhifun,AA,yy0,lam0,llbx,uubx,Sig,opts);
+
+res_ALADIN    = run_ALADIN(sProb,opts);
                                   
 % solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[1,1],'real');
@@ -176,7 +180,7 @@ sol =   cas('lbx', [lb1; lb2],...
             'ubg', [0;b]);
 
 % check result                                  
-assert(full(norm(sol.x -xoptAL,inf)) < 1e-6, 'Out of tolerance for local minizer!')
+assert(full(norm(sol.x -vertcat(res_ALADIN.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minizer!')
 
 %clean up
 clear all;
@@ -262,8 +266,10 @@ AA          = {A1,A2,A3};
 opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
     'muMax',1e5,'eps',eps,'maxiter',maxit);
 
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+% convert to new interface
+[sProb, opts] = old2new(ffifun,ggifun,hhifun,AA,yy0,lam0,llbx,uubx,Sig,opts);
+
+res_ALADIN    = run_ALADIN(sProb,opts);
                                   
 % solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');
@@ -292,7 +298,7 @@ sol =   cas('lbx', [lb1; lb2; lb3],...
             'ubg', [0;0;0;0;0;0;0;0;0;b]);
         
 % check result                                  
-assert(full(norm(sol.x -xoptAL,inf)) < 1e-4, 'Out of tolerance for local minizer!')
+assert(full(norm(sol.x -vertcat(res_ALADIN.xxOpt{:}),inf)) < 1e-4, 'Out of tolerance for local minizer!')
 
 %clean up
 clear all;
@@ -465,9 +471,11 @@ AA          = {A1,A2};
 
 opts = struct('rho0',rho,'rhoUpdate',1,'rhoMax',5e3,'mu0',mu,'muUpdate',1,...
     'muMax',1e5,'eps',eps,'maxiter',maxit);
- 
-[xoptAL, loggAL]   = run_ALADIN(ffifun,ggifun,hhifun,AA,yy0,...
-                                      lam0,llbx,uubx,Sig,opts);
+
+% convert to new interface
+[sProb, opts] = old2new(ffifun,ggifun,hhifun,AA,yy0,lam0,llbx,uubx,Sig,opts);
+
+res_ALADIN    = run_ALADIN(sProb,opts);
                                   
 % solve centralized problem with CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');

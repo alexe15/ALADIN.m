@@ -53,7 +53,7 @@ parforTmpVar_j.loc.KKapp(parforTmpVar_j.loc.inact) = 0;
 if strcmp(opts.Sig,'dyn')
     % after second iteration
     if iter.i > 1
-        [parforTmpVar_j.opts_SSig, parforTmpVar_j.loc.locStep] = computeDynSig(opts.SSig{j},...
+        [parforTmpVar_j.opts_SSig, parforTmpVar_j.loc.locStep] = updateParam(opts.SSig{j},...
             iter.yy{j} - parforTmpVar_j.loc.xx, iter.loc.locStep{j}, 'Sig');
     else
         parforTmpVar_j.loc.locStep = iter.yy{j} - parforTmpVar_j.loc.xx;
