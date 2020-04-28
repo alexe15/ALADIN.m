@@ -12,9 +12,12 @@ iter.loc.xx          = sProb.zz0;
 iter.lam             = sProb.lam0;
 iter.delxs           = inf;
 
+funs = sProb.locFuns;
+z0 = sProb.zz0;
+
 for j=1:NsubSys
-   nngi{j} = size(sProb.locFunsCas.ggi{j},1);
-   nnhi{j} = size(sProb.locFunsCas.hhi{j},1);  
+   nngi{j} = size(funs.ggi{j}(z0{j}), 1);
+   nnhi{j} = size(funs.hhi{j}(z0{j}), 1);
 
    iter.KKapp{j} = zeros(nngi{j}+nnhi{j},1);
    iter.LLam_x{j}= zeros(length(iter.loc.xx{j}),1);

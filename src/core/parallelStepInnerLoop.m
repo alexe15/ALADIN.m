@@ -5,8 +5,6 @@ j = iteration_index;
 
 gi = sProbCas_j.locFunsCas_ggi;
 nngi = size(gi,1);
-   
-
 %-------------------------------------------------------------------------
 % set up parameter vector for local NLP's
 if ~isfield(sProbValues, 'p')
@@ -25,20 +23,23 @@ end
 tic
 %sol = sProb.nnlp{j}('x0' ,    iter.yy{j},... this should be correct
 %but is not working for BFGS example
-sol = sProbCas_j.nnlp('x0' ,    iter.loc.xx{j},...
-    'lam_g0', iter.KKapp{j},...
-    'lam_x0', iter.LLam_x{j},...
-    'p',      [pNum; opts.SSig{j}(:)],...
-    'lbx',    sProbValues.llbx{j},...
-    'ubx',    sProbValues.uubx{j},...
-    'lbg',    sProbValues.gBounds.llb{j}, ...
-    'ubg',    sProbValues.gBounds.uub{j});
+fprintf('\n\nSolving NLP in region %i\n', j);
+[x0, z, rho, lambda, Sigma, problem] = unpack(sProbCas_j, iter, opts, j);
+sol = problem.solve_nlp(x0, z, rho, lambda, Sigma, problem.pars);
+
+% sol = sProbCas_j.nnlp('x0' ,    iter.loc.xx{j},...
+%     'lam_g0', iter.KKapp{j},...
+%     'lam_x0', iter.LLam_x{j},...
+%     'p',      [pNum; opts.SSig{j}(:)],...
+%     'lbx',    sProbValues.llbx{j},...
+%     'ubx',    sProbValues.uubx{j},...
+%     'lbg',    sProbValues.gBounds.llb{j}, ...
+%     'ubg',    sProbValues.gBounds.uub{j});
 
 
 % collect variables
 [ parforTmpVar_j.loc.xx, parforTmpVar_j.loc.KKapp, parforTmpVar_j.loc.LLam_x ] = deal(full(sol.x), ...
     full(sol.lam_g), full(sol.lam_x));
-%    timers.NLPtotTime = timers.NLPtotTime + toc;
 parforTmpVar_j.timers.NLPtotTime = toc;
 
 %-----------------------------------------------------------------------
@@ -163,5 +164,15 @@ else
     end
 end
 end
+
+function [x0, z, rho, lambda, Sigma, problem] = unpack(prob, iter, opts, j)
+    x0 = iter.yy{j};
+    z = iter.yy{j};
+    rho = iter.stepSizes.rho;
+    lambda = iter.lam;
+    Sigma = sparse(opts.SSig{j});
+    problem = prob.nnlp;
+end
+
 
 
