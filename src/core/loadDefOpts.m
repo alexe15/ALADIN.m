@@ -22,6 +22,8 @@ if strcmp(opts.alg, 'ALADIN')
     optVariants.lamInit      = {'false','true'};
     optVariants.term_eps     = {0};
     optVariants.regParam     = {1e-4};
+    optVariants.stepSize     = {1};
+    
 
     % extensions
     optVariants.slack        = {'standard','redSpace'};   % reduced space?
