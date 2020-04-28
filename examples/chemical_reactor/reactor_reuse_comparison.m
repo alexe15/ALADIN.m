@@ -132,12 +132,12 @@ XXopt = vertcat(Xopt, Uopt);
 plotresults(XXopt);
 
 
-% reuse the problem formulation
-chem.nnlp              = sol_ALADIN{1}.problemForm.nnlp;
-chem.sens              = sol_ALADIN{1}.problemForm.sens;
-chem.locFunsCas        = sol_ALADIN{1}.problemForm.locFunsCas;
-chem.gBounds           = sol_ALADIN{1}.problemForm.gBounds;
-chem.Mfun              = sol_ALADIN{1}.problemForm.Mfun;
+
+% reuse problem formulation 
+fNames = fieldnames(sol_ALADIN{1}.problemForm);
+for j = 1:length(fNames)
+   chem.(fNames{j}) = sol_ALADIN{1}.problemForm.(fNames{j});
+end
 
 sol_ALADIN{2} = run_ALADINnew(chem, opts);
 
