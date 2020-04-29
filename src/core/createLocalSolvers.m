@@ -1,5 +1,4 @@
 function [ nnlp, gBounds, rhoCas ] = createLocalSolvers( sProb, opts )
-global use_fmincon
 % set up solvers for local NLPs
 import casadi.*
 NsubSys = length(sProb.AA);
@@ -12,6 +11,7 @@ end
 
 funs = sProb.locFuns;
 z0 = sProb.zz0;
+solver = sProb.solver;
 
 for i=1:NsubSys     
     nnxi{i} = size(sProb.AA{i},2);
@@ -24,12 +24,12 @@ for i=1:NsubSys
     
     [solve_nlp, pars] = deal([]);
     
-    if use_fmincon
+    if strcmp(solver, 'fmincon')
         pars = [];
         funs = sProb.locFuns;
         sens = sProb.sens;
-        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i});   
-    else
+        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i});   
+    elseif strcmp(solver, 'Casadi+Ipopt')
         assert(isfield(sProb, 'locFunsCas'), 'locFunsCas field is missing')
         nlp_reference = build_nlp_reference(sProb.xxCas{i},...
                                             sProb.locFunsCas.ffi{i},...
@@ -79,15 +79,14 @@ function res = build_nlp_with_casadi(x, z, rho, lambda, Sigma, pars, nlp, lbx, u
     res.pars.lam_x = res.lam_x;
 end
 
-function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx)
+function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx)
     opts = optimoptions('fmincon');
     opts.Algorithm = 'interior-point';
     opts.CheckGradients = false;
     opts.SpecifyConstraintGradient = true;
     opts.SpecifyObjectiveGradient = true;
     opts.Display = 'iter';
-
-    cost = @(x)build_cost_function(x, f(x), lambda, A, rho, z, Sigma);
+    cost = @(x)build_cost_function(x, f(x), dfdx(x), lambda, A, rho, z, Sigma);
     nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
     [xopt, fval, flag, out, multiplier] = fmincon(cost, x0, [], [], [], [], lbx, ubx, nonlcon, opts);
     res.x = xopt;
@@ -96,13 +95,13 @@ function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, 
     res.pars = [];
 end
 
-function [fun, grad] = build_cost_function(x, f, lambda, A, rho, z, Sigma)
+function [fun, grad] = build_cost_function(x, f, dfdx, lambda, A, rho, z, Sigma)
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % the code assumes that Sigma is symmetric and positive definite!!!
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fun = f + lambda'*A*x + 0.5*rho*(x - z)'*Sigma*(x - z);
     if nargout > 1
-        grad = A'*lambda + rho*Sigma*(x - z);
+        grad = dfdx + A'*lambda + rho*Sigma*(x - z);
     end
 end
 
