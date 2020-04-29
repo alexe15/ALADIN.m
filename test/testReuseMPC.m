@@ -16,15 +16,15 @@ for i = 2:Nmpc
     chem.zz0 = sol_ALADIN{i-1}.xxOpt;
     for j = 1:Nunit
         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
+        chem.p{j}  = xx0{j};
     end
-    chem.p = vertcat(xx0{:});
     sol_ALADIN{i} = run_ALADIN(chem, opts);
 end
 
 % solve with active reuse option
 opts.reuse = 'true';
-chem.p     = vertcat(x0{:});
 for i = 1:Nunit
+    chem.p{i}    = x0{i};
     chem.zz0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
 end
 sol_ALADIN_re{1} = run_ALADIN(chem,opts);
@@ -33,6 +33,7 @@ for i = 2:Nmpc
     chem.zz0 = sol_ALADIN_re{i-1}.xxOpt;
     for j = 1:Nunit
         xx0{j} = sol_ALADIN_re{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
+        chem.p{j}  = xx0{j};
     end
     
     % reuse problem formulation 
@@ -40,10 +41,7 @@ for i = 2:Nmpc
     for j = 1:length(fNames)
        chem.(fNames{j}) = sol_ALADIN_re{i-1}.problemForm.(fNames{j});
     end
-    
-    
-  %  chem.reuse = sol_ALADIN_re{i-1}.reuse;
-    chem.p = vertcat(xx0{:});
+  
     sol_ALADIN_re{i} = run_ALADIN(chem, opts);
 end
 

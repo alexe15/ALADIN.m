@@ -1,7 +1,6 @@
 % variable initialization
 HHiEval = cell(NsubSys, 1);
 
-
 nh = 0;
 ng = 0;
 nx = 0;
@@ -26,7 +25,6 @@ for j=1:NsubSys
    nh = nh + nnhi{j};
    ng = ng + nngi{j};
 end
-
 
 iter.logg.X          = zeros(nx,opts.maxiter);
 iter.logg.Y          = zeros(nx,opts.maxiter);
@@ -70,11 +68,6 @@ if strcmp(opts.commCount, 'true')
     [iter.comm.nn{1:NsubSys}]            = deal([]);
 end
 
-
-
-
-
-
 iter.ls.kappaMax        = 0;
 iter.ls.lamMeritNum     = 0;
 iter.ls.kappMeritNum    = 0;
@@ -102,5 +95,5 @@ if strcmp(opts.alg, 'ALADIN')
     iter.stepSizes.mu      = opts.mu0;
 end
 
-iter.stepSizes.alpha   = 1;
+iter.stepSizes.alpha   = opts.stepSize;
 

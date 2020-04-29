@@ -9,7 +9,7 @@ t3 = runtests('testBFGS/testBFGSForOPF30bus');
 t4 = runtests('testBiLevelAL');
 
 
-cd parallelTests\
+cd parallelTests
 tp = runtests('testParforLoop');
 cd ..
 
