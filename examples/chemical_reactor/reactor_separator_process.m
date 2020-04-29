@@ -434,8 +434,8 @@ end
 % function: definition of system parameters
 function par = parameters
     par.Nunit      = 3;
-    par.N          = 40;
-    par.dT         = 0.04;
+    par.N          = 10;
+    par.dT         = 0.01;
 
     par.T10        = 300;
     par.T20        = 300;
