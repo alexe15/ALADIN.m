@@ -19,4 +19,4 @@ The output `sol` is a struct with the following entries.
 | `x` | `vector` | local optimal solution | 
 | `lam_g` | `vector` | Lagrange multiplier of equality constraints |
 | `lam_x` | `vector` | Lagrange multiplier of lower/upper bounds on state $x$ |
-~~| `pars` | `struct` or `empty` | if applicable, parameter values that need to be returned~~ probably not needed
+| ~~`pars`~~ | ~~`struct` or `empty`~~ | ~~if applicable, parameter values that need to be returned~~ probably not needed
