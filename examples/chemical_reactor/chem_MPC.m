@@ -114,21 +114,20 @@ chem.lam0 = ones(size(AA{1},1),1);
 
 
 % initialize the options for ALADIN
-rho = 1e3;
-mu = 1e4;
-maxit = 30;
-term_eps = 0; % no termination criterion, stop after maxit
-
-opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
+opts.rho = 1e3;
+opts.mu = 1e4;
+opts.maxit = 50;
+opts.term_eps = 0; % no termination criterion, stop after maxit
 opts.plot = 'false';
+opts.reuse = 'true';
 
 % solve with ALADIN
 sol_ALADIN{1}   = run_ALADIN(chem,opts);
-chem.nnlp       = sol_ALADIN{1}.problemForm.nnlp;
-chem.sens       = sol_ALADIN{1}.problemForm.sens;
-chem.locFunsCas = sol_ALADIN{1}.problemForm.locFunsCas;
-chem.gBounds    = sol_ALADIN{1}.problemForm.gBounds;
-chem.Mfun       = sol_ALADIN{1}.problemForm.Mfun;
+% reuse problem formulation 
+fNames = fieldnames(sol_ALADIN{1}.problemForm);
+for j = 1:length(fNames)
+   chem.(fNames{j}) = sol_ALADIN{1}.problemForm.(fNames{j});
+end
 
 Xopt = vertcat(x0{:});
 Uopt = [];
@@ -150,7 +149,7 @@ Uopt_last = [sol_ALADIN{Nmpc}.xxOpt{1}(Nunit*N*4+1);
              sol_ALADIN{Nmpc}.xxOpt{2}(Nunit*N*4+1);
              sol_ALADIN{Nmpc}.xxOpt{3}(Nunit*N*4+1)];
 
-Uopt = [Uopt,Uopt_last]
+Uopt = [Uopt,Uopt_last];
 
 plotresults([Xopt;Uopt])
 

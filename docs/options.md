@@ -1,5 +1,8 @@
 # Options
-ALADIN-M can be adjusted and run with the different variables and options listed below.
+ALADIN-$\alpha$ can be adjusted and run with the different variables and options listed below.
+
+
+
 
 
 **Basic options**
@@ -85,7 +88,7 @@ $$
 | rhoUpdate        |1.1                   |double > 0   |
 | rhoMax           |1e8                   |double > 0   |
 
-
+     
 **Dynamic $\Sigma$**
 
 The second parameter relevant for the **Parallelizable Step** is the scaling matrix $\Sigma$. During the first iteration, $\Sigma$ equals the identity matrix. When the alternative option 'dyn' was selected, in each step the it is checked whether the step sizes for all variables decrease. In case that a step size is not decreasing in a sufficient manner, $\Sigma$ is changed dynamically to increase the negative impact of the large step size on the objective function in the parallel step.
@@ -186,3 +189,8 @@ The parallelizable step from the ALADIN Algorithm can be executed in the paralle
 
 
 ## Bilevel Options
+
+
+
+!!! warning "Parameter combinations"
+    __Note that ss ALADIN-$\alpha$ is still in a prototypical phase of development, it is not guaranteed that *all* combinations of options work. We tried to make ALADIN-$\alpha$ as stable as possible running tests with a high code coverage, but including all option combinations was not possible__
