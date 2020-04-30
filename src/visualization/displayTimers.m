@@ -12,7 +12,7 @@ p.reg  =  round(timers.RegTotTime/timers.iterTime*100,decP);
 
 
 disp(['                                                           '])
-disp(['   -----------------   ALADIN-M timing   ------------------'])
+disp(['   ---------------   ALADIN-alpha timing   ----------------'])
 disp(['                       t[s]        %tot         %iter'])
 fprintf('   Tot time:......:    %-11.1f %-11.1f  %-11.1f\n',timers.totTime,[],[]);
 fprintf('   Prob setup:....:    %-11.1f %-11.1f  %-11.1f\n',timers.setupT,p.setup,[] );
