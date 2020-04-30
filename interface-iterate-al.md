@@ -76,11 +76,11 @@ Each of the $N_{\text{regions}}$ entries of the cell array `dims` is a struct wi
 
 The struct `sens` has the following fields.
 
-| Name | Type | Element type | #Entries | Meaning |
-| --- | --- | --- | --- | --- |
-| `gg` | `cell array` | `function handle` | $N_{\text{regions}}$ | local gradients |
-| `JJac` | `cell array` | `function handle` | $N_{\text{regions}}$ | local Jacobians | 
-| `HH` | `cell array` | `function handle` | $N_{\text{regions}}$ | local Hessians |
+| Name | Type | Element type | #Entries | Meaning | Comment |
+| --- | --- | --- | --- | --- | --- |
+| `gg` | `cell array` | `function handle` | $N_{\text{regions}}$ | local gradients | |
+| `JJac` | `cell array` | `function handle` | $N_{\text{regions}}$ | local Jacobians | |
+| `HH` | `cell array` | `function handle` | $N_{\text{regions}}$ | local Hessians | might be replaced by `ggL` (gradient of the Lagrangian) for BFGS|
 
 ## `nnlp`
 
