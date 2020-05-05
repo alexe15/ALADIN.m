@@ -28,7 +28,7 @@ for i=1:NsubSys
         pars = [];
         funs = sProb.locFuns;
         sens = sProb.sens;
-        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i});   
+        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});   
     elseif strcmp(solver, 'Casadi+Ipopt')
         assert(isfield(sProb, 'locFunsCas'), 'locFunsCas field is missing')
         nlp_reference = build_nlp_reference(sProb.xxCas{i},...
@@ -79,13 +79,27 @@ function res = build_nlp_with_casadi(x, z, rho, lambda, Sigma, pars, nlp, lbx, u
     res.pars.lam_x = res.lam_x;
 end
 
-function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx)
+function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx, Hessian)
     opts = optimoptions('fmincon');
     opts.Algorithm = 'interior-point';
     opts.CheckGradients = false;
     opts.SpecifyConstraintGradient = true;
     opts.SpecifyObjectiveGradient = true;
     opts.Display = 'iter';
+    opts.HessFcn = @(x,lambda)(Hessian(x) + rho*Sigma);
+    
+    % select Hessian approximation
+    if isempty(g(x0))&&isempty(h(x0))&& ~isempty(Hessian(x0))
+        % unconstrained problem and Hessian is computed by hand
+        opts.HessFcn = @(x,lambda)(Hessian(x,lambda) + rho*Sigma);
+    else
+        % switch to limited memory BFGS when large-scale opt
+        if numel(x0)<100
+            opts.HessianApproximation = 'bfgs';
+        else
+            opts.HessianApproximation = 'lbfgs';
+        end
+    end
     cost = @(x)build_cost_function(x, f(x), dfdx(x), lambda, A, rho, z, Sigma);
     nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
     [xopt, fval, flag, out, multiplier] = fmincon(cost, x0, [], [], [], [], lbx, ubx, nonlcon, opts);
