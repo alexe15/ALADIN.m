@@ -86,10 +86,9 @@ function res = build_local_NLP(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, 
     opts.SpecifyConstraintGradient = true;
     opts.SpecifyObjectiveGradient = true;
     opts.Display = 'iter';
-    opts.HessFcn = @(x,lambda)(Hessian(x) + rho*Sigma);
     
     % select Hessian approximation
-    if isempty(g(x0))&&isempty(h(x0))&& ~isempty(Hessian(x0))
+    if isempty(g(x0)) && isempty(h(x0))&& ~isempty(Hessian(x0))
         % unconstrained problem and Hessian is computed by hand
         opts.HessFcn = @(x,lambda)(Hessian(x,lambda) + rho*Sigma);
     else
