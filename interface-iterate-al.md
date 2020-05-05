@@ -26,7 +26,7 @@ sProb =
          AA: {3×1 cell}
           b: [12×1 double]
        lam0: [12×1 double]
-       pars: [1×1 struct]
+       specs: [1×1 struct]
        Mfun: @(x)[]
 
 ```
@@ -42,7 +42,7 @@ sProb =
 | `AA`| `cell array` | `matrix` | $N_{\text{regions}}$ | consensus matrices |
 | `b`| `vector` | - | - | right-hand side of consensus constraints |
 | `lam0` | `vector` | - | - | initial conditions for multipliers for consensus constraints |
-| `pars` | `struct` or empty | - | - | contains additional information for Aladin such as $\Sigma$ matrices or $\rho$ values, for instance. |
+| `specs` | `struct` or empty | - | - | contains additional information for Aladin such as $\Sigma$ matrices or $\rho$ values, for instance. |
 | `Mfun` | `function handle` | - | - | merit function |
 
 
@@ -89,7 +89,7 @@ Each of the $N_{\text{regions}}$ entries of the cell array `nnlp` is a struct wi
 | --- | --- | ---  |
 | `name` | `string` | name of NLP solver | 
 | `solve_nlp` | `function handle` | handle to NLP solver, see [here](interface-solve-nlp.md) |
-| `pars` | `struct` or `empty` | parameters for NLP solver (if applicable) |
+| `specs` | `struct` or `empty` | parameters for NLP solver (if applicable) |
 
 
 
