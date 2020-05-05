@@ -1,4 +1,4 @@
-site_name: ALADIN-M
+site_name: ALADIN-ALPHA
 site_url: https://alexe15.github.io/ALADIN.m/
 site_description: Project documentation ALADIN-M
 site_author: Alexander Engelmann
@@ -8,24 +8,32 @@ repo_name: 'alexe15/ALADIN.m'
 repo_url: https://github.com/alexe15/ALADIN.m
 edit_uri: ""
 
-theme:
-    name: readthedocs
-    highlightjs: true
-    hljs_languages:
-        - matlab
-    navigation_depth: 1
 
+
+theme:
+    name: material
+    highlightjs: true
+    hljs_languages: matlab
+    navigation_depth: 1
+    features:
+      - tabs
+      - instant
+    palette:
+      primary: blue grey
+      accent: indigo
+#    font:
+#      text: Ubuntu
+#      code: Ubuntu Mono
 nav:
-  - ALADIN-M:
-     - Getting Started: index.md
-     - The Algorithm: ALADIN.md
+  - Getting Started: index.md
+  - The Algorithm: ALADIN.md
+  - Code Structure: codeStruct.md
+  - Options: options.md
   - Application Examples:
-     - Parallel Computing: ParallelExample.md
-     - Distributed MPC: robotEx.md
-     - Reducing Communication: redComm.md
-  - Further Information:
-     - Code Structure: codeStruct.md
-     - Options: options.md
+    - Parallel Computing: ParallelExample.md
+    - Distributed MPC: robotEx.md
+    - Reducing Communication: redComm.md
+  - Publications: furtherReading.md
 
 markdown_extensions:
  # - codehilite
@@ -34,11 +42,14 @@ markdown_extensions:
   - tables
   - toc
   - admonition
- # - codehilite:
- #     linenums: True
+  - codehilite:
+      linenums: True
 
 plugins:
-#  - search
+  - search
+  - awesome-pages:
+        collapse_single_pages: true
+
 #  - markdownmermaid
       
   
@@ -47,3 +58,7 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML
   - https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js
 
+  
+extra_css:
+  - css/extra.css
+  

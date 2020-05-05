@@ -116,13 +116,14 @@ chem.lam0 = ones(size(AA{1},1),1);
 % initialize the options for ALADIN
 opts.rho = 1e3;
 opts.mu = 1e4;
-opts.maxit = 50;
+opts.maxiter = 50;
 opts.term_eps = 0; % no termination criterion, stop after maxit
 opts.plot = 'false';
 opts.reuse = 'true';
 
 % solve with ALADIN
 sol_ALADIN{1}   = run_ALADIN(chem,opts);
+save('MPC.mat','chem','opts','x0','Qs','Nunit','N')
 % reuse problem formulation 
 fNames = fieldnames(sol_ALADIN{1}.problemForm);
 for j = 1:length(fNames)
@@ -134,7 +135,7 @@ Uopt = [];
 for i = 2:Nmpc
     chem.zz0 = sol_ALADIN{i-1}.xxOpt;
     Xopti = [];
-    Uopti = []
+    Uopti = [];
     for j = 1:Nunit
         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
         Xopti = [Xopti; xx0{j}];

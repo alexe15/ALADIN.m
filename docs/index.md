@@ -1,19 +1,29 @@
-# ALADIN-M 
-## A toolbox for distributed non-convex optimization
+# ALADIN-$\alpha$ 
 
-ALADIN-M is a bare-bone implementation of the ALADIN algorithm with extensions including a set of application examples from different engineering fields. ALADIN-M solves problem of the form 
+ALADIN-$\alpha$ is a rapid-prototyping toolbox for *distributed* and *decentralized* non-convex optimization.
+ALADIN-$\alpha$ provides an implementation of the *Augmented Lagrangian Alternating Direction Inexact Newton (ALADIN)* algorithm and the Alternating Direction of Multipliers Method (ADMM) with a unified interface.
+Moreover, a bi-level ALADIN varinat is included in ALADIN-$\alpha$ allowing for *decentralized* non-convex optimization.
+Application examples from various fields highlight the broad applicability of ALADIN-$\alpha$.
+
+
+ALADIN-M solves problem of the form 
 
 $$
 \begin{aligned} 
-&\min_{x_1,\dots,x_R} && \sum_{i\in \mathcal{R}} f_i(x_i) \\
-&\;\;\text{subject to}&&g_{i}(x_i,p_i) = 0 \quad  \mid \kappa_i,  &\forall i \in \mathcal{R}, \\
-&&&h_{i}(x_i) \leq 0 \quad \;\, \mid \gamma_i,  &\forall i \in \mathcal{R}, \\
-&&&\underline{x}_i \leq x_i \leq  \overline{x}_i\;\, \mid\eta_i,  &\forall i \in \mathcal{R}, \\
-&&&\sum_{i\in \mathcal{R}}A_i x_i=0\;\mid\lambda.
+&\min_{x_1,\dots,x_{n_s}} && \sum_{i\in \mathcal{S}} f_i(x_i) \\
+&\;\;\text{subject to}&&g_{i}(x_i,p_i) = 0 \quad  &&\mid \kappa_i,  &\forall i \in \mathcal{R}, \\
+&&&h_{i}(x_i) \leq 0 \quad \;\,&& \mid \gamma_i,  &\forall i \in \mathcal{R}, \\
+&&&\underline{x}_i \leq x_i \leq  \overline{x}_i\;\,&& \mid\eta_i,  &\forall i \in \mathcal{R}, \\
+&&&\sum_{i\in \mathcal{S}}A_i x_i=0\;&&\mid\lambda.
 \end{aligned}
 $$
 
 in a distributed fashion.
+
+
+!!! note "Eearly-stage version of ALADIN-$\alpha$"
+    __Note that ALADIN-$\alpha$ is still in a prototypical phase of development.__
+
 
 ## An example
 
@@ -94,32 +104,12 @@ The resulting solver console output is shown next.
 ## How to install
 Clone `https://github.com/alexe15/ALADIN.m` and add `/ALADIN.m` to your MATLAB path.
 
-### Requirements
+## Requirements
 - MATLAB
 - [CasADi](https://web.casadi.org/get/) 
 - MATLAB symbolic toolbox (only for examples)
 
 The current version is tested with MATLAB R2019b and [CasADi](https://web.casadi.org/get/)  3.5.1.
-
-
-
-#### References
-###### Algorithmic Details
-[1] [Houska, B., Frasch, J., & Diehl, M. (2016). An augmented Lagrangian based algorithm for distributed nonconvex optimization. SIAM Journal on Optimization, 26(2), 1101-1127.](https://epubs.siam.org/doi/abs/10.1137/140975991) 
-
-[2] [Engelmann, A., Jiang, Y., Houska, B., & Faulwasser, T. (2019). Decomposition of non-convex optimization via bi-level distributed ALADIN. arXiv preprint arXiv:1903.11280.](https://arxiv.org/abs/1903.11280) 
-
-###### Application to power systems
-
-[3] [Engelmann, A., Jiang, Y., Mühlpfordt, T., Houska, B., & Faulwasser, T. (2018). Toward distributed OPF using ALADIN. IEEE Transactions on Power Systems, 34(1), 584-594.](https://ieeexplore.ieee.org/abstract/document/8450020) 
-
-
-[4] [Engelmann, A., Mühlpfordt, T., Jiang, Y., Houska, B., & Faulwasser, T. (2017). Distributed AC optimal power flow using ALADIN. IFAC-PapersOnLine, 50(1), 5536-5541.](https://www.sciencedirect.com/science/article/pii/S2405896317315823) 
-
-[5] [Du, X., Engelmann, A., Jiang, Y., Faulwasser, T., & Houska, B. (2019). Distributed State Estimation for AC Power Systems using Gauss-Newton ALADIN. arXiv preprint arXiv:1903.08956.](https://arxiv.org/abs/1903.08956) 
-
-###### Application to  Traffic engineering
-###### Application to Optimal control
 
 
 

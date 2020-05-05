@@ -93,7 +93,6 @@ iter.stepSizes.rho     = opts.rho0;
 
 if strcmp(opts.alg, 'ALADIN')
     iter.stepSizes.mu      = opts.mu0;
+    iter.stepSizes.alpha   = opts.stepSize;
 end
-
-iter.stepSizes.alpha   = opts.stepSize;
 

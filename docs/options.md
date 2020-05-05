@@ -1,27 +1,34 @@
 # Options
-ALADIN-M can be adjusted and run with the different variables and options listed below.
+ALADIN-$\alpha$ can be adjusted and run with the different variables and options listed below.
+
+
+
+
 
 **Basic options**
+
 | ALADIN option    | default values       | alternative |
 | -------------:   |----------------------|------------ |
 | rho0             |1e2                   |double > 0   |
 | rhoUpdate        |1.1                   |double > 0   |
 | rhoMax           |1e8                   |double > 0   |
-| Sig              |'const'              | 'dyn'       |
-| lamInit          |'false'              | 'true'     |
-| term_eps         |0                    | double > 0          |
-| maxiter          |30                   | integer > 0 |
+| Sig              |'const'               | 'dyn'       |
+| lamInit          |'false'               | 'true'      |
+| term_eps         |0                     | double > 0  |
+| maxiter          |30                    | integer > 0 |
 | mu0              |1e3                   | double > 0  |
 | muUpdate         |2                     | double > 0  |
 | muMax            |2*1e6                 | double > 0  |
-| solveQP        |'MA57'                 | 'ipopt', $\text{ }$ 'pinv', $\text{ }$'linsolve', $\text{ }$'sparseBs', $\text{ }$'MOSEK',$\text{ }$ 'quadprog'|
-| loc Sol          |'MA57'               | 'ipopt', $\text{ }$ 'sqpmethod'|
-| reg              |'true'               | 'false'     |
-| regParam         |1e-4                 | double > 0  |
-| actMargin        |-1e-6                | double < 0 |
-| plot             |'true'               | 'false'       |
+| solveQP          |'MA57'                | 'ipopt', 'pinv', 'linsolve', 'sparseBs', 'MOSEK', 'quadprog'|
+| loc Sol          |'MA57'                | 'ipopt','sqpmethod'|
+| reg              |'true'                | 'false'     |
+| regParam         |1e-4                  | double > 0  |
+| actMargin        |-1e-6                 | double < 0  |
+| plot             |'true'                | 'false'     |
+
 
 **Extensions**
+
 | ALADIN option    | default values       | alternative |
 | -------------:   |----------------------|------------ |
 | slack            |   'standard'         | 'redSpace'  |
@@ -33,18 +40,21 @@ ALADIN-M can be adjusted and run with the different variables and options listed
 | reuse            |     'false'          |  'true'     |
 | commCount        |     'false'          |  'true'     |
 
+
 **Bi-Level options**
+
 | ALADIN option    | default values       | alternative |
 | -------------:   |----------------------|------------ |
-| innnerAlg        | 'none'               | 'D-CG', $\text{ }$ 'D-ADMM'             |
+| innnerAlg        | 'none'               | 'D-CG', 'D-ADMM'             |
 | rhoADM           | 2e-2                  |             |
 | warmStart        | 'true'                | 'false'     |
 | innerIter        |  200                  | integer > 0 |
 
 
-<!----**Parameter choices for initialization**
+**Parameter choices for initialization**
 
 During the initialization process, the options for the parameters $\Sigma, \rho 0, \mu 0$ and $\varepsilon$ are of relevance. The default settings are given by 
+
 | ALADIN option    | default values       | alternatives |
 | -------------:   |----------------------|--------------|
 | Sig              |'const'               |     'dny'        |
@@ -53,7 +63,7 @@ During the initialization process, the options for the parameters $\Sigma, \rho 
 | term_eps         |0                     |     $\geq 0$     |
 
  The parameter $\texttt{rho0}$ represents the penalization of the distance (augmented step size) $\left|x_i-z_i^k\right|_{\Sigma_i}^2$ during the first parallel step. The option $\texttt{Sig}$ determines the augemented norm. In the first step, $\texttt{Sig}$ is the identity matrix, thus the norm $|x_i - z_i|$ is evaluated. Changing sigma leads to penalization of the distance $|\Sigma_i(x_i - z_i)| = |x_i - z_i|_{\Sigma_i}$.
----->
+
 
 
 First, we recall, that the algorithm consists of several stepts, which are [see here](ALADIN.md). Keeping the algorithm in mind, we can now focus on the options that can be selected.
@@ -69,16 +79,20 @@ $$
 \text{s.t.}\quad & g_i(x_i) = 0, \; \;h_i(x_i)\leq 0,\; \;\; \underline{x_i} \leq x_i \leq  \overline{x}_i.
 \end{aligned}
 $$
+
  need to be solved for fixed $z_i$. The parameter $\rho^k$ represents the penalization of the distance $\left|x_i-z_i^k\right|_{\Sigma_i}^2$. As long as $\texttt{rho}$ is smaller than $\texttt{rhoMax}$, it is increased by factor 1.1.
+
 | ALADIN option    | default values       | alternative |
 | -------------:   |----------------------|------------ |
 | rho0             |1e2                   |double > 0   |
 | rhoUpdate        |1.1                   |double > 0   |
 | rhoMax           |1e8                   |double > 0   |
 
+     
 **Dynamic $\Sigma$**
 
 The second parameter relevant for the **Parallelizable Step** is the scaling matrix $\Sigma$. During the first iteration, $\Sigma$ equals the identity matrix. When the alternative option 'dyn' was selected, in each step the it is checked whether the step sizes for all variables decrease. In case that a step size is not decreasing in a sufficient manner, $\Sigma$ is changed dynamically to increase the negative impact of the large step size on the objective function in the parallel step.
+
 | ALADIN option    | default value       | alternative |
 | -------------:   |---------------------| -------     |
 | Sig              |'const'              | 'dyn'       |
@@ -114,6 +128,7 @@ C^k_i \Delta x_i &= 0                                     \qquad   \forall i\in 
 \end{aligned}
 \end{aligned}
 $$ 
+
 has to be executed. Setting $s:= \sum A_ix_i - b \overset{!}{=} 0$, the parameter $\mu$ is similarly to the parameter $\rho$ from above a penalty parameter. It can be set in the same manner as $\rho$.  
 
 | ALADIN option    | default values       | alternative |
@@ -127,10 +142,13 @@ has to be executed. Setting $s:= \sum A_ix_i - b \overset{!}{=} 0$, the paramete
 To solve the two optimization problems in each iteration step, the desired solvers can be indicated via setting the option opts.solveQP and opts.locSol:
 
 **1. QP Solver**
+
 | ALADIN option    | default value       | alternatives |
 | -------------:   |---------------------| ------------ |
 | solveQP        |'MA57'                 | 'ipopt', 'pinv', 'linsolve', 'sparseBs', 'MOSEK', 'quadprog'|
+
 **2. Local Solver**
+
 | ALADIN option    | default value       | alternatives        |
 | -------------:   |---------------------| ------------------- |
 | locSol          |'MA57'               | 'ipopt', 'sqpmethod'|
@@ -138,6 +156,7 @@ To solve the two optimization problems in each iteration step, the desired solve
 **Regularization Parameters**
 
 Sometimes the Hessian matrices of the given problems do not have full rank, such that some important matrix operations are not readily available. Remedy can be obtained by regularization approaches, that increase the rank of the matrix. The option can be set as follows:
+
 | ALADIN option    | default value       | alternative |
 | -------------:   |---------------------| -------     |
 | reg              |'true'               | 'false'     |
@@ -146,6 +165,7 @@ Sometimes the Hessian matrices of the given problems do not have full rank, such
 **Active Margin Detection**
 
 ALADIN, beeing a solver for constraint optimization, needs an active margin detection. The tolerance is handed over by the option $\texttt{actMargin}$
+
 | ALADIN option    | default value        |
 | -------------:   |----------------------|
 | actMargin        |-1e-6                 |
@@ -153,6 +173,7 @@ ALADIN, beeing a solver for constraint optimization, needs an active margin dete
 **Plots**
 
 Plotting results is nice, because one can immediately see the results. However, push up windows spreading plots over your screen can be annoying, so we included an option to deactivate plots :)
+
 | ALADIN option    | default value       | alternative |
 | -------------:   |---------------------| -------     |
 | plot             |'true'               | 'false'       |
@@ -168,3 +189,8 @@ The parallelizable step from the ALADIN Algorithm can be executed in the paralle
 
 
 ## Bilevel Options
+
+
+
+!!! warning "Parameter combinations"
+    __Note that ss ALADIN-$\alpha$ is still in a prototypical phase of development, it is not guaranteed that *all* combinations of options work. We tried to make ALADIN-$\alpha$ as stable as possible running tests with a high code coverage, but including all option combinations was not possible__

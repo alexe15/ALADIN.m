@@ -3,7 +3,7 @@ function [ ] = dispSummary( neddedIter, opts, iter)
 %   Detailed explanation goes here
 disp(['                                                                ']);
 disp(['   ========================================================      ']);
-disp(['   ==               This is ALADIN-M v0.1                ==      ']);
+disp(['   ==             This is ALADIN-alpha v0.1              ==      ']);
 disp(['   ========================================================      ']);
 %disp(['Current iteration: ', num2str(iterationIndex)]);
 %disp(['                                                                ']);

@@ -10,7 +10,7 @@ $$
 \end{aligned}
 $$
 
-Here, $z_i=(x_i\; y_i\; \theta_i)^\top$ is the state of each robot $i \in \mathcal{R}$, $x_i$ and $y_i$ describe the robots position in the $x$-$y$-plane, and $\theta_i$ is the yaw angle with respect to the $x$-axis (cf. figure below). Note that the initial condition can here be interpreted as the parameter $p_i$ in the [format suitable for ALADIN-M](index.md). The robots' dynamics is given by 
+Here, $z_i=(x_i\; y_i\; \theta_i)^\top$ is the state of each robot $i \in \mathcal{R}$, $x_i$ and $y_i$ describe the robots position in the $x$-$y$-plane, and $\theta_i$ is the yaw angle with respect to the $x$-axis (cf. figure below). Note that the initial condition can here be interpreted as the parameter $p_i$ in the [format suitable for ALADIN-$\alpha$](index.md). The robots' dynamics is given by 
 $$
 \dot x_i= f_i(x_i,u_i) :=
 \begin{pmatrix}
@@ -36,7 +36,7 @@ ode = @(x,u) [ u(1)*cos(x(3));
                u(1)*sin(x(3));
                u(2)];   
 ```
-Next, we prepare ourself for setting ob the robots' OCPs. We construct our problem using CasADi. Specifically, we create cells `XX` and `UU` containing the CasADi symbolic variables for the states $z$ and the inputs $u$ over the horizon-length $T$. Moreover, we introduce a cell with state copies `ZZZ` containing the state information of neighboring robots in order to allow each robot to fulfill the distance inequality constraint ${\|(z, y)_i^\top(t)-(z, y)_j^\top(t)\|_2^2}\geq d^2$. Note that we will enforce the copied and the original state to coincide later by the consensus constraint $\sum_{i\in \mathcal{R}} A_ix_i=b$ in the [ALADIN-M format](index.md).
+Next, we prepare ourself for setting ob the robots' OCPs. We construct our problem using CasADi. Specifically, we create cells `XX` and `UU` containing the CasADi symbolic variables for the states $z$ and the inputs $u$ over the horizon-length $T$. Moreover, we introduce a cell with state copies `ZZZ` containing the state information of neighboring robots in order to allow each robot to fulfill the distance inequality constraint ${\|(z, y)_i^\top(t)-(z, y)_j^\top(t)\|_2^2}\geq d^2$. Note that we will enforce the copied and the original state to coincide later by the consensus constraint $\sum_{i\in \mathcal{R}} A_ix_i=b$ in the [ALADIN-$\alpha$ format](index.md).
 ```matlab
 %% set up OCP
 import casadi.*
@@ -134,8 +134,8 @@ for i=1:Nrobot
 end
 ```
 
-## Distributed MPC with ALADIN-M
-After setting up some options, the discretized OCP can be solved with ALADIN-M. Here we do that within an Model Predictive Control loop, where we use the `reuse` option of ALADIN-M in order to to construct the derivatives and local solvers only once. Note that the initial position of the robots changes in each iteration, cf. [2] for more information on MPC.
+## Distributed MPC with ALADIN-$\alpha$
+After setting up some options, the discretized OCP can be solved with ALADIN-$\alpha$. Here we do that within an Model Predictive Control loop, where we use the `reuse` option of ALADIN-$\alpha$ in order to to construct the derivatives and local solvers only once. Note that the initial position of the robots changes in each iteration, cf. [2] for more information on MPC.
 
 ```matlab
 rob.lam0      = 0*ones(size(AA{1},1),1);
@@ -164,7 +164,7 @@ for i = 1:Nmpc
 end
 ```
 
-To see the advantage of distributed parametric programming in combination with the `reuse` option, we can have a look at the computation times. In the first iteration, ALADIN-M needs `.8` seconds for the problem setup and `.7` seconds for iterating. After the second iteration however, the time for problem setup will be `0` and also the iteration time is halfed on my computer to `.3` seconds due to the fact that also the previous solution is used as an initial guess for ALADIN-M. This shows how the `reuse` option of ALADIN-M can be used to make distributed MPC more efficient. 
+To see the advantage of distributed parametric programming in combination with the `reuse` option, we can have a look at the computation times. In the first iteration, ALADIN-$\alpha$ needs `.8` seconds for the problem setup and `.7` seconds for iterating. After the second iteration however, the time for problem setup will be `0` and also the iteration time is halfed on my computer to `.3` seconds due to the fact that also the previous solution is used as an initial guess for ALADIN-$\alpha$. This shows how the `reuse` option of ALADIN-$\alpha$ can be used to make distributed MPC more efficient. 
 
 The resulting closed-loop trajectories are shown in the following figure. Not that the distance constraint ${\|(z, y)_i^\top(t)-(z, y)_j^\top(t)\|_2^2}\geq d^2$ is satisfied while the robots exchange their position. 
 ![Robot crossing](./figures/robCross.png)
