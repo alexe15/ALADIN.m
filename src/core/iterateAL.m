@@ -1,5 +1,10 @@
 function [ sol, timers ] = iterateAL( sProb, opts, timers )
 %ITERATEAL Summary of this function goes here
+
+% verify that sProb is handed over in a valid formate to use modularized
+% version of ALADIN.
+checksProbFormate(sProb);
+
 NsubSys = length(sProb.AA);
 Ncons   = size(sProb.AA{1},1);
 initializeVariables;
