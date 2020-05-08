@@ -20,10 +20,10 @@ function [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts
         tic
         fprintf('\nEvaluating sensitivities in region %i\n', j);
         [loc, iter, Jac] = evaluate_sensitivities(sProb, loc, iter, opts, j);
-        timers.sensEvalT        = timers.sensEvalT + toc;
+        timers.sensEvalT = timers.sensEvalT + toc;
 
-        fprintf('\nComputing reduced QP in region %i\n', j);
-        [loc, iter, timers] = compute_reduced_qp(sProb, loc, iter, opts, timers, Jac, j);
+        fprintf('\nModifying Hessian in region %i\n', j);
+        [loc, iter, timers] = modify_hessian(sProb, loc, iter, opts, timers, Jac, j);
     end 
 
     loc = save_for_bfgs(loc, opts);
@@ -143,7 +143,7 @@ function [loc, iter, Jac] = evaluate_sensitivities(prob, loc, iter, opts, j)
     [loc, Jac] = evaluate_jacobian(prob, loc, opts, j);
 end
 
-function [loc, iter, timers] = compute_reduced_qp(prob, loc, iter, opts, timers, Jac, j)
+function [loc, iter, timers] = modify_hessian(prob, loc, iter, opts, timers, Jac, j)
     % for reduced-space method, compute reduced QP
     if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
 
