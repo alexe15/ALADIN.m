@@ -1,8 +1,5 @@
 # Options
-ALADIN-$\alpha$ can be adjusted and run with the different variables and options listed below.
-
-
-
+ALADIN-$\alpha$ comes with several ALADIN variants. These variants can be activated by setting options. All options with possible values can be found in `loadDefOpts.m`. Here, we give a little more detailled description of these options. 
 
 
 **Basic options**

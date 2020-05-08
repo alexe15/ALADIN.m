@@ -30,9 +30,9 @@ nav:
   - Code Structure: codeStruct.md
   - Options: options.md
   - Application Examples:
-    - Parallel Computing: ParallelExample.md
     - Distributed MPC: robotEx.md
     - Reducing Communication: redComm.md
+    - Parallel Computing: ParallelExample.md
   - Publications: furtherReading.md
 
 markdown_extensions:
