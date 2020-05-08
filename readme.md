@@ -1,4 +1,4 @@
-# ALADIN-$\alpha$
+# ALADIN-alpha
 ALADIN-$\alpha$ is a rapid-prototyping toolbox for *distributed* and *decentralized* non-convex optimization. ALADIN-$\alpha$ implements the *Augmented Lagrangian Alternating Direction Inexact Newton (ALADIN)* algorithm and the *Alternating Direction of Multipliers Method (ADMM)* with a unified interface. Moreover, bi-level ALADIN is included in ALADIN-$\alpha$ allowing for *decentralized* non-convex optimization. Application examples from various fields highlight the broad applicability of ALADIN-$\alpha$. A documentation can be found [here](https://alexe15.github.io/ALADIN.m/).
 
 
@@ -9,7 +9,7 @@ ALADIN-$\alpha$ is a rapid-prototyping toolbox for *distributed* and *decentrali
 
 
 ## Highlights
-ALADIN-$\alpha$ 
+ALADIN-alpha 
 - supports general partially separable NLPs;
 - comes with a bi-level ALADIN extension enabling decentralizes optimization;
 - provides a unified interface for ALADIN and ADMM and a centralized solver for direct comparison;
