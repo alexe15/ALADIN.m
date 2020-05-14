@@ -22,7 +22,7 @@ $h_i(x_i) = (\vert\vert\chi_i - \xi_i\vert\vert_2 - \bar{\eta_i})^2 - \bar{\sigm
 
 ### Implementation
 
-For the implementaiton, firstly the problem needs to be defined in a way that is compatible to the ALADIN solver. The definitions of variables and functions are executed in separate functions:
+For the implementaiton, firstly the problem needs to be defined in a way that is compatible to ALADIN-$\alpha$. The definitions of variables and functions are executed in separate functions:
 
 For the computation of $\eta_i$ and $\bar{\eta_i}$ the sensors are assumed to be equidistantly located in a circle, i.e.
 $$
@@ -82,21 +82,21 @@ $$A_1 = \begin{pmatrix} 0 & I \\
  \vdots & \vdots \\
  0 & 0 \\
  -I & 0
- \end{pmatrix}, \quad
+ \end{pmatrix}, \;
 A_2 = \begin{pmatrix} -I & 0 \\
  0 & I \\
  0 & 0 \\
  \vdots & \vdots \\
  0 & 0 \\
  0 & 0
- \end{pmatrix}, \quad
+ \end{pmatrix}, \;
 A_3 = \begin{pmatrix} 0 & 0 \\
  -I & 0 \\
  0 & I \\
  \vdots & \vdots \\
  0 & 0 \\
  0 & 0
- \end{pmatrix}, \quad \cdots \quad,  \text{ } \quad
+ \end{pmatrix}, \; \cdots \;,  \;
 A_N = \begin{pmatrix} 0 & 0 \\
  0 & 0 \\
  0 & 0 \\

@@ -6,7 +6,7 @@ Moreover, a bi-level ALADIN varinat is included in ALADIN-$\alpha$ allowing for 
 Application examples from various fields highlight the broad applicability of ALADIN-$\alpha$.
 
 
-ALADIN-M solves problem of the form 
+ALADIN-$\alpha$ solves problem of the form 
 
 $$
 \begin{aligned} 
