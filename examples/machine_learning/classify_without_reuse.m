@@ -37,7 +37,6 @@ for i = 1:N
     ML.zz0{i} = zeros(n,1);
     ML.p{i}   = [point(i,:)';class(i)];
     
-    SSig{i}   = eye(n);
 end
 
 ML.lam0 = 1*ones(size(ML.AA{1},1),1);
@@ -98,7 +97,6 @@ for i = 1:Nsubs
     points    = set((i-1)*cap + 1:cap, :);
     ML.p{i}   = reshape(points', [], 1);
     
-    SSig{i}   = eye(n*cap);
 end
 
 ML.lam0 = 1*ones(size(ML.AA{1},1),1);
