@@ -31,10 +31,10 @@ Here's an example how to use ALADIN-M. Let us consider an inequality-constrained
 
 $$
 	\begin{aligned}  
-&	\min_{y_1,y_2 \in \mathbb{R}^2}   2 \,(y_{11} - 1)^2 +   (y_{22} - 2)^2\\
-	\;\;\text{subject to} \;\;    &  1 - y_{11}\,y_{12} \leq 0, \quad 
-	 -1.5 + y_{21} y_{22} \leq 0, \\
-	 &(\,0 \;\; 1\, )\,y_1 \;\;+\; \;(\,-1 \;\; 0 \,)\,y_2 = 0,
+&	\min_{x \in \mathbb{R},y \in \mathbb{R}^2}   2 \,(x - 1)^2 +   (y(2) - 2)^2\\
+	\;\;\text{subject to} \;\;    &  - 1 - y(1)\,y(2) \leq 0, \quad 
+	 -1.5 + y(1) y(2) \leq 0, \\
+	 &(\, 1\, )\,x \;\;+\; \;(\,-1 \;\; 0 \,)\,y = 0,
 	\end{aligned}
 $$
 
@@ -42,18 +42,16 @@ which is in the above form. In MATLAB code, this looks as follows:
 
 ``` matlab
 % define local objective functions
-f1 = @(x) 2 * ( x(1) - 1)^2;
+f1 = @(x) 2 * ( x - 1)^2;
 f2 = @(y) (y(2) - 2)^2;
 
 % local nonlinear inequality constraints
-h1 = @(x) (1 - x(1) * x(2));
-h2 = @(y) (-1.5 + y(1) * y(2));
+h1 = @(x) [];
+h2 = @(y) [-1 -  y(1) * y(2) ;-1.5 + y(1) * y(2)];
 
 % coupling matrices
-A1  =   [ 1,  0;
-          0,  1];
-A2  =   [-1   0;
-          0, -1];
+A1  =    1;
+A2  =   [-1   0];
      
 % collect variables in sProb struct
 sProb.locFuns.ffi  = {f1, f2};
