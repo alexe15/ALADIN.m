@@ -40,8 +40,8 @@ for i=1:NsubSys
                                             rhoCas,...
                                             opts);
         pars = struct('lam_g0', [], 'lam_x0', []);
-        solve_nlp  = @(x, z, rho, lambda, Sigma, pars)build_nlp_with_casadi(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});
-   
+%         solve_nlp  = @(x, z, rho, lambda, Sigma, pars)build_nlp_with_casadi(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});
+        solve_nlp  = @(x, z, rho, lambda, Sigma, pars)build_nlp_with_casadi(x, z, rho, lambda, Sigma, pars, nlp_reference, sProb.llbx{i}, sProb.uubx{i}, gBounds.llb{i}, gBounds.uub{i});
     elseif strcmp(solver, 'worhp')
         pars = [];
         funs = sProb.locFuns;
@@ -120,7 +120,7 @@ function res = build_local_NLP_with_worhp(f, g, h, A, lambda, rho, z, Sigma, x0,
     grad = @(x)build_grad(x, dfdx(x), lambda, A, rho, z, Sigma);
     % unconstrained problem and Hessian is computed by hand
     Hess = @(x, mu, scale)(scale * Hessian(x,lambda) + scale * rho*Sigma);
-    [xopt, multiplier] = worhp_interface(cost,grad,[],[],Hess,x0',[],lbx',ubx',[],[]);
+    [xopt, multiplier] = worhp_interface(cost,grad,Hess,x0',lbx',ubx);
     res.x = xopt;
     res.lam_g = [];
     res.lam_x = multiplier;
