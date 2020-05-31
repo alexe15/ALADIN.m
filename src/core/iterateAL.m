@@ -46,6 +46,12 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
       %                                                 opts, iter, sProb );
         % expand again locally based on computed \lamda
         iter.ddelx              = expandLocally(iter.llam, iter.loc.cond);
+        
+        % update mu in classical since Del not yet included --> has tto be adapted
+        % to new structure
+        if iter.stepSizes.mu < opts.muMax
+            iter.stepSizes.mu = iter.stepSizes.mu * opts.muUpdate;
+        end
     end        
     timers.QPtotTime      = timers.QPtotTime + toc;   
    

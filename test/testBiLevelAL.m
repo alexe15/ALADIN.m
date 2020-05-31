@@ -19,7 +19,7 @@ sProb.uubx        = dOPF.ubx;
 opts.SSig         = dOPF.Sig;
 opts.plot         = 'true';
 opts.innerAlg     = 'none';
-opts.maxiter      = 30;
+opts.maxiter      = 15;
 
 % automatically update Delta scaling matrix for slacks
 opts.innerAlg     = 'D-CG';
@@ -53,11 +53,11 @@ sProb.uubx        = dOPF.ubx;
 opts.SSig         = dOPF.Sig;
 opts.plot         = 'true';
 opts.innerAlg     = 'none';
-opts.maxiter      = 30;
+opts.maxiter      = 15;
 
 % automatically update Delta scaling matrix for slacks
 opts.innerAlg     = 'D-ADMM';
-opts.innerIter    = 130;
+opts.innerIter    = 180;
 opts.Hess         = 'standard';
 
 % run ALADIN-M                       

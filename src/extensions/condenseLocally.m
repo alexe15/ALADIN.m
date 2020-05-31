@@ -37,10 +37,7 @@ for i=1:NsubSys
    
    rrhs{i}     = AAred{i}*HHredInv{i}*ggred{i};
    
-   
-   %AAx{i}      = sProb.AA{i}*iter.yy{i};   
-   % wrong version!!! 
- %  AAx{i}      = sProb.AA{i}*iter.loc.xx{i};   
+    
    
    % compute sets \mathcal C(i)
    cond.C{i} = find(~all(sProb.AA{i}==0,2));
@@ -73,6 +70,7 @@ for i=1:NsubSys
     hS{i}  = IC{i}*SSn{i}*IC{i}'; 
     hs{i}  = IC{i}*ssn{i}; 
 end
+
 
 cond.IC    = IC;
 cond.Icc   = Icc;
