@@ -25,6 +25,7 @@ nav:
      - Reducing Communication: redComm.md
   - Further Information:
      - Code Structure: codeStruct.md
+     - Interfaces & Options: interfacesOpts.md
 
 markdown_extensions:
   - codehilite

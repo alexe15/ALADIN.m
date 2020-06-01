@@ -38,7 +38,7 @@ end
 
 % initialization
 iter.yy              = sProb.zz0;
-iter.loc.xx              = sProb.zz0;
+iter.loc.xx          = sProb.zz0;
 iter.lam             = sProb.lam0;
 iter.delxs           = inf;
 

@@ -30,6 +30,7 @@ xlabel('k')
 ylabel('Working set changes')
 xlim([0 opts.maxiter]);
 %ylim([-size(hhi,2)-size(ggi,2) size(hhi,2)+size(ggi,2)]);
+ylim([0 50]);
 axis manual;
 grid on
 box on
