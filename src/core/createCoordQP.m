@@ -19,7 +19,7 @@ function [ HQP, gQP, AQP, bQP ] = createCoordQP( sProb, iter, opts )
         % full space method
         A        = [sProb.AA{:}];
 
-        rhsQP    = -A*vertcat(iter.loc.xx{:});     
+        rhsQP    = -A*vertcat(iter.loc.xx{:}) + sProb.b;     
 
         HQP      = blkdiag(iter.loc.sensEval.HHiEval{:});
 

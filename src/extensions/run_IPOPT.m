@@ -29,7 +29,7 @@ gCas = vertcat(ggCas{:});
 hCas = vertcat(hhCas{:});
 fCas = ones(1,NsubSys)*[ffCas{:}]';
 
-gCas  = [ gCas; A*xCas];
+gCas  = [ gCas; A*xCas - sProb.b];
 cCas  = [ gCas; hCas];
 
 nlp_opts.ipopt.print_level = 5;

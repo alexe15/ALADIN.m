@@ -19,7 +19,7 @@ iter.logg.lam(:,i)        = iter.lam;
 iter.logg.localStepS(:,i) = norm(full(x - yOld),inf);
 iter.logg.QPstepS(:,i)    = norm(full(y-x),inf);
 % iter.logg.Mfun       = [iter.logg.Mfun full(sProb.Mfun(y,iter.ls.muMeritMin*1.1))];
-iter.logg.consViol(:,i+1)   = norm([sProb.AA{:}]*x,inf);
+iter.logg.consViol(:,i+1)   = norm([sProb.AA{:}]*x - sProb.b,inf);
 
 
 %         logg.obj        = [logg.obj obj];

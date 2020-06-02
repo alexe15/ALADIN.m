@@ -64,7 +64,7 @@ for i=1:NsubSys
   
     % new local Schurs including slack
     SSn{i} = SS{i} + 1/iter.stepSizes.mu*IC{i}'*inv(GGam{i})*IC{i};
-    ssn{i} = rrhsNoSl{i} + 1/iter.stepSizes.mu*IC{i}'*inv(GGam{i})*IC{i}*iter.lam; 
+    ssn{i} = rrhsNoSl{i} + IC{i}'*inv(GGam{i})*IC{i}*(1/iter.stepSizes.mu*iter.lam - sProb.b); 
     
     % compute reduced Schur \hat S_i
     hS{i}  = IC{i}*SSn{i}*IC{i}'; 

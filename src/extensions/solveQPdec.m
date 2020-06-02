@@ -179,7 +179,7 @@ end
 % 
 
 
-% %% plotting
+%% plotting
 % s = zeros(Ncons,1);
 % S = zeros(Ncons);
 % for i=1:NsubSys
