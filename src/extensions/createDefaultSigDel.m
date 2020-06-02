@@ -10,7 +10,10 @@ for i=1:NsubSys
     end
 end
 
-Del = (1/opts.mu0)*eye(size(sProb.AA{1},1));
-
+if strcmp(opts.alg,'ALADIN')
+    Del = (1/opts.mu0)*eye(size(sProb.AA{1},1));
+else
+    Del = zeros(size(sProb.AA{1},1));
+end
 end
 

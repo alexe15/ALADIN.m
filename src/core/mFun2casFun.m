@@ -8,7 +8,7 @@ if ~isfield(sProb, 'p')
     for i=1:NsubSys
         % set up local variables
         nx        = length(sProb.zz0{i});
-        xxCas{i}  = opts.sym('x',nx,1);    
+        xxCas{i}  = opts.sym('x',nx,1);
 
         % local equality and inequality constraints
         locFunsCas.ggi{i}  = sProb.locFuns.ggi{i}(xxCas{i});
@@ -16,16 +16,17 @@ if ~isfield(sProb, 'p')
         locFunsCas.ffi{i}  = sProb.locFuns.ffi{i}(xxCas{i});
     end
 else
-    pCas = opts.sym('par', size(sProb.p));
     for i=1:NsubSys
+        pCas{i} = opts.sym(['par' num2str(i)],length(sProb.p{i}),1);
+        
         % set up local variables
         nx        = length(sProb.zz0{i});
         xxCas{i}  = opts.sym('x',nx,1);    
 
         % local equality and inequality constraints
-        locFunsCas.ggi{i}  = sProb.locFuns.ggi{i}([xxCas{i}; pCas]);
-        locFunsCas.hhi{i}  = sProb.locFuns.hhi{i}(xxCas{i});
-        locFunsCas.ffi{i}  = sProb.locFuns.ffi{i}(xxCas{i});
+        locFunsCas.ggi{i}  = sProb.locFuns.ggi{i}(xxCas{i}, pCas{i});
+        locFunsCas.hhi{i}  = sProb.locFuns.hhi{i}(xxCas{i}, pCas{i});
+        locFunsCas.ffi{i}  = sProb.locFuns.ffi{i}(xxCas{i}, pCas{i});
     end
     varargout{1} = pCas;
 end

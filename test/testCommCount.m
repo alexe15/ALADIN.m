@@ -24,32 +24,32 @@ opts.commCount    = 'true';
 opts.innerAlg     = 'none';
 opts.slack        = 'standard'; 
 opts.Hess         = 'standard';       
-res_ALADINs       = run_ALADINnew(sProb, opts);
+res_ALADINs       = run_ALADIN(sProb, opts);
 
 %% BFGS
 opts.Hess         = 'DBFGS';   % damped BFGS       
 opts.slack        = 'standard'; 
 opts.BFGSinit     = 'exact';   % with exact Hessian initialization
-res_ALADINbf      = run_ALADINnew(sProb, opts);
+res_ALADINbf      = run_ALADIN(sProb, opts);
 
 %% reduced-space method
 opts.slack        = 'redSpace'; 
 opts.Hess         = 'standard';    
-res_ALADINred     = run_ALADINnew(sProb, opts);
+res_ALADINred     = run_ALADIN(sProb, opts);
 
 %% bi-level ALADIN with D-CG
 opts.innerAlg     = 'D-CG';
 opts.innerIter    = 50;
 opts.Hess         = 'standard';
 opts.slack        = 'standard'; 
-res_ALADINcg      = run_ALADINnew(sProb, opts);
+res_ALADINcg      = run_ALADIN(sProb, opts);
 
 %% bi-level ALADIN with D-ADMM
 opts.innerAlg     = 'D-ADMM';
 opts.innerIter    = 130;
 opts.Hess         = 'standard';
 opts.slack        = 'standard'; 
-res_ALADINadm     = run_ALADINnew(sProb, opts);
+res_ALADINadm     = run_ALADIN(sProb, opts);
 
 
 

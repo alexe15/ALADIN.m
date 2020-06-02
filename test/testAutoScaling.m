@@ -26,7 +26,7 @@ opts.DelUp        = 'true';
 opts.Hess         = 'standard';
 
 % run ALADIN-M                       
-res_ALADIN = run_ALADINnew(sProb, opts);
+res_ALADIN = run_ALADIN(sProb, opts);
 
 % centralized solution
 res_IPOPT  = run_IPOPT(sProb);
@@ -43,7 +43,7 @@ opts.Hess         = 'standard';
 opts.maxiter      = 20;
 
 % solve with ALADIN
-sol_ALADIN = run_ALADINnew(chem, opts);
+sol_ALADIN = run_ALADIN(chem, opts);
 
 % centralized solution
 res_IPOPT  = run_IPOPT(chem);
@@ -77,7 +77,7 @@ opts.Sig          = 'dyn';
 opts.Hess         = 'standard';
 
 % run ALADIN-M                       
-res_ALADIN = run_ALADINnew(sProb, opts);
+res_ALADIN = run_ALADIN(sProb, opts);
 
 % centralized solution
 res_IPOPT  = run_IPOPT(sProb);
@@ -96,13 +96,13 @@ opts.Hess         = 'standard';
 opts.maxiter      = 50;
 
 % solve with ALADIN
-sol_ALADIN = run_ALADINnew(chem, opts);
+sol_ALADIN = run_ALADIN(chem, opts);
 
 % centralized solution
 res_IPOPT  = run_IPOPT(chem);
 
 % check whether primal solution is close enough to centralized one
-assert(norm(full(sol.x)-vertcat(sol_ALADIN.xxOpt{:}),inf) < 1e-6, 'Out of tolerance for local minimizer!')
+assert(norm(full(res_IPOPT.x)-vertcat(sol_ALADIN.xxOpt{:}),inf) < 1e-6, 'Out of tolerance for local minimizer!')
 
 
 

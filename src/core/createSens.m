@@ -18,8 +18,16 @@ for i=1:NsubSys
 
     
     % set up CasADi functions
-    sens.gg{i}   = Function(['g' num2str(i)],{sProb.xxCas{i}},{gradiCas});
-    sens.JJac{i} = Function(['Jac' num2str(i)],{sProb.xxCas{i}},{JJhiCas});
+    if ~isfield(sProb, 'p')
+    	sens.gg{i}   = Function(['g' num2str(i)],{sProb.xxCas{i}},{gradiCas});
+        sens.JJac{i} = Function(['Jac' num2str(i)],{sProb.xxCas{i}},{JJhiCas});
+    else
+        sens.gg{i}   = Function(['g' num2str(i)],{sProb.xxCas{i},sProb.pCas{i}},...
+                                        {gradiCas});
+        sens.JJac{i} = Function(['Jac' num2str(i)],{sProb.xxCas{i},sProb.pCas{i}},...
+                                        {JJhiCas});
+    end
+
 
     if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
         % gradient of Lagrangian for BFGS version
@@ -60,8 +68,13 @@ for i=1:NsubSys
                                                                sProb.xxCas{i});       
             end
         end
-        sens.HH{i}   = Function(['H' num2str(i)],{sProb.xxCas{i}, ... 
+        if ~isfield(sProb, 'p')
+            sens.HH{i}   = Function(['H' num2str(i)],{sProb.xxCas{i}, ... 
                                               kkappCas,sProb.rhoCas},{HHiCas}); 
+        else
+            sens.HH{i}   = Function(['H' num2str(i)],{sProb.xxCas{i},sProb.pCas{i}, ... 
+                                              kkappCas,sProb.rhoCas},{HHiCas}); 
+        end
     end
 end
 

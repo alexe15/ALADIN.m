@@ -13,7 +13,7 @@ end
 function testMainExample(testCase)
 
     run ../examples/example_main.m   
-    assert(full(norm(sol.x -vertcat(sol_ALADIN.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minimizer!')
+    assert(full(norm(xoptCtr.x -vertcat(sol_1.xxOpt{:}),inf)) < 1e-6, 'Out of tolerance for local minimizer!')
     
     close all;
 end
@@ -46,12 +46,3 @@ function testMishrasBirdExample(TestMishrasBird)
    close all;
 end
 
-
-%% Test Convex example and ADMM solver
-function testConvexExample(testConvexExample)
-
-    %% New example needed, old one was non-convex.
-    
-    close all;
-
-end

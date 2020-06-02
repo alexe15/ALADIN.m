@@ -22,16 +22,18 @@ assert(all(size_ffi == size(sProb.AA)), ...
     'number of subsystems']);
 
 %% dimension check of initial value
- x_test = vertcat(sProb.zz0{:});
- A_test = [sProb.AA{:}];
- 
- size_x_test = size(x_test);
- size_A_test = size(A_test);
- 
- assert(size_x_test(1) == size_A_test(2), ...
-    ['ERROR: please recheck the dimensions of the inital value of x' ...
-    ' it should be equal to the dimension of the concatented' ...
-    'coupling matrices']);
+
+size_x = 0;
+size_A = 0;
+for i = 1 : size_ffi
+    size_x = size_x + length(sProb.zz0{i});
+    size_A = size_A + size(sProb.AA{i},2);
+end
+
+assert((size_x == size_A), ...
+   ['ERROR: please recheck the dimensions of the inital value of x' ...
+   ' it should be equal to the dimension of the concatented' ...
+   'coupling matrices']);
 
 %% check rank of AA
 AA_concat = horzcat(sProb.AA{:});

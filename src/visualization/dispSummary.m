@@ -3,11 +3,12 @@ function [ ] = dispSummary( neddedIter, opts, iter)
 %   Detailed explanation goes here
 disp(['                                                                ']);
 disp(['   ========================================================      ']);
-disp(['   ==               This is ALADIN-M v0.1                ==      ']);
+disp(['   ==             This is ALADIN-alpha v0.1              ==      ']);
 disp(['   ========================================================      ']);
 %disp(['Current iteration: ', num2str(iterationIndex)]);
 %disp(['                                                                ']);
 %disp(['Applied solvers: ' ]);
+disp(['   Algorithm:        ', (opts.alg)]);
 disp(['   QP solver:        ', (opts.solveQP)]);
 disp(['   Local solver:     ', (opts.locSol)]);
 disp(['   Inner algorithm:  ', (opts.innerAlg)]);

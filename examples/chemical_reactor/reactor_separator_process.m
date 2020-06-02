@@ -212,7 +212,7 @@ term_eps = 0; % no termination criterion, stop after maxit
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 % solve with ALADIN
-sol_ALADIN = run_ALADINnew(chem, opts);
+sol_ALADIN = run_ALADIN(chem, opts);
 
 % plot the results
 Xsol = full(sol_ALADIN.xxOpt{1}(1:Nx));

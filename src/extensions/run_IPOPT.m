@@ -1,7 +1,10 @@
 function [globSol, globFuns] = run_IPOPT( sProb )
 % solves an affinely-coupled seperable problem by a centralized solver
 import casadi.*
-NsubSys = length(sProb.zz0);
+NsubSys = length(sProb.AA);
+
+% set constraints to empty functions/default initial guess
+sProb   = setDefaultVals(sProb);
 x0      = vertcat(sProb.zz0{:});
 
 

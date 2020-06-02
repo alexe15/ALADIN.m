@@ -105,7 +105,7 @@ opts.term_eps = 1e-8;
 
 Xopt  = ppNumAll;
 for i = 1:Nmpc
-    sol_rob{i} = run_ALADINnew(rob,opts);
+    sol_rob{i} = run_ALADIN(rob,opts);
     Xopti = [];
     for j = 1:Nrobot
         Xopti = [Xopti; full(sol_rob{i}.xxOpt{j}(3*(Nrobot+j-1)+(1:3)))];

@@ -94,12 +94,10 @@ AA{Nunit} = -repmat(Abase, Nunit-1, 1);
 
 %% solve with ALADIN
 
-X0 = vertcat(XX0{:});
 for i = 1:Nunit
-    chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i}});
-    chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {[XXU{i};X0]});
-    
-    emptyfun = @(x) [];
+    chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i},XX0{i}});
+    chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {XXU{i},XX0{i}});
+    emptyfun = @(x,y) [];
     chem.locFuns.hhi{i} = emptyfun;
     
     % set up aladin parameters    
@@ -107,39 +105,44 @@ for i = 1:Nunit
     chem.uubx{i} = [inf*ones(Nunit*N*4,1); Qu(i)*ones(N,1)];
     chem.AA{i}   = AA{i};
     chem.zz0{i}  = [repmat(vertcat(x0{:}),N,1); Qs(i)*ones(N,1)];
+    chem.p{i}    = x0{i};
     
     SSig{i} = eye(length(XXU{i}));
 end
 
 chem.lam0 = ones(size(AA{1},1),1);
-chem.p    = vertcat(x0{:});
+
 
 % initialize the options for ALADIN
-rho = 1e3;
-mu = 1e4;
-maxit = 30;
-term_eps = 0; % no termination criterion, stop after maxit
-
-opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
+opts.rho = 1e3;
+opts.mu = 1e4;
+opts.maxiter = 50;
+opts.term_eps = 0; % no termination criterion, stop after maxit
 opts.plot = 'false';
+opts.reuse = 'true';
 
 % solve with ALADIN
-sol_ALADIN{1} = run_ALADINnew(chem,opts);
-chem.reuse    = sol_ALADIN{1}.reuse;
+sol_ALADIN{1}   = run_ALADIN(chem,opts);
+save('MPC.mat','chem','opts','x0','Qs','Nunit','N')
+% reuse problem formulation 
+fNames = fieldnames(sol_ALADIN{1}.problemForm);
+for j = 1:length(fNames)
+   chem.(fNames{j}) = sol_ALADIN{1}.problemForm.(fNames{j});
+end
 
 Xopt = vertcat(x0{:});
 Uopt = [];
 for i = 2:Nmpc
     chem.zz0 = sol_ALADIN{i-1}.xxOpt;
     Xopti = [];
-    Uopti = []
+    Uopti = [];
     for j = 1:Nunit
         xx0{j} = sol_ALADIN{i-1}.xxOpt{j}(12+[1+(j-1)*4:j*4]);
         Xopti = [Xopti; xx0{j}];
         Uopti = [Uopti; sol_ALADIN{i-1}.xxOpt{j}(Nunit*N*4+1)];
+        chem.p{j} = xx0{j};
     end
-    chem.p = vertcat(xx0{:});
-    sol_ALADIN{i} = run_ALADINnew(chem, opts);
+    sol_ALADIN{i} = run_ALADIN(chem, opts);
     Xopt = [Xopt, Xopti];
     Uopt = [Uopt, Uopti];
 end
@@ -147,7 +150,7 @@ Uopt_last = [sol_ALADIN{Nmpc}.xxOpt{1}(Nunit*N*4+1);
              sol_ALADIN{Nmpc}.xxOpt{2}(Nunit*N*4+1);
              sol_ALADIN{Nmpc}.xxOpt{3}(Nunit*N*4+1)];
 
-Uopt = [Uopt,Uopt_last]
+Uopt = [Uopt,Uopt_last];
 
 plotresults([Xopt;Uopt])
 

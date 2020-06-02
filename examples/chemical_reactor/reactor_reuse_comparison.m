@@ -113,13 +113,13 @@ chem.lam0 = ones(size(AA{1},1),1);
 % initialize the options for ALADIN
 rho = 1e3;
 mu = 1e4;
-maxit = 20;
+maxit = 50;
 term_eps = 0; % no termination criterion, stop after maxit
 
 opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 
 % solve with ALADIN
-sol_ALADIN{1} = run_ALADINnew(chem, opts);
+sol_ALADIN{1} = run_ALADIN(chem, opts);
 
 % plot the results
 Xsol = full(sol_ALADIN{1}.xxOpt{1}(1:Nx));
@@ -132,9 +132,14 @@ XXopt = vertcat(Xopt, Uopt);
 plotresults(XXopt);
 
 
-% reuse the problem formulation
-chem.reuse = sol_ALADIN{1}.reuse;
-sol_ALADIN{2} = run_ALADINnew(chem, opts);
+
+% reuse problem formulation 
+fNames = fieldnames(sol_ALADIN{1}.problemForm);
+for j = 1:length(fNames)
+   chem.(fNames{j}) = sol_ALADIN{1}.problemForm.(fNames{j});
+end
+
+sol_ALADIN{2} = run_ALADIN(chem, opts);
 
 %% define the fuctions 
 % function: Runge-Kutte 4 Integrator

@@ -46,4 +46,8 @@ axis manual;
 grid on
 box on
 
-title('ALADIN-M v0.1');
+if strcmp(opts.alg, 'ALADIN')
+    title('ALADIN-alpha v0.1');
+elseif strcmp(opts.alg, 'ADMM')
+    title('ALADIN-alpha v0.1 (ADMM)');
+end

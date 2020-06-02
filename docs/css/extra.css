@@ -1,0 +1,10 @@
+p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+
+img {
+    display: block;
+	margin: 0 auto;
+}

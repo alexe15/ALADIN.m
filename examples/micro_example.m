@@ -22,4 +22,4 @@ sProb.locFuns.hhi  = {h1, h2};
 sProb.AA           = {A1, A2};
 
 % solve with ALADIN-M
-sol_ALADIN = run_ALADINnew( sProb ); 
+sol_ALADIN = run_ALADIN( sProb ); 

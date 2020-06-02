@@ -1,20 +1,23 @@
-function [ sol, timers ] = iterateAL( sProb, opts )
+function [ sol, timers ] = iterateAL( sProb, opts, timers )
 %ITERATEAL Summary of this function goes here
 NsubSys = length(sProb.AA);
 Ncons   = size(sProb.AA{1},1);
 initializeVariables;
 
+if isfield(sProb, 'p')
+    parSubstitution;
+end
+
 iterTimer = tic;
-i                   = 1;
+i         = 1;
+iter.i    = 1;
+
 while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
                                       (iter.logg.consViol(i) >= opts.term_eps)))
-                                  
+                             
     % solve local NLPs and evaluate sensitivities
-   if (strcmp( opts.parfor, 'true' ))
-        [ iter.loc, timers, opts ] = parallelStepDecentral( sProb, iter, timers, opts );
-   else
-        [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts );
-   end
+    [ timers, opts, iter ] = parallelStep( sProb, iter, timers, opts );
+
     % set up and solve the coordination QP
     tic
     iter.lamOld      = iter.lam;
@@ -22,7 +25,7 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
         % update scaling matrix for consensus violation slack
         if strcmp(opts.DelUp,'true') 
             if i > 2                            
-                [opts.Del, iter.consViol] = computeDynSig(opts.Del,...
+                [opts.Del, iter.consViol] = updateParam(opts.Del,...
                          [sProb.AA{:}]*vertcat(iter.yy{:}),iter.consViol, 'Del');
             else
                 iter.consViol = [sProb.AA{:}]*vertcat(iter.yy{:});
@@ -38,11 +41,17 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
         iter.loc.cond           = condenseLocally(sProb, iter);
         % solve condensed QP by decentralized CG/ADMM
         [ iter.llam, iter.lam, iter.comm ] = ...
-                              solveQPdecNew(iter.loc.cond, iter.lam, opts);
+                              solveQPdec(iter.loc.cond, iter.lam, opts);
        % [ iter.llam, iter.lam ] = solveQPdecOld(iter.loc.cond, iter.lam, ...
       %                                                 opts, iter, sProb );
         % expand again locally based on computed \lamda
         iter.ddelx              = expandLocally(iter.llam, iter.loc.cond);
+        
+        % update mu in classical since Del not yet included --> has tto be adapted
+        % to new structure
+        if iter.stepSizes.mu < opts.muMax
+            iter.stepSizes.mu = iter.stepSizes.mu * opts.muUpdate;
+        end
     end        
     timers.QPtotTime      = timers.QPtotTime + toc;   
    
@@ -78,7 +87,8 @@ while ((i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || ...
        timers.plotTimer = timers.plotTimer + toc;
     end
     
-    i = i+1;
+    i      = i+1;
+    iter.i = i;
 end
 timers.iterTime = toc(iterTimer);
 

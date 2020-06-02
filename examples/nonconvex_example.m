@@ -70,7 +70,7 @@ sProb.lam0  = lam0;
 
 opts = initializeOpts(rho, mu, maxit, Sig, term_eps);
 
-sol_ALADIN  = run_ALADINnew(sProb,opts);
+sol_ALADIN  = run_ALADIN(sProb,opts);
            
 %% solve cantralized problem wih CasADi & IPOPT
 y1  =   sym('y1',[n,1],'real');
@@ -107,24 +107,16 @@ xlabel('$k$');
 ylabel('$x^k$');
 
 %% solve with ADMM
- rhoADMM = 1000;
- for i=1:length(sProb.locFuns.ffi) 
-     lam0ADMM{i}  = zeros(size(sProb.AA{i},1),1);
- end   
- 
- xx0 = {[0 0]', [0 0]'};
- ADMMopts = struct('scaling',false,'rhoUpdate',false,'maxIter',100);
- [xoptADM, loggADM]         = run_ADMM(sProb.locFuns.ffi,...
-                                       sProb.locFuns.ggi,...
-                                       sProb.locFuns.hhi,...
-                                       sProb.AA,...
-                                       xx0,...
-                                       lam0ADMM,...
-                                       sProb.llbx,...
-                                       sProb.uubx,...
-                                       rhoADMM,...
-                                       Sig,...
-                                       ADMMopts);             
+rhoADMM = 1000;
+for i=1:length(sProb.locFuns.ffi) 
+ lam0ADMM{i}  = zeros(size(sProb.AA{i},1),1);
+end   
+
+xx0 = {[0 0]', [0 0]'};
+ADMMopts = struct('scaling','false','rhoUpdate','false','maxIter',100);
+
+sol_ADMM         = run_ADMM(sProb, ADMMopts);             
+
                                  
 % [xoptSQP, loggSQP] = run_SQP(ffifun,ggifun,hhifun,AA,xxgi0,...
 %                                       lam0,llbx,uubx,Sig,opts);

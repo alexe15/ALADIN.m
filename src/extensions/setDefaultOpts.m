@@ -3,7 +3,7 @@ function [ opts ] = setDefaultOpts( sProb, opts )
 % user
 
 % load default options
-defOpts      = loadDefOpts();
+defOpts      = loadDefOpts(opts);
 
 optFields    = fieldnames(opts);
 defOptFields = fieldnames(defOpts);

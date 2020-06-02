@@ -9,25 +9,54 @@
 % out: xopt:   Optimal x vector
 %      logg:   Struct, logging several values during the iteration process
 %%------------------------------------------------------------------------
-function [ xopt, logg ] = run_ALADIN( ffi,ggi,hhi,AA,zz0,...
-                                                 lam0,llbx,uubx,SSig,opts )
-                                
-% just a wrapper for new interface!
+function [ sol ] = run_ALADIN( sProb, opts )
+import casadi.*
+opts.sym   = @SX.sym;
+opts.alg   = 'ALADIN';
 
-sProb.locFuns.ffi  = ffi;
-sProb.locFuns.ggi  = ggi;
-sProb.locFuns.hhi  = hhi;
-sProb.llbx = llbx;
-sProb.uubx = uubx;
-sProb.AA   = AA;
-sProb.zz0  = zz0;
-sProb.lam0 = lam0;
-sProb.b    = zeros(length(lam0),1);
-opts.SSig  = SSig;
+% set constraints to empty functions/default initial guess
+sProb      = setDefaultVals(sProb);
 
-                                
-sol = run_ALADINnew( sProb, opts );                             
-                          
-xopt   = vertcat(sol.xxOpt{:});
-logg   = sol.iter.logg;
+% set default options
+opts       = setDefaultOpts(sProb, opts);
+
+% check inputs
+checkInput(sProb);
+
+% timers
+totTimer   = tic;
+setupTimer = tic;
+
+% check whether problem setup is present already
+if ~isfield(sProb, 'nnlp') || ~isfield(sProb, 'sens') || ...
+        ~isfield(sProb, 'locFunsCas') ||  ~isfield(sProb, 'gBounds')
+    sProb            = createLocSolAndSens(sProb, opts);   
+end
+timers.setupT        = toc(setupTimer);
+
+% give problem formulation back
+if strcmp(opts.reuse, 'true')
+    sProbback;
+end
+
+% run ALADIN iterations
+[ sol, timers ] = iterateAL( sProb, opts, timers );
+
+% total time
+timers.totTime  = toc(totTimer);
+sol.timers = timers;
+
+% display solver output and timing
+dispSummary(size(sol.iter.logg.X,2), opts, sol.iter);
+displayTimers(timers, opts);
+
+% display comunication
+if strcmp(opts.commCount, 'true')
+    displayComm(sol.iter.comm, opts.innerAlg);
+end
+
+if strcmp(opts.reuse, 'true')
+    sol.problemForm = problemForm;
+end
+
 end

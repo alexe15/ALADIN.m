@@ -1,163 +1,120 @@
+%% Alex's non-convex example
 %restoredefaultpath;
 clear all;
 clc;
 
-% addpath(genpath('../src'));
-% addpath(genpath('../tools/'))
-% import casadi.*
 
-%% define Alex's non-convex problem
-% give general settings
-N   =   2;
-n   =   2;
-m   =   1;
-y1  =   sym('y1',[n,1],'real');
-y2  =   sym('y2',[n,1],'real');
+%% ALADIN Solution 1 - using matlab Functions as input
+% define symbolic variables
+y1  =   sym('y1',[1,1],'real');
+y2  =   sym('y2',[2,1],'real');
 
-f1  =   2*(y1(1)-1)^2;
-f2  =   (y2(2)-2)^2;
+% define symbolic objectives
+f1s =   2*(y1-1)^2;
+f2s =   (y2(2)-2)^2;
 
-h1  =   1-y1(1)*y1(2);
-h2  =   -1.5+y2(1)*y2(2);
+% define symbolic ineq. constraints
 
-A1  =   [1, 0;
-         0, 1];
-A2  =   [-1,0;
-         0, -1];
-b   =   [0; 0];
+h2s = [-1-y2(1)*y2(2);-1.5+y2(1)*y2(2)];
 
-lb1 =   [0;0];
-lb2 =   [0;0];
+% convert symbolic variables to MATLAB fuctions
+f1 = matlabFunction(f1s,'Vars',{y1});
+f2 = matlabFunction(f2s,'Vars',{y2});
 
-ub1 =   [10;10];
-ub2 =   [10;10];
+h1 = @(y1) [];
+h2 = matlabFunction(h2s,'Vars',{y2});
 
-%% convert symbolic variables to MATLAB fuctions
-f1f     =  matlabFunction(f1,'Vars',{y1});
-f2f     =  matlabFunction(f2,'Vars',{y2});
+% define coupling matrices
+A1 = 1;
+A2 = [-1, 0];
 
-h1f     =   matlabFunction(h1,'Vars',{y1});
-h2f     =   matlabFunction(h2,'Vars',{y2});
+% collect problem data in sProb struct
+sProb.locFuns.ffi = {f1, f2};
+sProb.locFuns.hhi = {h1, h2};
 
-%% set solver options
-maxit   =   30;
-y0      =   3*rand(N*n,1);
-lam0    =   10*(rand(1)-0.5)*ones(size(A1,1),1);
-rho     =   100;
-mu      =   100;
-eps     =   1e-4;
-Sig     =   {eye(n),eye(n)};
+% handing over of coupling matrices to problem
+sProb.AA = {A1, A2};
 
-% no termination criterion, stop after maxit
-term_eps = 0;
-
-%% solve with ALADIN
-emptyfun      = @(x) [];
-[ggifun{1:N}] = deal(emptyfun);
-
-% define the optimization set up
-% define objective and constraint functions
-sProb.locFuns.ffi  = {f1f, f2f};
-sProb.locFuns.hhi  = {h1f, h2f};
-sProb.locFuns.ggi  = ggifun;
-
-% define boundaries
-sProb.llbx = {lb1,lb2};
-sProb.uubx = {ub1,ub2};
-
-% define counpling matrix
-sProb.AA   = {A1,A2};
-
-% define initial values for solutions and lagrange multipliers
-sProb.zz0  = {y0(1:2),y0(3:4)};
-sProb.lam0 = lam0;
-
-% define the options for ALADIN algorthm in parallel form
- opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'true');
- sol_ALADIN_parallel = run_ALADINnew( sProb, opts ); 
-
-% define the options for ALADIN algorthm in centralized form
-opts = initializeOpts(rho, mu, maxit, Sig, term_eps, 'false');
-sol_ALADIN_centralized = run_ALADINnew( sProb, opts ); 
+% start solver with default options
+sol_1 = run_ALADIN(sProb);
 
 
-%% solve centralized problem with CasADi & IPOPT
+
+%% ALADIN Solution 2 - using CasADi variabes
+
+% define symbolic variables
 import casadi.*
-y1  =   sym('y1',[n,1],'real');
-y2  =   sym('y2',[n,1],'real');
-f1fun   =   matlabFunction(f1,'Vars',{y1});
-f2fun   =   matlabFunction(f2,'Vars',{y2});
-h1fun   =   matlabFunction(h1,'Vars',{y1});
-h2fun   =   matlabFunction(h2,'Vars',{y2});
+y_1 = SX.sym('y_1', 1);
+y_2 = SX.sym('y_2', 2);
+
+% define symbolic objectives
+f1s = 2 * (y_1 - 1)^2;
+f2s = (y_2(2) - 2)^2;
+
+% define symbolic ineq. constraints
+h1s = [];
+h2s = [  -1 - y_2(1)*y_2(2); ...
+       -1.5 + y_2(1)*y_2(2)]; 
+
+% convert symbolic variables to MATLAB fuctions
+f1 = Function('f1', {y_1}, {f1s});
+f2 = Function('f2', {y_2}, {f2s});
+
+h1 = Function('h1', {y_1}, {h1s});
+h2 = Function('h2', {y_2}, {h2s});
+
+% define coupling matrices
+A1 = 1;
+A2 = [-1, 0];
+
+% collect problem data in sProb struct
+sProb.locFuns.ffi = {f1, f2};
+sProb.locFuns.hhi = {h1, h2};
+
+% handing over of coupling matrices to problem
+sProb.AA = {A1, A2};
+
+% start solver with default options
+sol = run_ALADIN(sProb);
 
 
-% y0  =   ones(N*n,1);
-y   =   SX.sym('y',[N*n,1]);
-F   =   f1fun(y(1:2))+f2fun(y(3:4));
-g   =   [h1fun(y(1:2));
-         h2fun(y(3:4));
-         [A1, A2]*y];
-nlp =   struct('x',y,'f',F,'g',g);
-cas =   nlpsol('solver','ipopt',nlp);
-sol =   cas('lbx', [lb1; lb2],...
-            'ubx', [ub1; ub2],...
-            'lbg', [-inf;-inf;b], ...
-            'ubg', [0;0;b]);  
 
-
-
-%% solve with ADMM
-% rhoADMM = 1000;
-% for i=1:length(ffifun) 
-%     lam0ADM{i}  = zeros(size(AA{i},1),1);
-% end   
-% 
-% ADMMopts = struct('scaling',false,'rhoUpdate',false,'maxIter',100);
-% [xoptADM, loggADM]         = run_ADMM(ffifun,ggifun,hhifun,AA,xx0,...
-%                              lam0ADM,llbx,uubx,rhoADMM,Sig,ADMMopts);             
-                                  
-% [xoptSQP, loggSQP] = run_SQP(ffifun,ggifun,hhifun,AA,xxgi0,...
-%                                       lam0,llbx,uubx,Sig,opts);
-
-%% define this problem using casadi functions
-y_1 = SX.sym('y_1', n);
-y_2 = SX.sym('y_2', n);
-
-f1f = 2 * (y_1(1) - 1)^2;
-f2f = (y_2(2) - 2)^2;
-
-f1 = Function('f_1', {y_1}, {f1f});
-f2 = Function('f_2', {y_2}, {f2f});
-
-h1f = 1 - y_1(1)*y_1(2);
-h2f = -1.5 + y_2(1)*y_2(2);
-
-h1 = Function('h_1', {y_1}, {h1f});
-h2 = Function('h_2', {y_2}, {h2f});
-
-sProb.locFuns.ffi  = {f1, f2};
-sProb.locFuns.hhi  = {h1, h2};
-
-sol_ALADIN = run_ALADINnew( sProb, opts ); 
-
-%% define the problem using function handle
-f1 = @(x) 2 * ( x(1) - 1)^2;
+%% ALADIN Solution 3 -  using function handle
+% define objectives
+f1 = @(x) 2 * (x - 1)^2;
 f2 = @(y) (y(2) - 2)^2;
 
-h1 = @(x) (1 - x(1) * x(2));
-h2 = @(y) (-1.5 + y(1) * y(2));
+% define inequality constraints
+h1 = @(x) [];
+h2 = @(y) [  -1 - y(1) * y(2); ...
+           -1.5 + y(1) * y(2)];
+% define coupling matrices
+A1 =  1;
+A2 = [-1, 0];
 
-sProb.locFuns.ffi  = {f1, f2};
-sProb.locFuns.hhi  = {h1, h2};
+% collect problem data in sProb struct
+sProb.locFuns.ffi = {f1, f2};
+sProb.locFuns.hhi = {h1, h2};
 
-sol_ALADIN = run_ALADINnew( sProb, opts ); 
+% handing over of coupling matrices to problem
+sProb.AA = {A1, A2};
 
-%% plotting
-set(0,'defaulttextInterpreter','latex')
-figure(2)
-hold on
-plot(sol_ALADIN.iter.logg.X')
-hold on
-plot(maxit,full(sol.x),'ob')
-xlabel('$k$');
-ylabel('$x^k$');
+% start solver with default options
+sol = run_ALADIN(sProb);
+
+%% centralized problem with casadi + ipopt
+import casadi.*
+x1 = SX.sym('x1');
+x2 = SX.sym('x2');
+
+nlp = struct('x', [x1;x2], 'f', 2*(x1 - 1)^2 + (x2 - 2)^2, 'g', x1 * x2);
+S = nlpsol('S', 'ipopt', nlp);
+
+sol = S('x0', [0, 0], 'lbg', -1, 'ubg', 1.5);
+x_opt = sol.x;
+
+
+
+%% solve with centralized solver
+xoptCtr = run_IPOPT(sProb);
+

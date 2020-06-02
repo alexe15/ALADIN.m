@@ -1,84 +1,79 @@
-% Copy local data from parfor compatible data vector 
+function [loc, timers, opts ]= parforVars2globalVars(parforTmpVar, loc, iter, opts, NsubSys, timers)
+% Copy temporary data from parforTmpVar to global variables
 
-if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none') && strcmp(opts.reg, 'true')
-        for j=1:NsubSys
-        loc.xx{j} = loc_temp(j).xx;
-        loc.KKapp{j} = loc_temp(j).KKapp;
-        loc.LLam_x{j} = {loc_temp(j).LLam_x};
-        loc.inact{j} = loc_temp(j).inact;
-        
-       loc.sensEval.ZZ{j} = loc_temp(j).sensEval.ZZ;
-       loc.sensEval.HHred{j} = loc_temp(j).sensEval.HHred;
-       loc.sensEval.AAred{j} = loc_temp(j).sensEval.AAred;
-       loc.sensEval.ggred{j} = loc_temp(j).sensEval.ggred;
-     
-       loc.sensEval.ggiEval{j} = loc_temp(j).sensEval.ggiEval;
-       loc.sensEval.HHiEval{j} = loc_temp(j).sensEval.HHiEval;
-       loc.sensEval.JJacCon{j} = loc_temp(j).sensEval.JJacCon;    
+%% universal variables
+for i = 1 : NsubSys
+    loc.xx{i}               = parforTmpVar(i).loc.xx;
+    loc.KKapp{i}            = parforTmpVar(i).loc.KKapp;
+    loc.LLam_x{i}           = parforTmpVar(i).loc.LLam_x;
+    loc.inact{i}            = parforTmpVar(i).loc.inact;
+    loc.sensEval.ggiEval{i} = parforTmpVar(i).loc.sensEval.ggiEval;
+    loc.sensEval.HHiEval{i} = parforTmpVar(i).loc.sensEval.HHiEval;
+    loc.sensEval.JJacCon{i} = parforTmpVar(i).loc.sensEval.JJacCon;
+end
+
+%% variables sensitive to chosen opts
+% dynamically changing sigma
+if strcmp(opts.Sig, 'dyn')
+    for i = 1 : NsubSys
+        loc.locStep{i}      = parforTmpVar(i).loc.locStep;
+    end
+    if iter.i > 1
+        for i = 1 : NsubSys
+            opts.SSig{i}    = parforTmpVar(i).opts_SSig;
         end
-elseif strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none') && strcmp(opts.reg, 'false')
-        for j=1:NsubSys
-        loc.xx{j} = loc_temp(j).xx;
-        loc.KKapp{j} = loc_temp(j).KKapp;
-        loc.LLam_x{j} = {loc_temp(j).LLam_x};
-        loc.inact{j} = loc_temp(j).inact;
-        
-       loc.sensEval.ZZ{j} = loc_temp(j).sensEval.ZZ;
-       % loc.sensEval.HHred{j} = loc_temp(j).sensEval.HHred;
-       loc.sensEval.AAred{j} = loc_temp(j).sensEval.AAred;
-       loc.sensEval.ggred{j} = loc_temp(j).sensEval.ggred;
-       
-       loc.sensEval.ggiEval{j} = loc_temp(j).sensEval.ggiEval;
-       loc.sensEval.HHiEval{j} = loc_temp(j).sensEval.HHiEval;
-       loc.sensEval.JJacCon{j} = loc_temp(j).sensEval.JJacCon; 
-      
-        end 
-elseif (~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none') && strcmp(opts.reg, 'true'))
-    for j=1:NsubSys
-        loc.xx{j} = loc_temp(j).xx;
-        loc.KKapp{j} = loc_temp(j).KKapp;
-        loc.LLam_x{j} = {loc_temp(j).LLam_x};
-        loc.inact{j} = loc_temp(j).inact;
+    end
+end
 
-        loc.sensEval.ggiEval{j} = loc_temp(j).sensEval.ggiEval;
-        loc.sensEval.HHiEval{j} = loc_temp(j).sensEval.HHiEval;
-        loc.sensEval.JJacCon{j} = loc_temp(j).sensEval.JJacCon;    
+% BFGS || DBFGS
+if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
+    for i = 1 : NsubSys
+        loc.sensEval.gLiEval{i} = parforTmpVar(i).loc.sensEval.gLiEval;
+    end
+end
+
+% communication for xx and the gradient of the Lagrangian and the objective
+if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
+    for i = 1 : NsubSys
+        iter.comm.globF.Hess{i}     = parforTmpVar(i).comm.globF.Hess;
+        iter.comm.globF.grad{i}     = parforTmpVar(i).comm.globF.grad;
+        iter.comm.globF.primVal{i}  = parforTmpVar(i).comm.globF.primVal;
+    end
+end
+
+% for reduced-space method, compute reduced QP
+if strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
+    for j = 1 : NsubSys
+        loc.sensEval.ZZ{j}      = parforTmpVar(j).loc.sensEval.ZZ;
+        loc.sensEval.HHred{j}   = parforTmpVar(j).loc.sensEval.HHred;
+        loc.sensEval.AAred{j}   = parforTmpVar(j).loc.sensEval.AAred;
+        loc.sensEval.ggred{j}   = parforTmpVar(j).loc.sensEval.ggred;
+    end
+    
+    if strcmp(opts.commCount, 'true') && strcmp(opts.innerAlg, 'none')
+        for j = 1 : NsubSys
+            % number of floats for the reduce-space method (no sparsity ex.)
+            iter.comm.globF.AAred{j}   = parforTmpVar(j).comm.globF.AAred;
+            iter.comm.globF.Hess{j}    = parforTmpVar(j).comm.globF.Hess;
+            iter.comm.globF.grad{j}    = parforTmpVar(j).comm.globF.grad;
+            iter.comm.globF.Jac{j}     = parforTmpVar(j).comm.globF.Jac;
+            % reduced primal values
+            iter.comm.globF.primVal{j} = parforTmpVar(j).comm.globF.primVal;
+        end
     end
 else
-        for j=1:NsubSys
-        loc.xx{j} = loc_temp(j).xx;
-        loc.KKapp{j} = loc_temp(j).KKapp;
-        loc.LLam_x{j} = {loc_temp(j).LLam_x};
-        loc.inact{j} = loc_temp(j).inact;
-
-        loc.sensEval.ggiEval{j} = loc_temp(j).sensEval.ggiEval;
-        loc.sensEval.JJacCon{j} = loc_temp(j).sensEval.JJacCon;
-        end
-end
-
-if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
-   for j = 1 : NsubSys
-    loc.sensEval.gLiEval{j} = loc_temp(j).sensEval.gLiEval;
-   end
-end
-
-
-for j = 1 : NsubSys
-    if strcmp(opts.Sig,'dyn')
-        % after second iteration
-        if size(iter.logg.X,2) > 2 
-             opts.SSig{j} = mat2cell(SSig(j));
-             loc.locStep{j} = loc_temp(j).locStep;
-        else
-            loc.locStep{j} = loc_temp(j).locStep;
+    %  full Hessian
+    if strcmp(opts.commCount, 'true') && strcmp(opts.innerAlg, 'none')
+        for j = 1 : NsubSys
+            iter.comm.globF.Jac{j}     =  parforTmpVar(j).comm.globF.Jac;
         end
     end
 end
 
 for j = 1:NsubSys
-    timers.RegTotTime = timers.RegTotTime + timers_temp(j).RegToTTime;
-    timers.sensEvalT = timers.sensEvalT + timers_temp(j).sensEvalT;
-    timers.NLPtotTime = timers.NLPtotTime + timers_temp(j).NLPtotTime;
+    timers.RegTotTime = timers.RegTotTime + parforTmpVar(j).timers.RegTotTime;
+    timers.sensEvalT  = timers.sensEvalT  + parforTmpVar(j).timers.sensEvalT;
+    timers.NLPtotTime = timers.NLPtotTime + parforTmpVar(j).timers.NLPtotTime;
 end
 
-
+end

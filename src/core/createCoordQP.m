@@ -30,7 +30,7 @@ function [ HQP, gQP, AQP, bQP ] = createCoordQP( sProb, iter, opts )
 
         % check condition number of constraints
         if cond(full(JacCon)) > 1e8
-           keyboard 
+   %        keyboard 
         end
 
         Nhact    = size(JacCon,1);
