@@ -1,9 +1,17 @@
-function [ solADM ] = run_ADMM(sProb, opts)
-% Solve affinely-couple seperable problem with ADMM from 
+% Solves an optimization problem via ADMM
+%
+% in:  sProb and opts struct containing a problem formulation in 
+%      affinely-coupled separable form and solver options
+% out: Struct containig optimal primal/dual solution and logging
+%      information
+%
+% Checkout https://alexe15.github.io/ALADIN.m/ for detailed information.
+% We use the ADMM variant  from 
 %
 % Houska, B., Frasch, J., & Diehl, M. (2016). An augmented Lagrangian 
 % based algorithm for distributed nonconvex optimization. SIAM Journal 
 % on Optimization, 26(2), 1101-1127.
+function [ solADM ] = run_ADMM(sProb, opts)
 
 import casadi.*
 opts.alg   = 'ADMM';

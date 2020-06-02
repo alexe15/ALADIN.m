@@ -1,14 +1,13 @@
-% Solves a non-convex optimization problem in consensus form via the ALADIN
-% algorithm
+% Solves a non-convex optimization problem via ALADIN and bi-level ALADIN 
+% in a distributed/decentralized fashion.
 %
-% in:  ffi:    Cell with local objective functions fi
-%      hhi:    Cell with local inequality constraints hi
-%      ggi:    Cell with local equality constraints gi
-%      AA:     Cell with consensus matrices Ai
+% in:  sProb and opts struct containing a problem formulation in 
+%      affinely-coupled separable form and solver options
+% out: Struct containig optimal primal/dual solution and logging
+%      information
 %
-% out: xopt:   Optimal x vector
-%      logg:   Struct, logging several values during the iteration process
-%%------------------------------------------------------------------------
+% Checkout https://alexe15.github.io/ALADIN.m/ for detailed information.
+
 function [ sol ] = run_ALADIN( sProb, opts )
 import casadi.*
 opts.sym   = @SX.sym;
