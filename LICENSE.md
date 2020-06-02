@@ -1,8 +1,8 @@
 MIT License
 
 Copyright (c) 2020 Karlsruhe Institute of Technology, ShanghaiTech University.
-Contact: Alexander Engelmann, alexander.engelmann@kit.edu
 
+Contact: Alexander Engelmann, alexander.engelmann@kit.edu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
