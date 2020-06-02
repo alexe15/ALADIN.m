@@ -123,7 +123,6 @@ opts.reuse = 'true';
 
 % solve with ALADIN
 sol_ALADIN{1}   = run_ALADIN(chem,opts);
-save('MPC.mat','chem','opts','x0','Qs','Nunit','N')
 % reuse problem formulation 
 fNames = fieldnames(sol_ALADIN{1}.problemForm);
 for j = 1:length(fNames)
