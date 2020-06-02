@@ -33,6 +33,7 @@ nav:
     - Distributed MPC: robotEx.md
     - Reducing Communication: redComm.md
     - Parallel Computing: ParallelExample.md
+    - Machine Learing: machLearn.md
   - Publications: furtherReading.md
 
 markdown_extensions:
