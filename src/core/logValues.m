@@ -38,6 +38,6 @@ if strcmp(opts.alg, 'ALADIN')
     iter.logg.wrkSet(:,i)   = ~vertcat(iter.loc.inact{:});
     
     if i>2 % number of changing active constraints
-        iter.logg.wrkSetChang(:,i) = sum(abs(iter.logg.wrkSet(:,end-1) - ~vertcat(iter.loc.inact{:})));
+        iter.logg.wrkSetChang(:,i) = sum(abs(iter.logg.wrkSet(:,i-1) - iter.logg.wrkSet(:,i)));
     end
 end
