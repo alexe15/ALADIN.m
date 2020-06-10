@@ -1,0 +1,1055 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Project documentation ALADIN-M">
+      
+      
+        <link rel="canonical" href="https://alexe15.github.io/ALADIN.m/options/">
+      
+      
+        <meta name="author" content="Alexander Engelmann">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-5.1.0">
+    
+    
+      
+        <title>Options - ALADIN-ALPHA</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.89dc9fe3.min.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecd4686e.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#546e7a">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#options" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://alexe15.github.io/ALADIN.m/" title="ALADIN-ALPHA" class="md-header-nav__button md-logo" aria-label="ALADIN-ALPHA">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A3,3 0 0,0 15,5A3,3 0 0,0 12,2A3,3 0 0,0 9,5A3,3 0 0,0 12,8M12,11.54C9.64,9.35 6.5,8 3,8V19C6.5,19 9.64,20.35 12,22.54C14.36,20.35 17.5,19 21,19V8C17.5,8 14.36,9.35 12,11.54Z" /></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            ALADIN-ALPHA
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Options
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/alexe15/ALADIN.m" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alexe15/ALADIN.m
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+          
+
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href=".." class="md-tabs__link md-tabs__link--active">
+        Getting Started
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../robotEx/" class="md-tabs__link">
+          Application Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://alexe15.github.io/ALADIN.m/" title="ALADIN-ALPHA" class="md-nav__button md-logo" aria-label="ALADIN-ALPHA">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A3,3 0 0,0 15,5A3,3 0 0,0 12,2A3,3 0 0,0 9,5A3,3 0 0,0 12,8M12,11.54C9.64,9.35 6.5,8 3,8V19C6.5,19 9.64,20.35 12,22.54C14.36,20.35 17.5,19 21,19V8C17.5,8 14.36,9.35 12,11.54Z" /></svg>
+
+    </a>
+    ALADIN-ALPHA
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/alexe15/ALADIN.m" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alexe15/ALADIN.m
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ALADIN/" title="The Algorithm" class="md-nav__link">
+      The Algorithm
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../codeStruct/" title="Code Structure" class="md-nav__link">
+      Code Structure
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Options
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3,9H17V7H3V9M3,13H17V11H3V13M3,17H17V15H3V17M19,17H21V15H19V17M19,7V9H21V7H19M19,13H21V11H19V13Z" /></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Options" class="md-nav__link md-nav__link--active">
+      Options
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-options" class="md-nav__link">
+    Basic Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions" class="md-nav__link">
+    Extensions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bilevel-options" class="md-nav__link">
+    Bilevel Options
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Application Examples
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Application Examples" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+        </span>
+        Application Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../robotEx/" title="Distributed MPC" class="md-nav__link">
+      Distributed MPC
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../redComm/" title="Reducing Communication" class="md-nav__link">
+      Reducing Communication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ParallelExample/" title="Parallel Computing" class="md-nav__link">
+      Parallel Computing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../machLearn/" title="Machine Learing" class="md-nav__link">
+      Machine Learing
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../furtherReading/" title="Publications" class="md-nav__link">
+      Publications
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-options" class="md-nav__link">
+    Basic Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions" class="md-nav__link">
+    Extensions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bilevel-options" class="md-nav__link">
+    Bilevel Options
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="options">Options</h1>
+<p>ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> comes with several ALADIN variants. These variants can be activated by setting options. All options with possible values can be found in <code>loadDefOpts.m</code>. Here, we give a little more detailled description of these options. </p>
+<p><strong>Basic options</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default values</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">rho0</td>
+<td>1e2</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">rhoUpdate</td>
+<td>1.1</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">rhoMax</td>
+<td>1e8</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">Sig</td>
+<td>&lsquo;const&rsquo;</td>
+<td>&lsquo;dyn&rsquo;</td>
+</tr>
+<tr>
+<td align="right">lamInit</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+<tr>
+<td align="right">term_eps</td>
+<td>0</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">maxiter</td>
+<td>30</td>
+<td>integer &gt; 0</td>
+</tr>
+<tr>
+<td align="right">mu0</td>
+<td>1e3</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">muUpdate</td>
+<td>2</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">muMax</td>
+<td>2*1e6</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">solveQP</td>
+<td>&lsquo;MA57&rsquo;</td>
+<td>&lsquo;ipopt&rsquo;, &lsquo;pinv&rsquo;, &lsquo;linsolve&rsquo;, &lsquo;sparseBs&rsquo;, &lsquo;MOSEK&rsquo;, &lsquo;quadprog&rsquo;</td>
+</tr>
+<tr>
+<td align="right">loc Sol</td>
+<td>&lsquo;MA57&rsquo;</td>
+<td>&lsquo;ipopt&rsquo;,&rsquo;sqpmethod&rsquo;</td>
+</tr>
+<tr>
+<td align="right">reg</td>
+<td>&lsquo;true&rsquo;</td>
+<td>&lsquo;false&rsquo;</td>
+</tr>
+<tr>
+<td align="right">regParam</td>
+<td>1e-4</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">actMargin</td>
+<td>-1e-6</td>
+<td>double &lt; 0</td>
+</tr>
+<tr>
+<td align="right">plot</td>
+<td>&lsquo;true&rsquo;</td>
+<td>&lsquo;false&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Extensions</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default values</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">slack</td>
+<td>&lsquo;standard&rsquo;</td>
+<td>&lsquo;redSpace&rsquo;</td>
+</tr>
+<tr>
+<td align="right">hessian</td>
+<td>&lsquo;standard&rsquo;</td>
+<td></td>
+</tr>
+<tr>
+<td align="right">Hess</td>
+<td>&lsquo;standard&rsquo;</td>
+<td>&lsquo;DBFGS&rsquo;, <span><span class="MathJax_Preview">\text{ }</span><script type="math/tex">\text{ }</script></span> &lsquo;BFGS&rsquo;</td>
+</tr>
+<tr>
+<td align="right">BFGSinit</td>
+<td>&lsquo;ident&rsquo;</td>
+<td>&lsquo;exact&rsquo;</td>
+</tr>
+<tr>
+<td align="right">parfor</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+<tr>
+<td align="right">DelUp</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+<tr>
+<td align="right">reuse</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+<tr>
+<td align="right">commCount</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bi-Level options</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default values</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">innnerAlg</td>
+<td>&lsquo;none&rsquo;</td>
+<td>&lsquo;D-CG&rsquo;, &lsquo;D-ADMM&rsquo;</td>
+</tr>
+<tr>
+<td align="right">rhoADM</td>
+<td>2e-2</td>
+<td></td>
+</tr>
+<tr>
+<td align="right">warmStart</td>
+<td>&lsquo;true&rsquo;</td>
+<td>&lsquo;false&rsquo;</td>
+</tr>
+<tr>
+<td align="right">innerIter</td>
+<td>200</td>
+<td>integer &gt; 0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameter choices for initialization</strong></p>
+<p>During the initialization process, the options for the parameters <span><span class="MathJax_Preview">\Sigma, \rho 0, \mu 0</span><script type="math/tex">\Sigma, \rho 0, \mu 0</script></span> and <span><span class="MathJax_Preview">\varepsilon</span><script type="math/tex">\varepsilon</script></span> are of relevance. The default settings are given by </p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default values</th>
+<th>alternatives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">Sig</td>
+<td>&lsquo;const&rsquo;</td>
+<td>&lsquo;dny&rsquo;</td>
+</tr>
+<tr>
+<td align="right">rho0</td>
+<td>1e2</td>
+<td><span><span class="MathJax_Preview">\geq 0</span><script type="math/tex">\geq 0</script></span></td>
+</tr>
+<tr>
+<td align="right">mu0</td>
+<td>1e3</td>
+<td><span><span class="MathJax_Preview">\geq 0</span><script type="math/tex">\geq 0</script></span></td>
+</tr>
+<tr>
+<td align="right">term_eps</td>
+<td>0</td>
+<td><span><span class="MathJax_Preview">\geq 0</span><script type="math/tex">\geq 0</script></span></td>
+</tr>
+</tbody>
+</table>
+<p>The parameter <span><span class="MathJax_Preview">\texttt{rho0}</span><script type="math/tex">\texttt{rho0}</script></span> represents the penalization of the distance (augmented step size) <span><span class="MathJax_Preview">\left|x_i-z_i^k\right|_{\Sigma_i}^2</span><script type="math/tex">\left|x_i-z_i^k\right|_{\Sigma_i}^2</script></span> during the first parallel step. The option <span><span class="MathJax_Preview">\texttt{Sig}</span><script type="math/tex">\texttt{Sig}</script></span> determines the augemented norm. In the first step, <span><span class="MathJax_Preview">\texttt{Sig}</span><script type="math/tex">\texttt{Sig}</script></span> is the identity matrix, thus the norm <span><span class="MathJax_Preview">|x_i - z_i|</span><script type="math/tex">|x_i - z_i|</script></span> is evaluated. Changing sigma leads to penalization of the distance <span><span class="MathJax_Preview">|\Sigma_i(x_i - z_i)| = |x_i - z_i|_{\Sigma_i}</span><script type="math/tex">|\Sigma_i(x_i - z_i)| = |x_i - z_i|_{\Sigma_i}</script></span>.</p>
+<p>First, we recall, that the algorithm consists of several stepts, which are <a href="../ALADIN/">see here</a>. Keeping the algorithm in mind, we can now focus on the options that can be selected.</p>
+<h2 id="basic-options">Basic Options</h2>
+<p><strong>Parameter <span><span class="MathJax_Preview">\rho</span><script type="math/tex">\rho</script></span></strong></p>
+<p>During the <strong>Parallelizable Step</strong> <span><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span>, the optimization problems</p>
+<div>
+<div class="MathJax_Preview">
+\begin{aligned}
+\min_{x_i\in [\underline {x_i}, \overline x_i]} &amp;f_i(x_i) + (\lambda^k)^\top A_i x_i + \frac{\rho^k}{2}\left\|x_i-z_i^k\right\|_{\Sigma_i}^2 \;\; \\
+\text{s.t.}\quad &amp; g_i(x_i) = 0, \; \;h_i(x_i)\leq 0,\; \;\; \underline{x_i} \leq x_i \leq  \overline{x}_i.
+\end{aligned}
+</div>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\min_{x_i\in [\underline {x_i}, \overline x_i]} &f_i(x_i) + (\lambda^k)^\top A_i x_i + \frac{\rho^k}{2}\left\|x_i-z_i^k\right\|_{\Sigma_i}^2 \;\; \\
+\text{s.t.}\quad & g_i(x_i) = 0, \; \;h_i(x_i)\leq 0,\; \;\; \underline{x_i} \leq x_i \leq  \overline{x}_i.
+\end{aligned}
+</script>
+</div>
+<p>need to be solved for fixed <span><span class="MathJax_Preview">z_i</span><script type="math/tex">z_i</script></span>. The parameter <span><span class="MathJax_Preview">\rho^k</span><script type="math/tex">\rho^k</script></span> represents the penalization of the distance <span><span class="MathJax_Preview">\left|x_i-z_i^k\right|_{\Sigma_i}^2</span><script type="math/tex">\left|x_i-z_i^k\right|_{\Sigma_i}^2</script></span>. As long as <span><span class="MathJax_Preview">\texttt{rho}</span><script type="math/tex">\texttt{rho}</script></span> is smaller than <span><span class="MathJax_Preview">\texttt{rhoMax}</span><script type="math/tex">\texttt{rhoMax}</script></span>, it is increased by factor <span><span class="MathJax_Preview">\texttt{rhoUpdate}</span><script type="math/tex">\texttt{rhoUpdate}</script></span>.</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default values</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">rho0</td>
+<td>1e2</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">rhoUpdate</td>
+<td>1.1</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">rhoMax</td>
+<td>1e8</td>
+<td>double &gt; 0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dynamic <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span></strong></p>
+<p>The second parameter relevant for the <strong>Parallelizable Step</strong> is the scaling matrix <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span>. During the first iteration, <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span> equals the identity matrix. When the alternative option &lsquo;dyn&rsquo; was selected, in each step the it is checked whether the step sizes for all variables decrease. In case that a step size is not decreasing in a sufficient manner, <span><span class="MathJax_Preview">\Sigma</span><script type="math/tex">\Sigma</script></span> is changed dynamically to increase the negative impact of the large step size on the objective function in the parallel step.</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">Sig</td>
+<td>&lsquo;const&rsquo;</td>
+<td>&lsquo;dyn&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameter <span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span></strong></p>
+<p>The parameter <span><span class="MathJax_Preview">\lambda</span><script type="math/tex">\lambda</script></span> takes over the function of the lagrange multipliers. We can decide whether we want to hand over a specific one or not.</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">lamInit</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Termination criterion</strong></p>
+<p>Executing the ALADIN algorithm, in each step a termination criterion is checked. The termination criterion is split into two parts. Part one checks, whether the maximum number <span><span class="MathJax_Preview">\texttt{maxiter}</span><script type="math/tex">\texttt{maxiter}</script></span> of iterations is reached. Additionatlly, a termination bound <span><span class="MathJax_Preview">\varepsilon &gt; 0</span><script type="math/tex">\varepsilon > 0</script></span> can be handed over. Then, in each step, it is terminated, if <span><span class="MathJax_Preview">\left\|\sum_{i\in \mathcal{R}}A_ix^k_i -b \right\|\leq \epsilon \text{ and } \left\| x^k - z^k \right \|\leq \epsilon\;,</span><script type="math/tex">\left\|\sum_{i\in \mathcal{R}}A_ix^k_i -b \right\|\leq \epsilon \text{ and } \left\| x^k - z^k \right \|\leq \epsilon\;,</script></span> holds true.</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">term_eps</td>
+<td>0</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">maxiter</td>
+<td>30</td>
+<td>integer &gt; 0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameter <span><span class="MathJax_Preview">\mu</span><script type="math/tex">\mu</script></span></strong></p>
+<p>During the consensus step, the coordination QP </p>
+<div>
+<div class="MathJax_Preview">
+\begin{aligned}
+&amp;\underset{\Delta x,s}{\min}\;\;\sum_{i\in \mathcal{R}}\left\{\frac{1}{2}\Delta x_i^\top B^k_i\Delta x_i + {g_i^k}^\top \Delta x_i\right\}     + (\lambda^k)^\top s + \frac{\mu^k}{2}\|s\|^2_2  \\ 
+&amp;
+\begin{aligned}
+\text{subject to}\;                                   \sum_{i\in \mathcal{R}}A_i(x^k_i+\Delta x_i) &amp;=  s    \qquad  |\; \lambda^{\mathrm{QP} k},\\
+C^k_i \Delta x_i &amp;= 0                                     \qquad   \forall i\in \mathcal{R},\\
+\end{aligned}
+\end{aligned}
+</div>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\underset{\Delta x,s}{\min}\;\;\sum_{i\in \mathcal{R}}\left\{\frac{1}{2}\Delta x_i^\top B^k_i\Delta x_i + {g_i^k}^\top \Delta x_i\right\}     + (\lambda^k)^\top s + \frac{\mu^k}{2}\|s\|^2_2  \\ 
+&
+\begin{aligned}
+\text{subject to}\;                                   \sum_{i\in \mathcal{R}}A_i(x^k_i+\Delta x_i) &=  s    \qquad  |\; \lambda^{\mathrm{QP} k},\\
+C^k_i \Delta x_i &= 0                                     \qquad   \forall i\in \mathcal{R},\\
+\end{aligned}
+\end{aligned}
+</script>
+</div>
+<p>has to be executed. Setting <span><span class="MathJax_Preview">s:= \sum A_ix_i - b \overset{!}{=} 0</span><script type="math/tex">s:= \sum A_ix_i - b \overset{!}{=} 0</script></span>, the parameter <span><span class="MathJax_Preview">\mu</span><script type="math/tex">\mu</script></span> is similarly to the parameter <span><span class="MathJax_Preview">\rho</span><script type="math/tex">\rho</script></span> from above a penalty parameter. It can be set in the same manner as <span><span class="MathJax_Preview">\rho</span><script type="math/tex">\rho</script></span>.  </p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default values</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">mu0</td>
+<td>1e3</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">muUpdate</td>
+<td>2</td>
+<td>double &gt; 0</td>
+</tr>
+<tr>
+<td align="right">muMax</td>
+<td>2*1e6</td>
+<td>double &gt; 0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Solvers</strong> </p>
+<p>To solve the two optimization problems in each iteration step, the desired solvers can be indicated via setting the option opts.solveQP and opts.locSol:</p>
+<p><strong>1. QP Solver</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternatives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">solveQP</td>
+<td>&lsquo;MA57&rsquo;</td>
+<td>&lsquo;ipopt&rsquo;, &lsquo;pinv&rsquo;, &lsquo;linsolve&rsquo;, &lsquo;sparseBs&rsquo;, &lsquo;MOSEK&rsquo;, &lsquo;quadprog&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. Local Solver</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternatives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">locSol</td>
+<td>&lsquo;ipopt&rsquo;</td>
+<td>&lsquo;ipopt&rsquo;, &lsquo;sqpmethod&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regularization Parameters</strong></p>
+<p>Sometimes the Hessian matrices of the given problems do not have full rank, such that some important matrix operations are not readily available. Remedy can be obtained by regularization approaches that increase the rank of the matrix. The option can be set as follows:</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">reg</td>
+<td>&lsquo;true&rsquo;</td>
+<td>&lsquo;false&rsquo;</td>
+</tr>
+<tr>
+<td align="right">regParam</td>
+<td>1e-4</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Active Margin Detection</strong></p>
+<p>ALADIN, beeing a solver for constraint optimization, needs an active margin detection. The tolerance is handed over by the option <span><span class="MathJax_Preview">\texttt{actMargin}</span><script type="math/tex">\texttt{actMargin}</script></span></p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">actMargin</td>
+<td>-1e-6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Plots</strong></p>
+<p>Plotting results is nice, because one can immediately see the results. However, push up windows spreading plots over your screen can be annoying and slow down the algorithm, so we included an option to deactivate plots :)</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">plot</td>
+<td>&lsquo;true&rsquo;</td>
+<td>&lsquo;false&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<h2 id="extensions">Extensions</h2>
+<p><strong>parfor Option</strong></p>
+<p>The parallelizable step from the ALADIN Algorithm can be executed in the parallel threads in matlab using its implemented <code>parfor</code> -loop. This can be activeted by:</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN option</th>
+<th>default value</th>
+<th>alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">parfor</td>
+<td>&lsquo;false&rsquo;</td>
+<td>&lsquo;true&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bilevel-options">Bilevel Options</h2>
+<div class="admonition warning">
+<p class="admonition-title">Parameter combinations</p>
+<p><strong>Note that ss ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> is still in a prototypical phase of development, it is not guaranteed that <em>all</em> combinations of options work. We tried to make ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> as stable as possible running tests with a high code coverage, but we are at the moment not able to guarantee that all combinations of options work</strong></p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../codeStruct/" title="Code Structure" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Code Structure
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../robotEx/" title="Distributed MPC" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Distributed MPC
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.36cbf620.min.js"></script>
+      <script src="../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ["tabs", "instant"],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.7f7c8775.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+        <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

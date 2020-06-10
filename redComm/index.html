@@ -1,0 +1,747 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Project documentation ALADIN-M">
+      
+      
+        <link rel="canonical" href="https://alexe15.github.io/ALADIN.m/redComm/">
+      
+      
+        <meta name="author" content="Alexander Engelmann">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-5.1.0">
+    
+    
+      
+        <title>Reducing Communication - ALADIN-ALPHA</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.89dc9fe3.min.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecd4686e.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#546e7a">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#reducing-communication" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://alexe15.github.io/ALADIN.m/" title="ALADIN-ALPHA" class="md-header-nav__button md-logo" aria-label="ALADIN-ALPHA">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A3,3 0 0,0 15,5A3,3 0 0,0 12,2A3,3 0 0,0 9,5A3,3 0 0,0 12,8M12,11.54C9.64,9.35 6.5,8 3,8V19C6.5,19 9.64,20.35 12,22.54C14.36,20.35 17.5,19 21,19V8C17.5,8 14.36,9.35 12,11.54Z" /></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            ALADIN-ALPHA
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Reducing Communication
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/alexe15/ALADIN.m" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alexe15/ALADIN.m
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href=".." class="md-tabs__link">
+        Getting Started
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../robotEx/" class="md-tabs__link md-tabs__link--active">
+          Application Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://alexe15.github.io/ALADIN.m/" title="ALADIN-ALPHA" class="md-nav__button md-logo" aria-label="ALADIN-ALPHA">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A3,3 0 0,0 15,5A3,3 0 0,0 12,2A3,3 0 0,0 9,5A3,3 0 0,0 12,8M12,11.54C9.64,9.35 6.5,8 3,8V19C6.5,19 9.64,20.35 12,22.54C14.36,20.35 17.5,19 21,19V8C17.5,8 14.36,9.35 12,11.54Z" /></svg>
+
+    </a>
+    ALADIN-ALPHA
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/alexe15/ALADIN.m" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alexe15/ALADIN.m
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ALADIN/" title="The Algorithm" class="md-nav__link">
+      The Algorithm
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../codeStruct/" title="Code Structure" class="md-nav__link">
+      Code Structure
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../options/" title="Options" class="md-nav__link">
+      Options
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      Application Examples
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Application Examples" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+        </span>
+        Application Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../robotEx/" title="Distributed MPC" class="md-nav__link">
+      Distributed MPC
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Reducing Communication
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3,9H17V7H3V9M3,13H17V11H3V13M3,17H17V15H3V17M19,17H21V15H19V17M19,7V9H21V7H19M19,13H21V11H19V13Z" /></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Reducing Communication" class="md-nav__link md-nav__link--active">
+      Reducing Communication
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#numerical-example-optimal-power-flow" class="md-nav__link">
+    Numerical Example: Optimal Power Flow
+  </a>
+  
+    <nav class="md-nav" aria-label="Numerical Example: Optimal Power Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ParallelExample/" title="Parallel Computing" class="md-nav__link">
+      Parallel Computing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../machLearn/" title="Machine Learing" class="md-nav__link">
+      Machine Learing
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../furtherReading/" title="Publications" class="md-nav__link">
+      Publications
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#numerical-example-optimal-power-flow" class="md-nav__link">
+    Numerical Example: Optimal Power Flow
+  </a>
+  
+    <nav class="md-nav" aria-label="Numerical Example: Optimal Power Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="reducing-communication">Reducing Communication</h1>
+<p>There are different ways of reducing the communication overhead in ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>. Compared with ADMM for example, the coordination step of ALADIN is quite heavy due to the necessity to exchange derivative information. However, there are different ways to reduce the communication overhead of ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>. Which one works best also depends on the problem at hand.</p>
+<p>The first option is to use Hessian approximations instead of exact Hessians. The advantage here is, that with the <a href="https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm"><em>Broyden-Fletcher–Goldfarb-Shanno (BFGS)</em></a> formula for example, the Hessian matrix is approximated based on two subsequent gradients. Gradients scale with <span><span class="MathJax_Preview">O(n)</span><script type="math/tex">O(n)</script></span> whereas symmetric matrices with <span><span class="MathJax_Preview">O(n^2)</span><script type="math/tex">O(n^2)</script></span> in general making Hessian approximations preferable over exact Hessians. However, one has to keep in mind that due to their approximative nature, ALADIM-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> might need more iterations to convergence which might compensate the saved communication overhead per iteration. BFGS and damped BFGS can be activated in ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> with the <code>Hess</code> option with <code>BFGS</code> or <code>DBFGS</code> respectively. </p>
+<p>Another option is based on the so-called <em>reduced-space</em> or <em>nullspace</em> method (cf. Chapter 18 in [1] for example). The idea here is to eliminate all active constraints by computing a basis of the nullspace they span. With that, the dimension of the problem can be reduced by two-times the number of constraints and thus the communication-overhead can be substantially smaller - especially in case of many active constraints.</p>
+<p>A further improvement of the nullspace-method is using the <em>Schur-complement</em>. Here, the dimension of the coordination problem in ALADIN can be reduced to the number of coupling variables which is in general much smaller than the original coordination QP. On this reduced problem it is then also possible to use the both proposed variants of bi-level ALADIN which solves this reduced coordination problem purely on a neighbor-to-neighbor baisis yielding one of the first decentralized algorithms for non-convex optimization with convergence guarantees. The used inner algorithms are variants of the <a href="https://en.wikipedia.org/wiki/Augmented_Lagrangian_method#Alternating_direction_method_of_multipliers">Alternating Direction of Multipliers Method (ADMM)</a> and the <a href="https://en.wikipedia.org/wiki/Conjugate_gradient_method">Conjugate Gradient (CG)</a> method. For details on all of the above mentioned methods we refer to [1] and [3].</p>
+<h3 id="numerical-example-optimal-power-flow">Numerical Example: Optimal Power Flow</h3>
+<p>Next, we give a numerical example showing the benefits of the above mentioned methods. We load a given problem formulation containing an Optimal Power FLow problem with 30 buses from [2]. The data is included in ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> in the <code>./test/problem_data/</code> folder.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="n">load</span><span class="p">(</span><span class="s">&#39;./test/problem_data/IEEE30busPrbFrm.mat&#39;</span><span class="p">)</span>
+
+<span class="n">opts</span><span class="p">.</span><span class="n">commCount</span>    <span class="p">=</span> <span class="s">&#39;true&#39;</span><span class="p">;</span>
+
+<span class="c">%% standard ALADIN</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">maxiter</span>      <span class="p">=</span> <span class="mi">30</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">innerAlg</span>     <span class="p">=</span> <span class="s">&#39;none&#39;</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">slack</span>        <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span> 
+<span class="n">opts</span><span class="p">.</span><span class="n">Hess</span>         <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span>       
+<span class="n">res_ALADINs</span>       <span class="s">=</span> <span class="s">run_ALADINnew(sProb,</span> <span class="s">opts)</span><span class="p">;</span>
+
+<span class="c">%% damped BFGS</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">Hess</span>         <span class="p">=</span> <span class="s">&#39;DBFGS&#39;</span><span class="p">;</span>   <span class="c">% damped BFGS       </span>
+<span class="n">opts</span><span class="p">.</span><span class="n">slack</span>        <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span> 
+<span class="n">opts</span><span class="p">.</span><span class="n">BFGSinit</span>     <span class="p">=</span> <span class="s">&#39;exact&#39;</span><span class="p">;</span>   <span class="c">% with exact Hessian initialization</span>
+<span class="n">res_ALADINbf</span>      <span class="s">=</span> <span class="s">run_ALADINnew(sProb,</span> <span class="s">opts)</span><span class="p">;</span>
+
+<span class="c">%% reduced-space method</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">slack</span>        <span class="p">=</span> <span class="s">&#39;redSpace&#39;</span><span class="p">;</span> 
+<span class="n">opts</span><span class="p">.</span><span class="n">Hess</span>         <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span>    
+<span class="n">res_ALADINred</span>     <span class="s">=</span> <span class="s">run_ALADINnew(sProb,</span> <span class="s">opts)</span><span class="p">;</span>
+
+<span class="c">%% bi-level ALADIN with D-CG</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">innerAlg</span>     <span class="p">=</span> <span class="s">&#39;D-CG&#39;</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">innerIter</span>    <span class="p">=</span> <span class="mi">50</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">Hess</span>         <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">slack</span>        <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span> 
+<span class="n">res_ALADINcg</span>      <span class="s">=</span> <span class="s">run_ALADINnew(sProb,</span> <span class="s">opts)</span><span class="p">;</span>
+
+<span class="c">%% bi-level ALADIN with D-ADMM</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">innerAlg</span>     <span class="p">=</span> <span class="s">&#39;D-ADMM&#39;</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">innerIter</span>    <span class="p">=</span> <span class="mi">130</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">Hess</span>         <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">slack</span>        <span class="p">=</span> <span class="s">&#39;standard&#39;</span><span class="p">;</span> 
+<span class="n">res_ALADINadm</span>     <span class="s">=</span> <span class="s">run_ALADINnew(sProb,</span> <span class="s">opts)</span><span class="p">;</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>By activating the <code>commCount</code> option, global and neighbor-neighbor communication is counted during the ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> iterations. An exemplary solver output looks for standard ALADIN like this: </p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="o">========================================================</span><span class="w">      </span>
+<span class="o">==</span><span class="w">               </span><span class="n">This</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">ALADIN</span><span class="o">-</span><span class="err">$\</span><span class="n">alpha</span><span class="err">$</span><span class="w"> </span><span class="n">v0</span><span class="mf">.1</span><span class="w">                </span><span class="o">==</span><span class="w">      </span>
+<span class="o">========================================================</span><span class="w">      </span>
+<span class="n">QP</span><span class="w"> </span><span class="nl">solver</span><span class="p">:</span><span class="w">        </span><span class="n">MA57</span><span class="w"></span>
+<span class="k">Local</span><span class="w"> </span><span class="nl">solver</span><span class="p">:</span><span class="w">     </span><span class="n">ipopt</span><span class="w"></span>
+<span class="k">Inner</span><span class="w"> </span><span class="nl">algorithm</span><span class="p">:</span><span class="w">  </span><span class="k">none</span><span class="w"></span>
+
+<span class="k">No</span><span class="w"> </span><span class="n">termination</span><span class="w"> </span><span class="n">criterion</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">specified</span><span class="p">.</span><span class="w"></span>
+<span class="n">Consensus</span><span class="w"> </span><span class="nl">violation</span><span class="p">:</span><span class="w"> </span><span class="mf">3.3407e-12</span><span class="w"></span>
+
+<span class="n">Maximum</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">iterations</span><span class="w"> </span><span class="n">reached</span><span class="p">.</span><span class="w"></span>
+
+<span class="c1">-----------------   ALADIN-$\alpha$ timing   ------------------</span>
+<span class="w">                    </span><span class="n">t</span><span class="o">[</span><span class="n">s</span><span class="o">]</span><span class="w">        </span><span class="o">%</span><span class="n">tot</span><span class="w">         </span><span class="o">%</span><span class="n">iter</span><span class="w"></span>
+<span class="n">Tot</span><span class="w"> </span><span class="nc">time</span><span class="err">:</span><span class="p">......</span><span class="err">:</span><span class="w">    </span><span class="mf">7.7</span><span class="w">                                 </span>
+<span class="n">Prob</span><span class="w"> </span><span class="nl">setup</span><span class="p">:....</span><span class="err">:</span><span class="w">    </span><span class="mf">1.5</span><span class="w">         </span><span class="mf">19.8</span><span class="w">                    </span>
+<span class="n">Iter</span><span class="w"> </span><span class="nc">time</span><span class="err">:</span><span class="p">.....</span><span class="err">:</span><span class="w">    </span><span class="mf">6.2</span><span class="w">         </span><span class="mf">80.0</span><span class="w">                    </span>
+<span class="c1">------</span>
+<span class="n">NLP</span><span class="w"> </span><span class="nc">time</span><span class="err">:</span><span class="p">......</span><span class="err">:</span><span class="w">    </span><span class="mf">2.6</span><span class="w">                      </span><span class="mf">42.3</span><span class="w">       </span>
+<span class="n">QP</span><span class="w"> </span><span class="nc">time</span><span class="err">:</span><span class="p">.......</span><span class="err">:</span><span class="w">    </span><span class="mf">0.2</span><span class="w">                      </span><span class="mf">3.8</span><span class="w">        </span>
+<span class="n">Reg</span><span class="w"> </span><span class="nc">time</span><span class="err">:</span><span class="p">......</span><span class="err">:</span><span class="w">    </span><span class="mf">0.1</span><span class="w">                      </span><span class="mf">1.2</span><span class="w">        </span>
+<span class="n">Plot</span><span class="w"> </span><span class="nc">time</span><span class="err">:</span><span class="p">.....</span><span class="err">:</span><span class="w">    </span><span class="mf">2.9</span><span class="w">                      </span><span class="mf">46.9</span><span class="w">       </span>
+
+<span class="c1">--------------  Communication analysis  ----------------</span>
+<span class="n">floats</span><span class="w">                   </span><span class="n">tot</span><span class="w">              </span><span class="nf">avg</span><span class="w"> </span>
+<span class="k">Global</span><span class="w"> </span><span class="nl">forward</span><span class="p">:....</span><span class="err">:</span><span class="w">     </span><span class="mi">344176</span><span class="w">           </span><span class="mi">11473</span><span class="w">      </span>
+<span class="n">Neighbor</span><span class="o">-</span><span class="nl">neighbor</span><span class="p">:.</span><span class="err">:</span><span class="w">     </span><span class="mi">0</span><span class="w">                </span><span class="mi">0</span><span class="w">          </span>
+<span class="o">========================================================</span><span class="w"></span>
+</code></pre></div>
+</td></tr></table>
+
+<p>Note that we have an output where the communication overhead is counted. The results for the average communication per ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> iteration are shown below for all the above cases in floats not exploiting sparsity in the Hessian of the Lagrangian and the Jacobian of the constraints. Note that we only count forward communication here. This means that we count the communication from the subsystems to the coordinator as this type of communication dominates the backward communication.</p>
+<table>
+<thead>
+<tr>
+<th align="right">ALADIN variant</th>
+<th>standard</th>
+<th>D-BFGS</th>
+<th>red.-space</th>
+<th>bi-level CG</th>
+<th>bi-level ADMM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">global</td>
+<td>11.473</td>
+<td>7.245</td>
+<td>1663</td>
+<td>8</td>
+<td>-</td>
+</tr>
+<tr>
+<td align="right">neighbor-neighbor</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>64</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<p>From this table, one can clearly see that using a reduced-space method can reduce the per-step communication overhead substantially for this example. Even more, we can use bi-level ALADIN reducing the communication overhead even further. However, consider that due to the different inaccuracies introduce in bi-level ALADIN for example, one might need more iterations in total as shown in [2].</p>
+<h4 id="references">References</h4>
+<p>[1] <a href="https://www.springer.com/de/book/9780387303031">Nocedal, J., &amp; Wright, S. (2006). Numerical optimization. Springer Science &amp; Business Media.</a></p>
+<p>[2] <a href="https://arxiv.org/abs/1903.11280">Engelmann, A., Jiang, Y., Houska, B., &amp; Faulwasser, T. (2019). Decomposition of non-convex optimization via bi-level distributed ALADIN. arXiv preprint arXiv:1903.11280.</a> </p>
+<p>[3] Engelmann, A., Jiang, Y., Houska, B., &amp; Faulwasser, T. (2019). ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> – An open-source MATLAB toolbox for distributed optimization.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../robotEx/" title="Distributed MPC" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Distributed MPC
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../ParallelExample/" title="Parallel Computing" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Parallel Computing
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.36cbf620.min.js"></script>
+      <script src="../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ["tabs", "instant"],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.7f7c8775.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+        <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

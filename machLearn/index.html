@@ -1,0 +1,746 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Project documentation ALADIN-M">
+      
+      
+        <link rel="canonical" href="https://alexe15.github.io/ALADIN.m/machLearn/">
+      
+      
+        <meta name="author" content="Alexander Engelmann">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-5.1.0">
+    
+    
+      
+        <title>Machine Learing - ALADIN-ALPHA</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.89dc9fe3.min.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecd4686e.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#546e7a">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#an-example-from-machine-learning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://alexe15.github.io/ALADIN.m/" title="ALADIN-ALPHA" class="md-header-nav__button md-logo" aria-label="ALADIN-ALPHA">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A3,3 0 0,0 15,5A3,3 0 0,0 12,2A3,3 0 0,0 9,5A3,3 0 0,0 12,8M12,11.54C9.64,9.35 6.5,8 3,8V19C6.5,19 9.64,20.35 12,22.54C14.36,20.35 17.5,19 21,19V8C17.5,8 14.36,9.35 12,11.54Z" /></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            ALADIN-ALPHA
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Machine Learing
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/alexe15/ALADIN.m" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alexe15/ALADIN.m
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href=".." class="md-tabs__link">
+        Getting Started
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../robotEx/" class="md-tabs__link md-tabs__link--active">
+          Application Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://alexe15.github.io/ALADIN.m/" title="ALADIN-ALPHA" class="md-nav__button md-logo" aria-label="ALADIN-ALPHA">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A3,3 0 0,0 15,5A3,3 0 0,0 12,2A3,3 0 0,0 9,5A3,3 0 0,0 12,8M12,11.54C9.64,9.35 6.5,8 3,8V19C6.5,19 9.64,20.35 12,22.54C14.36,20.35 17.5,19 21,19V8C17.5,8 14.36,9.35 12,11.54Z" /></svg>
+
+    </a>
+    ALADIN-ALPHA
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/alexe15/ALADIN.m" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    alexe15/ALADIN.m
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../ALADIN/" title="The Algorithm" class="md-nav__link">
+      The Algorithm
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../codeStruct/" title="Code Structure" class="md-nav__link">
+      Code Structure
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../options/" title="Options" class="md-nav__link">
+      Options
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      Application Examples
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Application Examples" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+        </span>
+        Application Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../robotEx/" title="Distributed MPC" class="md-nav__link">
+      Distributed MPC
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../redComm/" title="Reducing Communication" class="md-nav__link">
+      Reducing Communication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ParallelExample/" title="Parallel Computing" class="md-nav__link">
+      Parallel Computing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Machine Learing
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3,9H17V7H3V9M3,13H17V11H3V13M3,17H17V15H3V17M19,17H21V15H19V17M19,7V9H21V7H19M19,13H21V11H19V13Z" /></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Machine Learing" class="md-nav__link md-nav__link--active">
+      Machine Learing
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loss-function" class="md-nav__link">
+    Loss Function
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distributed-problem-setup" class="md-nav__link">
+    Distributed Problem Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solution-with-aladin-alphaalpha" class="md-nav__link">
+    Solution with ALADIN-\alpha\alpha
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../furtherReading/" title="Publications" class="md-nav__link">
+      Publications
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loss-function" class="md-nav__link">
+    Loss Function
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distributed-problem-setup" class="md-nav__link">
+    Distributed Problem Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solution-with-aladin-alphaalpha" class="md-nav__link">
+    Solution with ALADIN-\alpha\alpha
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="an-example-from-machine-learning">An example from machine learning</h1>
+<p>Here we give a simple classification example how ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span> can be used for machine learning problems.  The goal here is finding a suitable  parameter <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> that classify the input data into its label.</p>
+<h2 id="loss-function">Loss Function</h2>
+<p>Let <span><span class="MathJax_Preview">x_j</span><script type="math/tex">x_j</script></span> be the j-th input data and <span><span class="MathJax_Preview">y_j</span><script type="math/tex">y_j</script></span> be its label, let <span><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> be the number of input data, let <span><span class="MathJax_Preview">n_x</span><script type="math/tex">n_x</script></span> be the dimension of input data, let <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> be the decision variable.  We consider a <span><span class="MathJax_Preview">\ell_2</span><script type="math/tex">\ell_2</script></span>-regularized logistic regression loss function</p>
+<div>
+<div class="MathJax_Preview">
+\begin{aligned}
+\min_{w\in \mathbb{R}^d}\; f(w) \triangleq \frac1N \sum_{j=1}^N log(1+e^{-y_j x_j^T w})+\frac{\gamma}{2} \lVert w \rVert_2^2.
+\end{aligned}
+</div>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\min_{w\in \mathbb{R}^d}\; f(w) \triangleq \frac1N \sum_{j=1}^N log(1+e^{-y_j x_j^T w})+\frac{\gamma}{2} \lVert w \rVert_2^2.
+\end{aligned}
+</script>
+</div>
+<p>We add the term <span><span class="MathJax_Preview">\frac{\gamma}{2} \lVert w \rVert_2^2</span><script type="math/tex">\frac{\gamma}{2} \lVert w \rVert_2^2</script></span> in order to prevent overfitting, where <span><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span> is a hyperparameter chosen by user.</p>
+<h2 id="distributed-problem-setup">Distributed Problem Setup</h2>
+<p>To solve this problem,  we divide the input data set into several groups and each group specifies a subsystem. We set the number of subsystems <span><span class="MathJax_Preview">N_{subs}</span><script type="math/tex">N_{subs}</script></span> to 10, that is, the capacity of each subsystem is <span><span class="MathJax_Preview">cap=N/N_{subs}</span><script type="math/tex">cap=N/N_{subs}</script></span>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="c">%% set basic parameters</span>
+<span class="n">import</span> <span class="s">casadi.*</span><span class="p">;</span>
+
+<span class="n">data</span> <span class="p">=</span> <span class="n">importdata</span><span class="p">(</span><span class="s">&#39;ML_DATA.mat&#39;</span><span class="p">);</span> <span class="c">% import data set</span>
+
+<span class="n">point</span> <span class="p">=</span> <span class="n">data</span><span class="p">.</span><span class="n">input</span><span class="p">;</span> <span class="c">% defeine data</span>
+<span class="n">class</span> <span class="p">=</span> <span class="n">data</span><span class="p">.</span><span class="n">class</span><span class="p">;</span> <span class="c">% define label</span>
+<span class="c">% connect point and their label</span>
+<span class="n">set</span>   <span class="s">=</span> <span class="s">[point,class]</span><span class="p">;</span>
+
+
+<span class="n">N</span>     <span class="s">=</span> <span class="s">size(point,</span> <span class="s">1)</span><span class="p">;</span> <span class="c">% number of input data</span>
+<span class="n">nx</span>    <span class="s">=</span> <span class="s">size(point,</span> <span class="s">2)</span><span class="p">;</span> <span class="c">% dimension of input data</span>
+<span class="n">Nsubs</span> <span class="p">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c">% number of subsystems</span>
+<span class="n">cap</span>   <span class="s">=</span> <span class="s">N/Nsubs</span><span class="p">;</span>
+<span class="nb">gamma</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c">% choose hyperparameter gamma</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>Next, we define the decision variable <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> and set up the OCP problem. Because the volume of each group is <span><span class="MathJax_Preview">cap</span><script type="math/tex">cap</script></span> and the dimension of data point is <span><span class="MathJax_Preview">n_x</span><script type="math/tex">n_x</script></span>, the dimension of <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> should be <span><span class="MathJax_Preview">cap*n_x</span><script type="math/tex">cap*n_x</script></span>. It is obvious that we can also divide <span><span class="MathJax_Preview">w</span><script type="math/tex">w</script></span> into <span><span class="MathJax_Preview">cap</span><script type="math/tex">cap</script></span> groups, we denote it as <span><span class="MathJax_Preview">w_j, j =1,2,...,cap</span><script type="math/tex">w_j, j =1,2,...,cap</script></span>. Therefore, equality constraints occurs naturally:</p>
+<div>
+<div class="MathJax_Preview"> 
+\begin{aligned}
+w_1 = w_2 = ... = w_{cap}
+\end{aligned}
+</div>
+<script type="math/tex; mode=display"> 
+\begin{aligned}
+w_1 = w_2 = ... = w_{cap}
+\end{aligned}
+</script>
+</div>
+<p>Note that the form of the objective functions for each subsystem are same, so we define the objective function with parameter <span><span class="MathJax_Preview">xy</span><script type="math/tex">xy</script></span>, which represents the input data and their labels for each subsystem. So we get:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="c">% define variables</span>
+<span class="n">w</span>  <span class="s">=</span> <span class="s">SX.sym(&#39;w&#39;,</span> <span class="s">[cap*nx</span> <span class="s">1])</span><span class="p">;</span> <span class="c">% decision variable</span>
+<span class="n">xy</span> <span class="p">=</span> <span class="n">SX</span><span class="p">.</span><span class="n">sym</span><span class="p">(</span><span class="s">&#39;xy&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">cap</span><span class="o">*</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">]);</span> <span class="c">% data and label</span>
+
+<span class="c">% set up objective function and constraints</span>
+<span class="n">ff</span>  <span class="s">=</span> <span class="s">0</span><span class="p">;</span>
+<span class="n">gg</span> <span class="p">=</span> <span class="p">[];</span>
+<span class="n">for</span> <span class="s">i</span> <span class="s">=</span> <span class="s">1:cap</span>
+    <span class="n">j</span>   <span class="s">=</span> <span class="s">(i-1)*nx</span><span class="p">;</span>
+    <span class="n">k</span>   <span class="s">=</span> <span class="s">(i-1)*(nx+1)</span><span class="p">;</span>
+    <span class="n">ff</span>  <span class="s">=</span> <span class="s">ff</span> <span class="s">+</span> <span class="s">1/N*log(1+exp(xy(k+nx+1)*xy(k+1:nx)&#39;*w(j+1:nx))) +...</span>
+<span class="s">            gamma/(2*N)*w(j+1:nx)&#39;*w(j+1:nx)</span><span class="p">;</span> <span class="c">% objective function</span>
+    <span class="n">if</span> <span class="s">i</span> <span class="s">&gt;</span> <span class="s">1</span>
+        <span class="n">for</span> <span class="s">p</span> <span class="s">=</span> <span class="s">1:nx</span>
+            <span class="n">gg</span> <span class="p">=</span> <span class="p">[</span><span class="n">gg</span><span class="p">;</span> <span class="n">w</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">-</span><span class="n">w</span><span class="p">(</span><span class="nb">j</span><span class="o">+</span><span class="n">p</span><span class="p">)];</span> <span class="c">% equality constraint</span>
+        <span class="n">end</span>
+    <span class="s">end</span>
+<span class="k">end</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>Next, we construct the consensus matrix <span><span class="MathJax_Preview">\{ A_i\}, i=1,2,...N_{subs}</span><script type="math/tex">\{ A_i\}, i=1,2,...N_{subs}</script></span>.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="c">% create elements used to set matrix A</span>
+<span class="n">eyebase</span> <span class="p">=</span> <span class="nb">eye</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="n">cap</span><span class="p">);</span>
+<span class="n">zerobase</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="n">cap</span><span class="p">);</span>
+<span class="c">% set up consensus constraints</span>
+<span class="n">AA</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span> <span class="p">=</span> <span class="nb">repmat</span><span class="p">(</span><span class="n">eyebase</span><span class="p">,</span> <span class="n">Nsubs</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">for</span> <span class="s">i</span> <span class="s">=</span> <span class="s">2:Nsubs</span>
+    <span class="n">AA</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span> <span class="p">=</span> <span class="p">[</span><span class="nb">repmat</span><span class="p">(</span><span class="n">zerobase</span><span class="p">,</span><span class="nb">i</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="n">eyebase</span><span class="p">;</span><span class="nb">repmat</span><span class="p">(</span><span class="n">zerobase</span><span class="p">,</span><span class="n">Nsubs</span><span class="o">-</span><span class="nb">i</span><span class="p">,</span><span class="mi">1</span><span class="p">)];</span>
+<span class="n">end</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>In the last step, we convert the CasADi symbolic expressions to the MATLAB functions and set up the initial guess <span><span class="MathJax_Preview">z_i^0</span><script type="math/tex">z_i^0</script></span> and <span><span class="MathJax_Preview">\lambda_0</span><script type="math/tex">\lambda_0</script></span>. Note that the objective function is parameterized with input data <span><span class="MathJax_Preview">xy</span><script type="math/tex">xy</script></span> and the constraints for each subsystem are the same.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="c">% convert expressions to MATLAB functions</span>
+<span class="k">for</span> <span class="nb">i</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">Nsubs</span>
+    <span class="n">ML</span><span class="p">.</span><span class="n">locFuns</span><span class="p">.</span><span class="n">ffi</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span> <span class="p">=</span> <span class="n">Function</span><span class="p">([</span><span class="s">&#39;f&#39;</span> <span class="n">num2str</span><span class="p">(</span><span class="nb">i</span><span class="p">)],</span> <span class="p">{</span><span class="n">w</span><span class="p">,</span><span class="n">xy</span><span class="p">},</span> <span class="p">{</span><span class="n">ff</span><span class="p">});</span> 
+    <span class="n">ML</span><span class="p">.</span><span class="n">locFuns</span><span class="p">.</span><span class="n">ggi</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span> <span class="p">=</span> <span class="n">Function</span><span class="p">([</span><span class="s">&#39;g&#39;</span> <span class="n">num2str</span><span class="p">(</span><span class="nb">i</span><span class="p">)],</span> <span class="p">{</span><span class="n">w</span><span class="p">,</span><span class="n">xy</span><span class="p">},</span> <span class="p">{</span><span class="n">gg</span><span class="p">});</span>
+    <span class="n">ML</span><span class="p">.</span><span class="n">locFuns</span><span class="p">.</span><span class="n">hhi</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span> <span class="p">=</span> <span class="n">Function</span><span class="p">([</span><span class="s">&#39;h&#39;</span> <span class="n">num2str</span><span class="p">(</span><span class="nb">i</span><span class="p">)],</span> <span class="p">{</span><span class="n">w</span><span class="p">,</span><span class="n">xy</span><span class="p">},</span> <span class="p">{[]});</span>
+
+    <span class="c">% lower and upper boundary of variables will be set as default values</span>
+    <span class="n">ML</span><span class="p">.</span><span class="n">AA</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span> <span class="p">=</span> <span class="n">AA</span><span class="p">{</span><span class="nb">i</span><span class="p">};</span>
+    <span class="n">ML</span><span class="p">.</span><span class="n">zz0</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">nx</span><span class="o">*</span><span class="n">cap</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">ML</span><span class="p">.</span><span class="n">p</span><span class="p">{</span><span class="nb">i</span><span class="p">}</span>   <span class="p">=</span> <span class="nb">reshape</span><span class="p">(</span><span class="n">set</span><span class="p">((</span><span class="nb">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">cap</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">cap</span><span class="p">,</span> <span class="p">:)</span><span class="o">&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">end</span>
+</code></pre></div>
+</td></tr></table>
+
+<h2 id="solution-with-aladin-alphaalpha">Solution with ALADIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span></h2>
+<p>To solve this distributed problem with ALDIN-<span><span class="MathJax_Preview">\alpha</span><script type="math/tex">\alpha</script></span>, we still need to set up some options.</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code><span class="c">% initialize the options for ALADIN</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">rho</span> <span class="p">=</span> <span class="mf">1e3</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">mu</span> <span class="p">=</span> <span class="mf">1e4</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">maxiter</span> <span class="p">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">term_eps</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c">% no termination criterion, stop after maximum iteration</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">plot</span> <span class="p">=</span> <span class="s">&#39;true&#39;</span><span class="p">;</span>
+
+<span class="n">sol_ML</span> <span class="p">=</span> <span class="n">run_ALADIN</span><span class="p">(</span><span class="n">ML</span><span class="p">,</span><span class="n">opts</span><span class="p">);</span>
+</code></pre></div>
+</td></tr></table>
+
+<p>If the option <code>plot</code> is <code>true</code>, we can see that the algorithm converges in about 5 iterations, which is quite fast.
+<img alt="mahine_learning" src="../figures/machine_learning.png" /></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../ParallelExample/" title="Parallel Computing" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Parallel Computing
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../furtherReading/" title="Publications" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Publications
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.36cbf620.min.js"></script>
+      <script src="../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ["tabs", "instant"],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.7f7c8775.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+        <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
