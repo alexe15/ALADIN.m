@@ -1,6 +1,12 @@
 MIT License
 
-Copyright (c) 2020 Karlsruhe Institute of Technology, ShanghaiTech University.
+Copyright (c) 2020 
+Alexander Engelmann, Karlsruhe Institute of Technology;
+Yuning Jiang, ShanghaiTech University;
+Henrieke Benner, Karlsruhe Institute of Technology;
+Ruchuan Ou, Karlsruhe Institute of Technology;
+Boris Houska, ShanghaiTech University;
+Timm Faulwasser, Karlsruhe Institute of Technology .
 
 Contact: Alexander Engelmann, alexander.engelmann@kit.edu
 
