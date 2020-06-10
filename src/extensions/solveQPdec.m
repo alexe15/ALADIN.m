@@ -125,7 +125,7 @@ for n = 1:opts.innerIter
     end
     
     % logg
-    logg = true;
+    logg = false;
     if logg == true
         llam = zeros(Ncons,1);
         for i=1:NsubSys
@@ -135,8 +135,8 @@ for n = 1:opts.innerIter
     end
 end
 
-%figure
-%semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
+% figure
+% semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
 
 end
 

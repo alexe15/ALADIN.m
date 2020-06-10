@@ -13,8 +13,7 @@ iter.logg.X(:,i)  =  x;
 iter.logg.Y(:,i)  =  y;
 %         logg.delY       = [logg.delY delx];
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];
-%         logg.KappaEq    = [logg.KappaEq vertcat(KioptEq{:})];
-%         logg.KappaIneq  = [logg.KappaIneq vertcat(KioptIneq{:})];
+
 iter.logg.lam(:,i)        = iter.lam;
 iter.logg.localStepS(:,i) = norm(full(x - yOld),inf);
 iter.logg.QPstepS(:,i)    = norm(full(y-x),inf);
@@ -41,3 +40,6 @@ if strcmp(opts.alg, 'ALADIN')
         iter.logg.wrkSetChang(:,i) = sum(abs(iter.logg.wrkSet(:,i-1) - iter.logg.wrkSet(:,i)));
     end
 end
+
+iter.logg.KappaEq    = [iter.logg.KappaEq vertcat(KioptEq{:})];
+iter.logg.KappaIneq  = [iter.logg.KappaIneq vertcat(KioptIneq{:})];
