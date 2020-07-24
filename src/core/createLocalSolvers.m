@@ -119,8 +119,22 @@ function res = build_local_NLP_with_worhp(f, g, h, A, lambda, rho, z, Sigma, x0,
     cost = @(x)build_cost(x, f(x), lambda, A, rho, z, Sigma);
     grad = @(x)build_grad(x, dfdx(x), lambda, A, rho, z, Sigma);
     % unconstrained problem and Hessian is computed by hand
-    Hess = @(x, mu, scale)(scale * Hessian(x,lambda) + scale * rho*Sigma);
-    [xopt, multiplier] = worhp_interface(cost,grad,Hess,x0',lbx',ubx);
+    % Sparse
+    Nx = numel(x0);
+    nr = 3;
+    S  = zeros(Nx,Nx);
+    for i=1:nr
+        S = S + full(build_hessian(rand(Nx,1), Hessian, rho, Sigma) ~=0);
+    end
+    % get sparsity
+    S = S ~=0;
+    % convert everything to vectors for WORHP
+    [ pos1, pos2 ] = find(S);
+    posCombined    = find(S);
+     
+    Hess = @(x, mu, scale)build_hessian(x, Hessian, rho, Sigma, mu, scale, posCombined);
+    
+    [xopt, multiplier] = worhp_interface(cost,grad,Hess,x0',lbx',ubx',pos1,pos2);
     res.x = xopt;
     res.lam_g = [];
     res.lam_x = multiplier;
@@ -144,6 +158,22 @@ end
 function grad = build_grad(x, dfdx, lambda, A, rho, z, Sigma)
     grad = dfdx + A'*lambda + rho*Sigma*(x - z);
 end
+
+
+function hm  = build_hessian(x, Hessian, rho, Sigma, mu, scale, posCombined)
+    hm   = Hessian(x,0,0) + rho*Sigma;
+    if nargin > 4
+        hm = hm * scale;
+        hm = hm(:);
+        hm = long(hm(posCombined));
+    end
+end
+
+% function hv  = hessian_vector(x, mu, scale, posCombined, Hess)
+%     hm   = scale * Hess()
+% 
+% end
+
 
 function [ineq, eq, jac_ineq, jac_eq] = build_nonlcon(x, g, h, dgdx)
     ineq = h(x);
