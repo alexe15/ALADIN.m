@@ -91,56 +91,89 @@ function res = build_local_NLP_with_fmincon(f, g, h, A, lambda, rho, z, Sigma, x
     opts.SpecifyConstraintGradient = true;
     opts.SpecifyObjectiveGradient = true;
     opts.Display = 'iter';
-    
+    Nx  =  numel(x0);
     % select Hessian approximation
     if isempty(g(x0)) && isempty(h(x0)) 
-        % unconstrained problem and Hessian is computed by hand
-        opts.HessFcn = @(x,lambda)(Hessian(x,lambda) + rho*Sigma);
+%        unconstrained problem and Hessian is computed by hand
+        opts.HessFcn = @(x,kappa)build_hessian(Hessian(x,0,0), zeros(Nx,Nx), rho, Sigma);
     else
-        % switch to limited memory BFGS when large-scale opt
-        if numel(x0)<100
-            opts.HessianApproximation = 'bfgs';
-        else
-            opts.HessianApproximation = 'lbfgs';
-        end
+        %% three method to approach hessian: BFGS, limit-memory BFGS, infinite jacobian 
+%       opts.HessianApproximation = 'bfgs';
+      opts.HessianApproximation = 'lbfgs';
+%         opts.HessFcn = @(x,kappa)build_hessian(zeros(Nx,Nx), Hessian(x,kappa.eqnonlin,0), rho, Sigma);
     end
-    cost    = @(x)build_cost_function(x, f(x), dfdx(x), [], lambda, A, rho, z, Sigma);
+    objective    = @(x)build_objective(x, f(x), dfdx(x), [], lambda, A, rho, z, Sigma);
     nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
-    [xopt, fval, flag, out, multiplier] = fmincon(cost, x0, [], [], [], [], lbx, ubx, nonlcon, opts);
+    [xopt, fval, flag, out, multiplier] = fmincon(objective, x0, [], [], [], [], lbx, ubx, nonlcon, opts);
     res.x = xopt;
-    res.lam_g =[];% [multiplier.eqnonlin; multiplier.ineqnonlin];
+    res.lam_g = [multiplier.eqnonlin; multiplier.ineqnonlin];
     res.lam_x = max(multiplier.lower, multiplier.upper);
     res.pars = [];
 end
 
 function res = build_local_NLP_with_fminunc(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx, Hessian)
-    options = optimoptions('fminunc','Algorithm','trust-region',...
-    'SpecifyObjectiveGradient',true,'HessianFcn','objective','Display','iter');
-    cost    = @(x)build_cost_function(x, f(x), dfdx(x) , Hessian(x), lambda, A, rho, z, Sigma);
-    [xopt, fval, flag, ~, multiplier] = fminunc(cost, x0, options);
+    options = optimoptions('fminunc');
+    options.Algorithm = 'trust-region';
+    options.SpecifyObjectiveGradient= true;
+    options.HessianFcn = 'objective';
+    options.Display='iter';
+    objective    = @(x)build_objective(x, f(x), dfdx(x) , Hessian(x), lambda, A, rho, z, Sigma);
+    [xopt, fval, flag, ~, multiplier] = fminunc(objective, x0, options);
     res.x = xopt;
     res.lam_g = [];
     res.lam_x = [];
     res.pars = [];
 end
 
+
 function res = build_local_NLP_with_worhp(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx, Hessian)
     %% assumption: least-square problem, i.e. without constraints
-    cost = @(x)build_cost(x, f(x), lambda, A, rho, z, Sigma);
-    grad = @(x)build_grad(x, dfdx(x), lambda, A, rho, z, Sigma);
-    Hess.Func = @(x)build_hessian(x, Hessian(x,0,0), rho, Sigma);
-    % [cost, grad] = @(x)build_function(x, f(x), dfdx(x), [], lambda, A, rho, z, Sigma)
-    Nx   = numel(x0);
+    Nx            = numel(x0);    
+    Ng            = numel(g(x0));
+    cost          = @(x)build_cost(x, f(x), lambda, A, rho, z, Sigma);
+    grad          = @(x)build_grad(x, dfdx(x), lambda, A, rho, z, Sigma);
+    if isempty(g(x0)) && isempty(h(x0)) 
+    % unconstrained problem and Hessian is computed by hand
+        Hess.Func = @(x,kappa,scale)build_hessian(Hessian(x,0,0), zeros(Nx,Nx), rho, Sigma, scale);
+        Jac.Func      = @(x)0;
+        Jac.nonzero_pos.idx = 1;
+        Jac.nonzero_pos.row = 1;
+        Jac.nonzero_pos.col = 1;
+    else
+        Hess.Func = @(x,kappa,scale)build_hessian(zeros(Nx,Nx), Hessian(x,kappa) , rho, Sigma, scale);
+        Jac.Func      = @(x)dgdx(x);
+        Jac.nonzero_pos  = build_nonzero_vector_worhp(Jac.Func,Nx);
+    end
     % transform hessian matrix into hessian vector for WORHP solver
-    [Hess.row,Hess.col,Hess.pos] = build_Hess_indx_worhp(Hess.Func,Nx);
-    [xopt, multiplier] = worhp_interface(cost,grad,Hess,x0',lbx',ubx');
-    res.x = xopt;
-    res.lam_g = [];
-    res.lam_x = multiplier;
-    res.pars = [];
+    Hess.nonzero_pos     = build_nonzero_vector_worhp(Hess.Func,Nx,Ng);
+    [xopt, lam_x, lam_g]           = worhp_interface(cost,grad, g, Jac, Hess,x0,lbx,ubx);
+    res.x                        = xopt;
+    res.lam_g                    = lam_g;
+    res.lam_x                    = lam_x;
+    res.pars                     = [];
 end
+% function res = build_local_NLP_with_worhp(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx, Hessian)
+%     %% assumption: least-square problem, i.e. without constraints
+%     Nx            = numel(x0);    
+%     Ng            = numel(g(x0));
+%     cost          = @(x)build_cost(x, f(x), lambda, A, rho, z, Sigma);
+%     grad          = @(x)build_grad(x, dfdx(x), lambda, A, rho, z, Sigma);
+%     if isempty(g(x0)) && isempty(h(x0)) 
+%     % unconstrained problem and Hessian is computed by hand
+%         Hess.Func = @(x,kappa,scale)build_hessian(Hessian(x,0,0), zeros(Nx,Nx), rho, Sigma, scale);
+%     else
+%         Hess.Func = @(x,kappa,scale)build_hessian(zeros(Nx,Nx), Hessian(x,kappa) , rho, Sigma, scale);
+%     end
+%     % transform hessian matrix into hessian vector for WORHP solver
+%     Hess.nonzero_pos     = build_idx_HessVector_worhp(Hess.Func,Nx,Ng);
+%     [xopt, lam_x, lam_g]           = worhp_interface(cost,grad, g, dgdx, Hess,x0,lbx,ubx);
+%     res.x                        = xopt;
+%     res.lam_g                    = lam_g;
+%     res.lam_x                    = lam_x;
+%     res.pars                     = [];
+% end
 
-function [fun, grad, Hessian] = build_cost_function(x, f, dfdx, H, lambda, A, rho, z, Sigma)
+function [fun, grad, Hessian] = build_objective(x, f, dfdx, H, lambda, A, rho, z, Sigma)
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % the code assumes that Sigma is symmetric and positive definite!!!
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,7 +181,9 @@ function [fun, grad, Hessian] = build_cost_function(x, f, dfdx, H, lambda, A, rh
     if nargout > 1
         grad = double(build_grad(x, dfdx, lambda, A, rho, z, Sigma));
         if nargout > 2
-            Hessian = build_hessian(x, H, rho, Sigma);
+            % only called by fminunc
+            Nx      = numel(x);
+            Hessian = build_hessian(H,zeros(Nx,Nx), rho, Sigma);
         end
     end
 end
@@ -161,38 +196,75 @@ function grad = build_grad(x, dfdx, lambda, A, rho, z, Sigma)
     grad = dfdx + A'*lambda + rho*Sigma*(x - z);
 end
 
-function hm  = build_hessian(x, Hessian, rho, Sigma)
-    hm   = Hessian + rho*Sigma;
+function hm  = build_hessian(hessian_f, kappa_hessian_g, rho, Sigma, scale)
+    if nargin > 4
+        % worhp scale hessian_f
+        hessian_f = hessian_f .* scale;
+    end
+    hm   = hessian_f + rho * Sigma + kappa_hessian_g;
 end
-
-% function hv  = hessian_vector(x, mu, scale, posCombined, Hess)
-%     hm   = scale * Hess()
-% 
-% end
-
 
 function [ineq, eq, jac_ineq, jac_eq] = build_nonlcon(x, g, h, dgdx)
     ineq = h(x);
     eq = g(x);
-    jac_ineq = [];
-    jac_eq = dgdx(x)';
+    if nargout > 2
+        jac_ineq = [];
+        jac_eq = dgdx(x)';
+    end
 end
 
-function [Hrow, Hcol, Hpos] = build_Hess_indx_worhp(H, Nx)
-    nr = 5;
-    S  = zeros(Nx,Nx);
-    for i=1:nr
-        S = S + full(H(rand(Nx,1)/100) ~=0);
+% function HessVec_nonzero_pos = build_idx_HessVector_worhp(H, Nx, Ng)
+%     nr = 5;
+%     S  = zeros(Nx,Nx);
+%     for i=1:nr
+%         S = S + full(H(rand(Nx,1)/100, ones(Ng,1),1) ~=0);
+%     end
+%     % get sparsity
+%     S = S ~=0;
+%     % convert everything to vectors for WORHP
+%     [row, col] = find(S);
+%     idx = find(S);
+%     
+%     diag = find(row == col);
+%     low_triangle = find(row>col);
+%     HessVec_nonzero_pos.triangle.row  = row(low_triangle);
+%     HessVec_nonzero_pos.triangle.col  = col(low_triangle);
+%     HessVec_nonzero_pos.triangle.idx  = idx(low_triangle);
+%     HessVec_nonzero_pos.diag.idx      = idx(diag);
+%     HessVec_nonzero_pos.diag.iith = col(diag);   
+% end
+function nonzero_pos = build_nonzero_vector_worhp(M, Nx, Ng)
+    nr = 20;
+    if nargin > 2
+        % hessian_f
+        S  = zeros(size(M(ones(Nx,1),ones(Ng,1),1)));
+        for i=1:nr
+            S = S + full(M(rand(Nx,1), rand(Ng,1),1) ~=0);
+        end
+    else
+        % kappa*hessian_g
+        S  = zeros(size(M(ones(Nx,1))));
+        for i=1:nr
+            S = S + full(M(rand(Nx,1)) ~=0);
+        end        
     end
     % get sparsity
     S = S ~=0;
     % convert everything to vectors for WORHP
     [row, col] = find(S);
-    position_number = find(S);
+    idx = find(S);
+    if nargin > 2    
+        diag = find(row == col);
+        low_triangle = find(row>col);
+        nonzero_pos.triangle.row  = row(low_triangle);
+        nonzero_pos.triangle.col  = col(low_triangle);
+        nonzero_pos.triangle.idx  = idx(low_triangle);
+        nonzero_pos.diag.idx      = idx(diag);
+        nonzero_pos.diag.iith = col(diag);   
+    else
+        nonzero_pos.row = row;
+        nonzero_pos.col = col;
+        nonzero_pos.idx = idx;
+    end
     
-    diag = find(row == col);
-    low_triangle = find(row>col);
-    Hrow = [row(low_triangle);row(diag)]';
-    Hcol = [col(low_triangle);col(diag)]';
-    Hpos = [position_number(low_triangle); position_number(diag)];
 end
