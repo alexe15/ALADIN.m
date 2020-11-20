@@ -19,7 +19,7 @@ function [ timers, opts, iter ] = parallelStepCentral( sProb, iter, timers, opts
 
         tic
         fprintf('\nEvaluating sensitivities in region %i\n', j);
-        [loc, iter, Jac] = evaluate_sensitivities(sProb, loc, iter, opts, j);
+        [loc, iter, Jac] = evaluate_sensitivities(sProb, loc, iter, opts, j, Neq);
         timers.sensEvalT = timers.sensEvalT + toc;
 
         fprintf('\nModifying Hessian in region %i\n', j);
@@ -85,7 +85,7 @@ function loc = evaluate_gradient(prob, loc, j)
     loc.sensEval.ggiEval{j} = prob.sens.gg{j}(loc.xx{j});
 end
 
-function [loc, iter] = evaluate_hessian(prob, loc, opts, iter, j)
+function [loc, iter] = evaluate_hessian(prob, loc, opts, iter, j, Neq)
     % Hessian approximations
     if strcmp(opts.Hess, 'BFGS') || strcmp(opts.Hess, 'DBFGS')
         loc.sensEval.gLiEval{j}   = prob.sens.gL{j}(loc.xx{j},loc.KKapp{j});
@@ -114,7 +114,8 @@ function [loc, iter] = evaluate_hessian(prob, loc, opts, iter, j)
             iter.comm.globF.primVal{j} = [ iter.comm.globF.primVal{j} length(iter.loc.xx{j}) ];
         end
     else
-        loc.sensEval.HHiEval{j}   = prob.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho);
+
+        loc.sensEval.HHiEval{j}   = prob.sens.HH{j}(loc.xx{j},loc.KKapp{j},iter.stepSizes.rho, Neq);
         
         if strcmp(opts.commCount, 'true') && ~strcmp(opts.slack,'redSpace') && strcmp(opts.innerAlg, 'none')
             % communication for xx and the gradient of the Lagrangian and
@@ -137,9 +138,9 @@ function [loc, JacCon] = evaluate_jacobian(prob, loc, opts, j)
     loc.sensEval.JJacCon{j} = [JJacCon{j}; JacBounds];   
 end
 
-function [loc, iter, Jac] = evaluate_sensitivities(prob, loc, iter, opts, j)
+function [loc, iter, Jac] = evaluate_sensitivities(prob, loc, iter, opts, j, Neq)
     loc = evaluate_gradient(prob, loc, j);
-    [loc, iter] = evaluate_hessian(prob, loc, opts, iter, j);
+    [loc, iter] = evaluate_hessian(prob, loc, opts, iter, j, Neq);
     [loc, Jac] = evaluate_jacobian(prob, loc, opts, j);
 end
 
