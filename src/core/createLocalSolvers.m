@@ -13,7 +13,7 @@ funs = sProb.locFuns;
 z0 = sProb.zz0;
 solver = sProb.solver;
 
-for i=1:NsubSys     
+for i = 1:NsubSys     
     nnxi{i} = size(sProb.AA{i},2);
     nngi{i} = size(funs.ggi{i}(z0{i}), 1);
     nnhi{i} = size(funs.hhi{i}(z0{i}), 1);    
@@ -28,7 +28,15 @@ for i=1:NsubSys
     funs = sProb.locFuns;
     sens = sProb.sens;
     if strcmp(solver, 'fmincon')
-        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_fmincon(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});   
+        %% We need to untangle the Jacobian back to Jacobian for equalities
+        %% and Jacobian for inequalities
+        %% !!!!!This will (currently) not work for power flow problems!!!!!
+        jac = sens.JJac{i};
+        n_eq = sProb.locFuns.dims{i}.eq;
+        eq_jac = @(x)eq_jacobian(x, jac, n_eq);
+        ineq_jac = @(x)ineq_jacobian(x, jac, n_eq);
+        %%
+        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_fmincon(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, eq_jac, ineq_jac, sens.gg{i}, sens.HH{i});   
     elseif strcmp(solver, 'fminunc')
         solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_fminunc(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});   
 
@@ -48,8 +56,18 @@ for i=1:NsubSys
         solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_worhp(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});
     end
     
-nnlp{i} = struct('solve_nlp', solve_nlp, 'pars', pars); 
+    nnlp{i} = struct('solve_nlp', solve_nlp, 'pars', pars); 
 end
+end
+
+function eq_jac = eq_jacobian(x, jac, n_eq)
+    j = jac(x);
+    eq_jac = j(1:n_eq, :);
+end
+
+function ineq_jac = ineq_jacobian(x, jac, n_eq)
+    j = jac(x);
+    ineq_jac = j(n_eq+1:end, :);
 end
 
 function nlp_reference = build_nlp_reference(x, f, g, h, A, lambda, rho, opts)
@@ -84,7 +102,7 @@ function res = build_nlp_with_casadi(x, z, rho, lambda, Sigma, pars, nlp, lbx, u
     res.pars.lam_x = res.lam_x;
 end
 
-function res = build_local_NLP_with_fmincon(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx, Hessian)
+function res = build_local_NLP_with_fmincon(f, g, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dhdx, dfdx, Hessian)
     opts = optimoptions('fmincon');
     opts.Algorithm = 'interior-point';
     opts.CheckGradients = false;
@@ -103,7 +121,7 @@ function res = build_local_NLP_with_fmincon(f, g, h, A, lambda, rho, z, Sigma, x
 %         opts.HessFcn = @(x,kappa)build_hessian(zeros(Nx,Nx), Hessian(x,kappa.eqnonlin,0), rho, Sigma);
     end
     objective    = @(x)build_objective(x, f(x), dfdx(x), [], lambda, A, rho, z, Sigma);
-    nonlcon = @(x)build_nonlcon(x, g, h, dgdx);
+    nonlcon = @(x)build_nonlcon(x, g, h, dgdx, dhdx);
     [xopt, fval, flag, out, multiplier] = fmincon(objective, x0, [], [], [], [], lbx, ubx, nonlcon, opts);
     res.x = xopt;
     res.lam_g = [multiplier.eqnonlin; multiplier.ineqnonlin];
@@ -182,6 +200,7 @@ function [fun, grad, Hessian] = build_objective(x, f, dfdx, H, lambda, A, rho, z
         grad = double(build_grad(x, dfdx, lambda, A, rho, z, Sigma));
         if nargout > 2
             % only called by fminunc
+            error('Please check that the Hessian H is the Hessian of f!!');
             Nx      = numel(x);
             Hessian = build_hessian(H,zeros(Nx,Nx), rho, Sigma);
         end
@@ -204,11 +223,11 @@ function hm  = build_hessian(hessian_f, kappa_hessian_g, rho, Sigma, scale)
     hm   = hessian_f + rho * Sigma + kappa_hessian_g;
 end
 
-function [ineq, eq, jac_ineq, jac_eq] = build_nonlcon(x, g, h, dgdx)
+function [ineq, eq, jac_ineq, jac_eq] = build_nonlcon(x, g, h, dgdx, dhdx)
     ineq = h(x);
     eq = g(x);
     if nargout > 2
-        jac_ineq = [];
+        jac_ineq = dhdx(x)';
         jac_eq = dgdx(x)';
     end
 end
