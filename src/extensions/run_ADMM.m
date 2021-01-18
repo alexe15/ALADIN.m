@@ -113,12 +113,20 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
                                    
         tic     
         % solve local NLP's
-        sol = nnlp{j}('x0' , iter.yy{j},...
-                      'p',   pNum,...
-                      'lbx', sProb.llbx{j},...
-                      'ubx', sProb.uubx{j},...
-                      'lbg', lbg{j}, ...
-                      'ubg', ubg{j});           
+        if ~isempty(sProb.llbx{j}) %only call casadi with ubx,lbx if their not empty
+            sol = nnlp{j}('x0' , iter.yy{j},...
+                          'p',   pNum,...
+                          'lbx', sProb.llbx{j},...
+                          'ubx', sProb.uubx{j},...
+                          'lbg', lbg{j}, ...
+                          'ubg', ubg{j});
+        else %if ubx,lbx are empty, then don't use them as arguments to casadi;
+            %if you call casadi with empty ubx,lbx then it will insert some constraints for you
+            sol = nnlp{j}('x0' , iter.yy{j},...
+                          'p',   pNum,...
+                          'lbg', lbg{j}, ...
+                          'ubg', ubg{j});  
+        end %todo: insert additional checks if ubx XOR lbx is empty
         timers.NLPtotTime = timers.NLPtotTime + toc;   
                                     
         iter.loc.xx{j}  = full(sol.x);
@@ -132,7 +140,7 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
     end
     % gloabl x vector
     x = vertcat(iter.loc.xx{:});
-
+    floats = floats + numel(x);
          
     % Solve ctr. QP
     hQP_T=[];
@@ -160,6 +168,7 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
         iter.yy{j}       = y(ctr:(ctr+ni-1)); 
         ctr = ctr + ni;
     end
+    floats = floats + numel(y);
     
     % lambda update after z update
     for j = 1:NsubSys
