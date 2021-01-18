@@ -18,6 +18,7 @@ if strcmp(opts.alg, 'ALADIN')
     optVariants.reg          = {'true','false'};
     optVariants.locSol       = {'ipopt','sqpmethod'};
     optVariants.plot         = {'true', 'false'};
+    optVariants.plotInner    = {'false', 'true'};
     optVariants.Sig          = {'const','dyn'};
     optVariants.lamInit      = {'false','true'};
     optVariants.term_eps     = {0};

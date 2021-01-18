@@ -3,8 +3,6 @@ clear all;
 clc;
 close all;
 
-
-
 % define robot models
 ode = @(x,u) [ u(1)*cos(x(3));
                u(1)*sin(x(3));
@@ -84,9 +82,9 @@ X0       = vertcat(XX0{:});
 ppNumAll = [ppNum{1}(:,1); ppNum{2}(:,1)];
 
 for i=1:Nrobot
-    rob.locFuns.ffi{i} = Function(['f' num2str(i)],{XXU{i}},{JJ{i}});
-    rob.locFuns.ggi{i} = Function(['g' num2str(i)],{[XXU{i};X0]},{gg{i}});
-    rob.locFuns.hhi{i} = Function(['h' num2str(i)],{XXU{i}},{hh{i}});
+    rob.locFuns.ffi{i} = Function(['f' num2str(i)],{XXU{i},XX0{i}},{JJ{i}});
+    rob.locFuns.ggi{i} = Function(['g' num2str(i)],{XXU{i},XX0{i}},{gg{i}});
+    rob.locFuns.hhi{i} = Function(['h' num2str(i)],{XXU{i},XX0{i}},{hh{i}});
     
     % set up ALADIN parameters
     rob.llbx{i}  = -inf*ones(length(XXU{i}),1);
@@ -97,7 +95,8 @@ for i=1:Nrobot
 end
 
 rob.lam0   = 0*ones(size(AA{1},1),1);
-rob.p      = ppNumAll;
+rob.p{1}   = ppNum{1}(:,1);
+rob.p{2}   = ppNum{2}(:,1);
 opts.plot  = 'false';
 opts.reuse = 'true';
 opts.maxiter  = 50;
@@ -114,7 +113,12 @@ for i = 1:Nmpc
 %     xx0  = [repmat(Xopt(:,i+1),N,1); zeros(2*N,1)];
 %     rob.zz0 = {xx0,xx0};
     rob.zz0 = sol_rob{i}.xxOpt;
-    rob.p = Xopt(:,i+1);
+    
+    % set new initial point
+    for j = 1:Nrobot
+        rob.p{j} = Xopti(3*(j-1)+1:3*(j-1)+3);
+    end
+      
     
     % reuse problem formulation 
     fNames = fieldnames(sol_rob{1}.problemForm);
