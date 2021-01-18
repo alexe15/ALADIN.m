@@ -1,5 +1,5 @@
 function [ lam, Lam, comm ] = solveQPdec( cond, lamOld, opts )
-NsubSys = length(cond.C);
+NsubSys = length(cond.IC);
 Ncons   = size(cond.IC{1},2);
 
 % compute consistent initialization 
@@ -80,7 +80,7 @@ if strcmp(opts.innerAlg,'D-CG')
        etaG = etaGP;
 
        % logg
-       logg = false;
+       logg = true;
        if logg == true 
            llam = zeros(Ncons,1);
            for i=1:NsubSys
@@ -125,7 +125,7 @@ for n = 1:opts.innerIter
     end
     
     % logg
-    logg = false;
+    logg = true;
     if logg == true
         llam = zeros(Ncons,1);
         for i=1:NsubSys
@@ -187,10 +187,15 @@ end
 %     S = S + cond.IC{i}'*cond.hS{i}*cond.IC{i};
 % end
 % 
-% figure
-% semilogy(max(abs(S*LamCG-repmat(s,[1,size(LamCG,2)]))))
+if strcmp(opts.plotInner,'true')
+    figure
+    if strcmp(opts.innerAlg,'D-CG')
+        semilogy(max(abs(S*LamCG-repmat(s,[1,size(LamCG,2)]))))
+    else
+        semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
+    end
+end
 % hold on
-% semilogy(max(abs(S*LamADM-repmat(s,[1,size(LamADM,2)]))))
 %loglog(max(abs(S*Z-rhsS)))
 
 

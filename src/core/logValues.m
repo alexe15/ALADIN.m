@@ -10,7 +10,7 @@ y                 = vertcat(iter.yy{:});
 yOld              = vertcat(iter.yyOld{:});
 
 iter.logg.X(:,i)  =  x;
-iter.logg.Y(:,i)  =  y;
+iter.logg.Y(:,i)  =  full(y);
 %         logg.delY       = [logg.delY delx];
 %         logg.Kappa      = [logg.Kappa vertcat(Kiopt{:})];
 

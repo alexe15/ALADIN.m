@@ -70,7 +70,7 @@ for i = 1:Nunit
     
     % over horizon
     for j = 1: N-1
-        ZZij1      = rk4(@(t,x,u) ode_reactor(t,x,u,i,state(:,j)), dT, 0, ZZ{i}{i}(:,j), UU{i}(j));
+        ZZij1    = rk4(@(t,x,u) ode_reactor(t,x,u,i,state(:,j)), dT, 0, ZZ{i}{i}(:,j), UU{i}(j));
         gg{i}    = [gg{i}; ZZ{i}{i}(:,j+1)-ZZij1];
         dx       = ZZ{i}{i}(:,j+1) - xs{i};
         du       = UU{i}(j) - Qs(i); 
@@ -93,7 +93,6 @@ end
 AA{Nunit} = -repmat(Abase, Nunit-1, 1);
 
 %% solve with ALADIN
-
 for i = 1:Nunit
     chem.locFuns.ffi{i} = matlabFunction(JJ{i}, 'Vars', {XXU{i},XX0{i}});
     chem.locFuns.ggi{i} = matlabFunction(gg{i}, 'Vars', {XXU{i},XX0{i}});
