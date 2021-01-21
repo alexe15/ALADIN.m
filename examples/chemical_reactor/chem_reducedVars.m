@@ -47,15 +47,15 @@ Qc = diag([20*sc_tem^2, 1000, 1000, 1000]);
 Rc = 1e-10*sc_in^2;
 
 %% distributed formulation
-
-ZZ{1}{1} = SX.sym('z11', [4 N]); % states
-ZZ{1}{3} = SX.sym('z13', [4 N]);
-ZZ{2}{1} = SX.sym('z21', [4 N]);
-ZZ{2}{2} = SX.sym('z22', [4 N]);
-ZZ{2}{3} = [];
-ZZ{3}{2} = SX.sym('z32', [4 N]);
-ZZ{3}{3} = SX.sym('z33', [4 N]);
+% the number of previous reactor, 
+% e.g. for the 1st reactor, the previous one is the 3rd reactor
+num_prev = circshift([1 2 3], 1); 
 for i = 1:Nunit
+    % ZZ{i}{1} represent the states of the previous reactor
+    ZZ{i}{1} = SX.sym(['x' num2str(i) num2str(num_prev(i))], [4 N]);
+    % ZZ{i}{2} represent the states of the reactor
+    ZZ{i}{2} = SX.sym(['x' num2str(i) num2str(i)], [4 N]);
+   
     UU{i} = SX.sym(['u' num2str(i)], [1 N]); % inputs
 end
 
@@ -65,18 +65,13 @@ for i = 1:Nunit
     gg{i}   = [];
     llbu{i} = [];
     uubu{i} = [];
-    gg{i} = [gg{i}; ZZ{i}{i}(:,1)-x0{i}];
-    if i == 1
-        state = ZZ{1}{3};
-    else
-        state = ZZ{i}{i-1};
-    end
+    gg{i} = [gg{i}; ZZ{i}{2}(:,1)-x0{i}];
     
     % over horizon
     for j = 1: N-1
-        ZZij1      = rk4(@(t,x,u) ode_reactor(t,x,u,i,state(:,j)), dT, 0, ZZ{i}{i}(:,j), UU{i}(j));
-        gg{i}    = [gg{i}; ZZ{i}{i}(:,j+1)-ZZij1];
-        dx       = ZZ{i}{i}(:,j+1) - xs{i};
+        ZZij1      = rk4(@(t,x,u) ode_reactor(t,x,u,i,ZZ{i}{1}(:,j)), dT, 0, ZZ{i}{2}(:,j), UU{i}(j));
+        gg{i}    = [gg{i}; ZZ{i}{2}(:,j+1)-ZZij1];
+        dx       = ZZ{i}{2}(:,j+1) - xs{i};
         du       = UU{i}(j) - Qs(i); 
         JJ{i}    = JJ{i} + dx'*Qc*dx + du'*Rc*du;
     end
@@ -84,17 +79,14 @@ end
 
 % connect the states and inputs
 for i = 1:Nunit
-    ZZi      = vertcat(ZZ{i}{1}(:), ZZ{i}{2}(:), ZZ{i}{3}(:));
+    ZZi      = vertcat(ZZ{i}{1}(:), ZZ{i}{2}(:));
     XXU{i}   = [ZZi(:); UU{i}(:)];
 end
 
 % set up consensus constraints
-AA{1}   = horzcat([eye(N*4) zeros(N*4); zeros(N*4) zeros(N*4); zeros(N*4) eye(N*4)], zeros(Nunit*4*N,N));
-AA{2}   = horzcat([-eye(N*4) zeros(N*4); zeros(N*4) eye(N*4); zeros(N*4) zeros(N*4)], zeros(Nunit*4*N,N));
-AA{3}   = horzcat([zeros(N*4) zeros(N*4); -eye(N*4) zeros(N*4); zeros(N*4) -eye(N*4)], zeros(Nunit*4*N,N));
-XXU0{1}  = [repmat(x0{1},N,1); repmat(x0{3},N,1); Qs(1)*ones(N,1)];
-XXU0{2}  = [repmat(x0{1},N,1); repmat(x0{2},N,1); Qs(2)*ones(N,1)];
-XXU0{3}  = [repmat(x0{2},N,1); repmat(x0{3},N,1); Qs(3)*ones(N,1)];
+AA{1}   = horzcat([zeros(Nx) eye(Nx); zeros(Nx) zeros(Nx); eye(Nx) zeros(Nx)], zeros(Nunit*Nx,N));
+AA{2}   = horzcat([-eye(Nx) zeros(Nx); zeros(Nx) eye(Nx); zeros(Nx) zeros(Nx)], zeros(Nunit*Nx,N));
+AA{3}   = horzcat([zeros(Nx) zeros(Nx); -eye(Nx) zeros(Nx); zeros(Nx) -eye(Nx)], zeros(Nunit*Nx,N));
 
 %% solve with ALADIN
 for i = 1:Nunit
@@ -108,7 +100,7 @@ for i = 1:Nunit
     chem.llbx{i} = [zeros(length(XXU{i})-N,1); Ql(i)*ones(N,1)];
     chem.uubx{i} = [inf*ones(length(XXU{i})-N,1); Qu(i)*ones(N,1)];
     chem.AA{i}   = AA{i};
-    chem.zz0{i}  = XXU0{i};
+    chem.zz0{i}  = [repmat(x0{num_prev(i)},N,1); repmat(x0{i},N,1); Qs(3)*ones(N,1)];
     
     SSig{i} = eye(length(XXU{i}));
 end
@@ -128,14 +120,13 @@ opts = initializeOpts(rho, mu, maxit, SSig, term_eps, 'false');
 sol_ALADIN = run_ALADIN(chem, opts);
 
 % plot the results
-solx1 = reshape(full(sol_ALADIN.xxOpt{1}(1:Nx)), [], N);
-solx2 = reshape(full(sol_ALADIN.xxOpt{2}(Nx+1:2*Nx)), [], N);
-solx3 = reshape(full(sol_ALADIN.xxOpt{3}(Nx+1:2*Nx)), [], N);
-Xopt = [solx1; solx2; solx3];
-Usol = full([sol_ALADIN.xxOpt{1}(2*Nx+1:end);...
-             sol_ALADIN.xxOpt{2}(2*Nx+1:end);...
-             sol_ALADIN.xxOpt{3}(2*Nx+1:end)]);
-Uopt  = reshape(Usol,N,[])';
+Xopt = [];
+Uopt = [];
+for i = 1:Nunit
+    Xopt = [Xopt; reshape(full(sol_ALADIN.xxOpt{i}(Nx+1:2*Nx)), [], N)];
+    Uopt = [Uopt; full(sol_ALADIN.xxOpt{i}(2*Nx+1:end))'];
+end
+
 XXopt = vertcat(Xopt, Uopt);
 plotresults(XXopt);
 
@@ -203,33 +194,32 @@ function dx = ode_reactor(t, x, u, number, prev)
     CA(number) = x(2);
     CB(number) = x(3);
     CC(number) = x(4);
+    % the number of the previous reactor
+    num_prev = circshift([1 2 3], 1);
+    T(num_prev(number))  = prev(1);
+    CA(num_prev(number)) = prev(2);
+    CB(num_prev(number)) = prev(3);
+    CC(num_prev(number)) = prev(4);
     
     Q  = sc_in*u;
     
     % give the concentration in the recycle
-    
+    if number == 1 | number == 3
+         K   = (alpha_a*CA(3)*MWA + alpha_b*CB(3)*MWB + alpha_c*CC(3)*MWC)/rho + alpha_d*xd*rho;
+         CAr = alpha_a*CA(3)/K;
+         CBr = alpha_b*CB(3)/K;
+         CCr = alpha_c*CC(3)/K; 
+    end
     
     switch number
         case 1
-            T(3)  = prev(1);
-            CA(3) = prev(2);
-            CB(3) = prev(3);
-            CC(3) = prev(4);
             E1T1 = exp(-E1/(R*sc_tem*T(1)));
             E2T1 = exp(-E2/(R*sc_tem*T(1)));
-            K   = (alpha_a*CA(3)*MWA + alpha_b*CB(3)*MWB + alpha_c*CC(3)*MWC)/rho + alpha_d*xd*rho;
-            CAr = alpha_a*CA(3)/K;
-            CBr = alpha_b*CB(3)/K;
-            CCr = alpha_c*CC(3)/K; 
             dT  = F10/V1*(T10-sc_tem*T(1)) + Fr/V1*sc_tem*(T(3)-T(1)) - H1/(Cp*rho)*k1*E1T1*CA(1) - H2/(Cp*rho)*k2*E2T1*CA(1) + Q/(rho*Cp*V1);
             dCA = F10/V1*(CA10-CA(1)) + Fr/V1*(CAr-CA(1)) - k1*E1T1*CA(1) - k2*E2T1*CA(1);
             dCB = -F10/V1*CB(1) + Fr/V1*(CBr-CB(1)) + k1*E1T1*CA(1);
             dCC = -F10/V1*CC(1) + Fr/V1*(CCr-CC(1)) + k2*E2T1*CA(1);
         case 2
-            T(1)  = prev(1);
-            CA(1) = prev(2);
-            CB(1) = prev(3);
-            CC(1) = prev(4);
             E1T2 = exp(-E1/(R*sc_tem*T(2)));
             E2T2 = exp(-E2/(R*sc_tem*T(2)));
             dT  = F1/V2*sc_tem*(T(1)-T(2)) + F20/V2*(T20-sc_tem*T(2)) - H1/(Cp*rho)*k1*E1T2*CA(2) - H2/(Cp*rho)*k2*E2T2*CA(2) + Q/(rho*Cp*V2);
@@ -237,14 +227,6 @@ function dx = ode_reactor(t, x, u, number, prev)
             dCB = F1/V2*(CB(1)-CB(2)) - F20/V2*CB(2) + k1*E1T2*CA(2);
             dCC = F1/V2*(CC(1)-CC(2)) - F20/V2*CC(2) + k2*E2T2*CA(2);
         case 3
-            T(2)  = prev(1);
-            CA(2) = prev(2);
-            CB(2) = prev(3);
-            CC(2) = prev(4);
-            K   = (alpha_a*CA(3)*MWA + alpha_b*CB(3)*MWB + alpha_c*CC(3)*MWC)/rho + alpha_d*xd*rho;
-            CAr = alpha_a*CA(3)/K;
-            CBr = alpha_b*CB(3)/K;
-            CCr = alpha_c*CC(3)/K; 
             dT  = F2/V3*sc_tem*(T(2)-T(3)) - Hvap*Fr/(rho*Cp*V3) + Q/(rho*Cp*V3);
             dCA = F2/V3*(CA(2)-CA(3)) - Fr/V3*(CAr-CA(3));
             dCB = F2/V3*(CB(2)-CB(3)) - Fr/V3*(CBr-CB(3));
