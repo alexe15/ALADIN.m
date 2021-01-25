@@ -140,7 +140,6 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
     end
     % gloabl x vector
     x = vertcat(iter.loc.xx{:});
-    floats = floats + numel(x);
          
     % Solve ctr. QP
     hQP_T=[];
@@ -168,7 +167,6 @@ while i <= opts.maxiter% && norm(delx,inf)>eps
         iter.yy{j}       = y(ctr:(ctr+ni-1)); 
         ctr = ctr + ni;
     end
-    floats = floats + numel(y);
     
     % lambda update after z update
     for j = 1:NsubSys
