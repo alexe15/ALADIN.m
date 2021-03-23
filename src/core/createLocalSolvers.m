@@ -31,7 +31,8 @@ for i=1:NsubSys
         solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_fmincon(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});   
     elseif strcmp(solver, 'fminunc')
         solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_fminunc(funs.ffi{i}, funs.ggi{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});   
-
+    elseif strcmp(solver, 'lsqnonlin')
+        solve_nlp = @(x, z, rho, lambda, Sigma, pars)build_local_NLP_with_lsqnonlin(funs.rri{i}, funs.dri{i}, funs.hhi{i}, sProb.AA{i}, lambda, rho, z, Sigma, x, sProb.llbx{i}, sProb.uubx{i}, sens.JJac{i}, sens.gg{i}, sens.HH{i});   
     elseif strcmp(solver, 'Casadi+Ipopt')
         assert(isfield(sProb, 'locFunsCas'), 'locFunsCas field is missing')
         nlp_reference = build_nlp_reference(sProb.xxCas{i},...
@@ -51,6 +52,40 @@ for i=1:NsubSys
 nnlp{i} = struct('solve_nlp', solve_nlp, 'pars', pars); 
 end
 end
+
+
+function res = build_local_NLP_with_lsqnonlin(r, drdx, h, A, lambda, rho, z, Sigma, x0, lbx, ubx, dgdx, dfdx, Hessian)
+    Nx  =  numel(x0);
+    options = optimoptions('lsqnonlin','SpecifyObjectiveGradient',true);
+    objective    = @(x)build_objective_least_squares(x, r(x), drdx(x), [], lambda, A, rho, z, Sigma);
+    xopt    = lsqnonlin(objective, x0, lbx, ubx, options);
+    res.x = xopt;
+    res.lam_g = [];
+    sz = size(lambda);
+    res.lam_x = zeros(sz);
+    res.pars = [];
+end
+
+
+function [fun, jac] = build_objective_least_squares(x, r, drdx, H, lambda, A, rho, z, Sigma)
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % the code assumes that Sigma is symmetric and positive definite!!!
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    fun = double( build_residual(x, r, lambda, A, rho, z, Sigma));
+    if nargout > 1
+        jac = double(build_jacobian(x, drdx, lambda, A, rho, z, Sigma));
+    end
+end
+
+
+function fun = build_residual(x, r, lambda, A, rho, z, Sigma)
+    fun = [r;sqrt(0.5*rho)*Sigma*(x - z)];
+end
+
+function fun = build_jacobian(x, drdx, lambda, A, rho, z, Sigma)
+    fun = [drdx ; sqrt(0.5*rho)*Sigma];
+end
+
 
 function nlp_reference = build_nlp_reference(x, f, g, h, A, lambda, rho, opts)
     import casadi.*
