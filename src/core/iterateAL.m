@@ -45,11 +45,11 @@ while (i <= opts.maxiter) && ( (strcmp(opts.term_eps,'false')) || (iter.logg.con
     end
    
     % plot iterates?
-    if opts.plot
-       tic
-       plotIterates;
-       timers.plotTimer = timers.plotTimer + toc;
-    end
+%     if opts.plot
+%        tic
+%        plotIterates;
+%        timers.plotTimer = timers.plotTimer + toc;
+%     end
     
     i = i+1;
     iter.i = i;
