@@ -3,7 +3,7 @@ ALADIN-alpha is a rapid-prototyping toolbox for *distributed* and *decentralized
 
 
 ## Getting started
-1. Download ALADIN-M and add the `\src` folder to you MATLAB path.
+1. Download ALADIN-M and add the `\src` folder including all subfolders folder to you MATLAB path.
 2. Run `\exampels\main_example.m`.
 
 
