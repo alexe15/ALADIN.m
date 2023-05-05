@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Install dependencies
         run:  pip3 install mkdocs-mermaid-plugin
+      - name: Install dependencies2
         run:  pip3 install mkdocs-awesome-pages-plugin
       - name: Checkout master
         uses: actions/checkout@v1
