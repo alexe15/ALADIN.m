@@ -9,14 +9,15 @@ jobs:
     name: Deploy docs
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4 
       - name: Install dependencies
         run:  pip3 install mkdocs-mermaid-plugin
       - name: Install dependencies2
         run:  pip3 install mkdocs-awesome-pages-plugin
       - name: Install dependencies3
         run:  pip install mkdocs-awesome-pages-plugin
-      - name: Checkout master
-        uses: actions/checkout@v1
+
 
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
