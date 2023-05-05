@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies2
         run:  pip3 install mkdocs-awesome-pages-plugin
       - name: Install dependencies3
-        run:  pip install awesome-pages
+        run:  pip install mkdocs-awesome-pages-plugin
       - name: Checkout master
         uses: actions/checkout@v1
 
