@@ -1,10 +1,10 @@
 
 # References
-ALADIN-$\alpha$ is descibed in [ArXiv](https://arxiv.org/pdf/2006.01866.pdf). Different versions of ALADIN are implemented in ALADIN-$\alpha$. Algorithmic details are described in the publications below. 
+Note that different versions of ALADIN are implemented in ALADIN-α. Please find details on them in the papers below.
 
 ###### Toolbox
 
-[1] [Engelmann, A., Jiang, Y., Benner, H., Ou, R., Houska, B., & Faulwasser, T. (2020). ALADIN-$\alpha $--An open-source MATLAB toolbox for distributed non-convex optimization. Optimal Control Applications and Methods, 43(1), 4-22.](https://doi.org/10.1002/oca.2811)
+[1] [Engelmann, A., Jiang, Y., Benner, H., Ou, R., Houska, B., & Faulwasser, T. (2020). ALADIN-α--An open-source MATLAB toolbox for distributed non-convex optimization. Optimal Control Applications and Methods, 43(1), 4-22.](https://doi.org/10.1002/oca.2811)
 
 ###### Algorithmic Details
 
