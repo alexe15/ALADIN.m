@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
-        run:  pip install mkdocs-mermaid-plugin
+        run:  pip3 install mkdocs-mermaid-plugin
+        run:  pip3 install mkdocs-awesome-pages-plugin
       - name: Checkout master
         uses: actions/checkout@v1
 
