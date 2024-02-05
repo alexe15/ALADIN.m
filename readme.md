@@ -9,7 +9,7 @@ ALADIN-alpha is a rapid-prototyping toolbox for *distributed* and *decentralized
 
 
 ## Highlights
-ALADIN-alpha 
+ALADIN-alpha
 - supports general partially separable NLPs;
 - comes with a bi-level ALADIN extension enabling decentralizes optimization;
 - provides a unified interface for ALADIN and ADMM and a centralized solver for direct comparison;
@@ -19,5 +19,5 @@ ALADIN-alpha
 ## Requirements:
 ALADIN-alpha requires
 - [CasADi](https://web.casadi.org/) optimization and automatic differentiation;
-- the MATLAB [parallel computing toolbox](https://de.mathworks.com/products/parallel-computing.html) for parallel computin (if needed);
+- the MATLAB [parallel computing toolbox](https://de.mathworks.com/products/parallel-computing.html) for parallel computing (if needed);
 - the MATLAB [symbolic math toolbox](https://de.mathworks.com/products/symbolic.html) (only for some examples).
